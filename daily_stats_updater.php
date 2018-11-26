@@ -22,9 +22,9 @@ $query .= " address VARCHAR(32) NOT NULL PRIMARY KEY )";
 $results = $db->query( $query );
 
 if (! $results) {
-    echo "<p>There was an error in query: $query</p>";
-    echo $db->lastErrorMsg();
-    exit;
+	echo "<p>There was an error in query: $query</p>";
+	echo $db->lastErrorMsg();
+	exit;
 }
 
 
@@ -35,15 +35,15 @@ if (! $results) {
 $results = $db->query( "select address from unit_witnesses where 1 group by address" );
 
 if (! $results) {
-    echo "<p>There was an error in query: $query</p>";
-    echo $db->lastErrorMsg();
-    exit;
+	echo "<p>There was an error in query: $query</p>";
+	echo $db->lastErrorMsg();
+	exit;
 }
 
 while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 
 //     echo "\n<br>" . print_r($row, true);
-    $db->query( "insert into witnesses_tmp (address) VALUES ('" . $row[ 'address' ] . "')" );
+	$db->query( "insert into witnesses_tmp (address) VALUES ('" . $row[ 'address' ] . "')" );
 
 }
 
@@ -60,9 +60,9 @@ while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 $q = mysqli_query($mysqli, "select max( main_chain_index ) as max_MCI from mci_timestamp where to_days( date ) = to_days( (select max( day ) from daily_stats) )" );
 
 if ( ! $q ) {
-     
-    die("erreur : " .  mysqli_error( $mysqli ) );
-    
+	 
+	die("erreur : " .  mysqli_error( $mysqli ) );
+	
 }
 
 $row = mysqli_fetch_assoc ( $q );
@@ -84,9 +84,9 @@ $query .= " date TIMESTAMP NOT NULL )";
 $results = $db->query( $query );
 
 if (! $results) {
-    echo "<p>There was an error in query: $query</p>";
-    echo $db->lastErrorMsg();
-    exit;
+	echo "<p>There was an error in query: $query</p>";
+	echo $db->lastErrorMsg();
+	exit;
 }
 
 
@@ -98,15 +98,15 @@ $q = mysqli_query($mysqli, "select * from mci_timestamp where main_chain_index >
 
 while( $row = mysqli_fetch_assoc ( $q ) ){
 
-    $query =  "insert into mci_timestamp_tmp (main_chain_index, date) VALUES ('" . $row[ 'main_chain_index' ] . "', '" . $row[ 'date' ] . "' )";
+	$query =  "insert into mci_timestamp_tmp (main_chain_index, date) VALUES ('" . $row[ 'main_chain_index' ] . "', '" . $row[ 'date' ] . "' )";
 
-    $results = $db->query( $query );
-    
-    if (! $results) {
-        echo "<p>There was an error in query: $query</p>";
-        echo $db->lastErrorMsg();
-        exit;
-    }
+	$results = $db->query( $query );
+	
+	if (! $results) {
+		echo "<p>There was an error in query: $query</p>";
+		echo $db->lastErrorMsg();
+		exit;
+	}
 
 }
  
@@ -139,26 +139,26 @@ $query .= " order by units.main_chain_index";
 $results = $db->query( $query );
 
 if (! $results) {
-    echo "<p>There was an error in query: $query</p>";
-    echo $db->lastErrorMsg();
-    exit;
+	echo "<p>There was an error in query: $query</p>";
+	echo $db->lastErrorMsg();
+	exit;
 }
 
 while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 
-    echo "\n<br>" . print_r($row, true);
-    
-    $query = "insert into daily_stats set day='" . $row[ 'day' ] . "'";
-    $query .= ", units_w = '" . $row[ 'units_w_count' ] . "'";
-    $query .= ", units_nw = '" . $row[ 'units_nw_count' ] . "'";
-    $query .= ", payload_nw = '" . $row[ 'payload_nw' ] . "'";
-    $query .= ", payload_w = '" . $row[ 'payload_w' ] . "'";
-    $query .= ", sidechain_units  = '" . $row[ 'sidechain_units' ] . "'";
-    $query .= ", addresses = '" . $row[ 'authors' ] . "'";
-    $query .= ", new_addresses = '" . $row[ 'new_authors' ] . "'";
-    
-    $q = mysqli_query($mysqli, $query );
-    
+	echo "\n<br>" . print_r($row, true);
+	
+	$query = "insert into daily_stats set day='" . $row[ 'day' ] . "'";
+	$query .= ", units_w = '" . $row[ 'units_w_count' ] . "'";
+	$query .= ", units_nw = '" . $row[ 'units_nw_count' ] . "'";
+	$query .= ", payload_nw = '" . $row[ 'payload_nw' ] . "'";
+	$query .= ", payload_w = '" . $row[ 'payload_w' ] . "'";
+	$query .= ", sidechain_units  = '" . $row[ 'sidechain_units' ] . "'";
+	$query .= ", addresses = '" . $row[ 'authors' ] . "'";
+	$query .= ", new_addresses = '" . $row[ 'new_authors' ] . "'";
+	
+	$q = mysqli_query($mysqli, $query );
+	
 
 }
 
@@ -174,7 +174,7 @@ $q = mysqli_query($mysqli, "select (unix_timestamp(day)*1000 + 3600 * 25.9 * 100
 
 while( $row = mysqli_fetch_assoc ( $q ) ){
 
-    $res[] = $row;
+	$res[] = $row;
 
 }
 
