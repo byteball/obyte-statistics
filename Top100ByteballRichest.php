@@ -8,12 +8,14 @@ include_once '/var/www/where_are_your_mysql_credentials/mysql.php';
 <head>
 <title>Byteball Top 100 richest list</title>
 <link rel="stylesheet" type="text/css" href="mystyle.css">
-<meta name="Description" CONTENT="byteball hub and redistributive witness service">
+<meta name="Description" CONTENT="Byteball Top 100 richest list">
 <meta name="keywords" content="byteball, witness, hub, relay, statistics" />
-<link rel="icon" href="./icon_16x16@2x.png">
+<link rel="icon" href="https://byteball.org/static/android-icon-192x192.png">
 
-
-<script src="https://byteball.fr/graph_framework/jquery-3.2.1.min.js" type="text/javascript"></script>
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
 		function search(){
@@ -48,7 +50,7 @@ include_once '/var/www/where_are_your_mysql_credentials/mysql.php';
 <body>
 	<table>
 <tr>
-<td><a href="https://byteball.fr"><img src="icon-white-outline-1024.png" height="100" width="100"></a></td>
+<td><a href="https://byteball.org"><img src="https://byteball.org/static/android-icon-192x192.png" height="100" width="100"></a></td>
 <td><center><h1>Byteball Top 100 richest list</h1></center></td>
 </tr>
 </table>

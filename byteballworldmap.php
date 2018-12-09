@@ -3,9 +3,9 @@
 <head>
 <title>The Byteball world map</title>
 <link rel="stylesheet" type="text/css" href="mystyle.css">
-<meta name="Description" CONTENT="byteball hub and redistributive witness service">
+<meta name="Description" CONTENT="The Byteball world map">
 <meta name="keywords" content="byteball, witness, hub, relay, statistics, map" />
-<link rel="icon" href="./icon_16x16@2x.png">
+<link rel="icon" href="https://byteball.org/static/android-icon-192x192.png">
 
 <style>
 	#page-wrap { width: 800px; margin: 15px auto; position: relative; }
@@ -81,7 +81,7 @@ html {
 		<div id="main">
 			<table>
 				<tr>
-					<td><a href="https://byteball.fr"><img src="https://byteball.fr/icon-white-outline-1024.png" height="100" width="100"></a></td>
+					<td><a href="https://byteball.org"><img src="https://byteball.org/static/android-icon-192x192.png" height="100" width="100"></a></td>
 					<td><center><h1>The Byteball World map</h1></center></td>
 				</tr>
 				<tr>
@@ -131,7 +131,7 @@ echo "<div id=\"map\" style=\"height: 400px; min-width: 310px; width: 100%\">
   <div id=\"info\">
   <table>
 	<tr>
-		<td><img src=\"https://byteball.fr/icon-white-outline-1024.png\" height=\"25\" width=\"25\"></td><td width=\"5\"></td><td><font size=\"+1\">Hubs and full wallets</font></td>
+		<td><img src=\"https://byteball.org/static/android-icon-192x192.png\" height=\"25\" width=\"25\"></td><td width=\"5\"></td><td><font size=\"+1\">Hubs and full wallets</font></td>
 	</tr>
 	<tr>
 		<td></td><td></td><td><font size=\"-1\"><b>".$hub_numbers."</b> hubs and <b>".$full_wallets_numbers."</b> full wallets counted today</font></td>
@@ -143,15 +143,16 @@ echo "<div id=\"map\" style=\"height: 400px; min-width: 310px; width: 100%\">
 	</div>
   </div>
 ";
-?>  
-	<script src="https://byteball.fr/jsGeo/jquery-2.2.4.min.js"></script>
+?>
 
-	<script src="https://byteball.fr/jsGeo/jquery.geo-1.0.0-rc1.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script src="/js/jquery.geo.min.js"></script>
+
 <script>
 $(function() {
 
 	var jsondata;
-	jQuery.get('https://byteball.fr/json.php?f=byteball_map', function(data) {
+	jQuery.get('/byteball_map.json', function(data) {
 		jsondata=data;
 
 
@@ -206,7 +207,7 @@ $(function() {
 			if (this.properties.name.match(/Hub/g) && !this.properties.name.match(/byteball\.org\/bb/g) ){
 				map.geomap("append", this, { color: "#006400", fillOpacity: "0",height:8,width: 16 }, '<span class="' + this.properties.id + '">' +  this.properties.name + '</span>', false);
 			} else if(this.properties.name.match(/byteball\.org\/bb/)){//"#006400"
-				var buff="<table><tr><td><img src=\"./icon-white-outline-100x100.png\" width=\"30\" height=\"30\"></td><td width=\"5\"></td><td><b>Default Hub: byteball.org/bb<br>IP: 144.76.217.155</b></td></tr></table>";
+				var buff="<table><tr><td><img src=\"https://byteball.org/static/android-icon-192x192.png\" width=\"30\" height=\"30\"></td><td width=\"5\"></td><td><b>Default Hub: byteball.org/bb<br>IP: 144.76.217.155</b></td></tr></table>";
 				map.geomap("append", this, { color: "#006400", fillOpacity: "0",height:10,width: 20 }, '<span class="' + this.properties.id + '">' +  buff + '</span>', false);
 			}
 			else if (this.properties.name.match((/Full/g))){

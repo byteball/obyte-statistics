@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Byteball official alternative hubs and redistributive witness service</title>
+	<title>Byteball stats</title>
 	<link rel="stylesheet" type="text/css" href="mystyle.css">
-	<meta name="Description" CONTENT="byteball hub and redistributive witness service">
+	<meta name="Description" CONTENT="byteball stats">
 	<meta name="keywords" content="byteball, witness, hub, relay, statistics" />
 	<meta http-equiv="refresh" content="120" >
-	<link rel="icon" href="./icon_16x16@2x.png">
+	<link rel="icon" href="https://byteball.org/static/android-icon-192x192.png">
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
@@ -16,7 +16,7 @@
 
 <table>
 	<tr>
-		<td><img src="icon-white-outline-1024.png" height="100" width="100"></td>
+		<td><img src="https://byteball.org/static/android-icon-192x192.png" height="100" width="100"></td>
 		<td width=20></td>
 		<td>
 			Hubs status: <img src="green_button.jpg" height="15" width="15"><br>
@@ -69,9 +69,12 @@
 
 <p><br></p>
 
-<script src="https://byteball.fr/graph_framework/jquery-3.2.1.min.js"></script>
-<script src="https://byteball.fr/graph_framework/code/highstock.js"></script>
-<script src="https://byteball.fr/graph_framework/code/modules/exporting.js"></script>
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+<script src="https://code.highcharts.com/stock/highstock.js"></script>
+<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
 <table>
 	<tr>
 		<td><b>Connected wallets history</b></td>
