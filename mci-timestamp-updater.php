@@ -25,6 +25,7 @@ $row = $results->fetchArray(SQLITE3_ASSOC);
 $max_MCI = $row[ 'max_MCI' ];
 
 $last_timestamped_mci = $max_MCI ? $max_MCI : 0;
+echo "last mci ".$last_timestamped_mci."\n";
 
 /*
  * first get timestamp oracle info
