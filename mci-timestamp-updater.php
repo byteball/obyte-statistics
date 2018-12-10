@@ -48,7 +48,7 @@ while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 //	echo "<br>".print_r($row,true);
 //	echo " " . date( 'Y-m-d H:i:s', round($row[ 'int_value' ]/1000) );
 
-	$query = "insert into mci_timestamps (main_chain_index, date) VALUES ($row[main_chain_index], '".date('Y-m-d H:i:s', round($row['int_value']/1000))."')";
+	$query = "insert OR IGNORE into mci_timestamps (main_chain_index, date) VALUES ($row[main_chain_index], '".date('Y-m-d H:i:s', round($row['int_value']/1000))."')";
 
 	$db->query($query);
     
