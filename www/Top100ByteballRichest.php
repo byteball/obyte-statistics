@@ -1,8 +1,3 @@
-<?php
-
-include_once '/var/www/where_are_your_mysql_credentials/mysql.php';
-
-?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -90,16 +85,17 @@ echo "
 	</tr>
 ";
 
+$db = new SQLite3($_SERVER['HOME'].'/.config/byteball-hub/byteball.sqlite');
 
-$query = "SELECT * FROM richests_list order by amount DESC LIMIT 100";
+$query = "SELECT * FROM richlist order by amount DESC LIMIT 100";
 
-$q = mysqli_query($mysqli, $query);    
-if ( ! $q ) {
+$results = $db->query($query);    
+if ( ! $results ) {
 	echo "Problem here..."; 
 	exit;
 }
 $i=1;
-while( $row = mysqli_fetch_assoc ( $q ) ){
+while( $row = $results->fetchArray(SQLITE3_ASSOC) ){
 	echo "<tr><td><b>#".$i."</b></td><td>".number_format ($row[ 'amount' ])."</td><td>$".number_format (($row[ 'amount' ]/1000000000)*$dollar_value)."</td><td><a href=\"https://explorer.byteball.org/#".$row[ 'address' ]."\">".$row[ 'address' ]."</a></td></tr><tr>";
 	$i++;
 }
@@ -148,8 +144,5 @@ function make_443_get ($url) {
 	}
 
 	// close curl resource to free up system resources 
-
-
-
 }   
 ?>

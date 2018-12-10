@@ -93,34 +93,36 @@ html {
 <br><br>
 
 <?php
-include_once '/var/www/path_to_your_mysql_credentials/mysql.php';
+	
+	$db = new SQLite3($_SERVER['HOME'].'/.config/byteball-hub/byteball.sqlite');
+
 	$query = "select count(*) as total_count from geomap where type='hub'";
-	$q = mysqli_query($mysqli, $query);
-	if ( ! $q ) {
-		echo mysqli_error( $mysqli );
+	$results = $db->query($query);
+	if ( ! $results ) {
+		echo $db->lastErrorMsg();
 		exit;       
 	}
-	while( $row = mysqli_fetch_assoc ( $q ) ){
+	while( $row = $results->fetchArray(SQLITE3_ASSOC) ){
 		$hub_numbers=$row[ 'total_count' ];
 	}
 
 	$query = "select count(*) as total_count from geomap where type='full_wallet'";
-	$q = mysqli_query($mysqli, $query);
-	if ( ! $q ) {
-		echo mysqli_error( $mysqli );
+	$results = $db->query($query);
+	if ( ! $results ) {
+		echo $db->lastErrorMsg();
 		exit;       
 	}
-	while( $row = mysqli_fetch_assoc ( $q ) ){
+	while( $row = $results->fetchArray(SQLITE3_ASSOC) ){
 		$full_wallets_numbers=$row[ 'total_count' ];
 	}
 	
 	$query = "select date from geomap order by date desc limit 1";
-	$q = mysqli_query($mysqli, $query);
-	if ( ! $q ) { 
-		echo mysqli_error( $mysqli );
+	$results = $db->query($query);
+	if ( ! $results ) { 
+		echo $db->lastErrorMsg();
 		exit;       
 	}
-	while( $row = mysqli_fetch_assoc ( $q ) ){
+	while( $row = $results->fetchArray(SQLITE3_ASSOC) ){
 		$mytime= $row[ 'date' ];
 	}
  

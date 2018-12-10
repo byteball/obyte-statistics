@@ -1,8 +1,7 @@
 <?php 
 
-	include_once '/var/www/where_are_your_mysql_credentials/mysql.php';
+	$db = new SQLite3($_SERVER['HOME'].'/.config/byteball-hub/byteball.sqlite');
 
-	$table_name = "richests_list";
 	$address=trim($_POST['address']);
   
 	if( strlen( $address ) > 0 ){
@@ -19,21 +18,19 @@
 		exit;
 	}
   
-	$query = "SELECT * FROM $table_name where address='".addslashes($address)."' LIMIT 1"; 
+	$query = "SELECT * FROM richlist where address='".addslashes($address)."' LIMIT 1"; 
 
 
-	$q = mysqli_query($mysqli, $query);    
-	if ( ! $q ) {
+	$results = $db->query($query);    
+	if ( ! $results ) {
 		echo "Problem here...";
 		exit;
 	}
 
 
 
-	if(mysqli_num_rows ( $q )==1){
-		while( $row = mysqli_fetch_assoc ( $q ) ){
-			echo "Congratulations! You are the <b>#".$row[ 'id' ]."</b> richest with a value of <b>".number_format ( $row[ 'amount' ] , 0 , "." , "," )." </b>bytes.";
-		}
+	if( $row = $results->fetchArray(SQLITE3_ASSOC) ){
+		echo "Congratulations! You are the <b>#".$row[ 'id' ]."</b> richest with a value of <b>".number_format ( $row[ 'amount' ] , 0 , "." , "," )." </b>bytes.";
 	}else{
 		echo "Not found.";
 	}

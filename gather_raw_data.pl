@@ -17,18 +17,14 @@ my $sth;
 my $sth2;
 my $sth3;
 
-my $Mysql_dbh=connect_Mysql_base();
-my $Mysql_sth;
-my $Mysql_rv;
-
-my $dbfile="/root/.config/byteball-hub/byteball.sqlite";
+my $dbfile=$ENV{"HOME"}."/.config/byteball-hub/byteball.sqlite";
 
 $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile","","") or die $DBI::errstr;
 my $total_value=0;
 my $others_value=0;
 my $diversity_index=0;
 
-my @defaul_witnesses=("BVVJ2K7ENPZZ3VYZFWQWK7ISPCATFIW3",
+my @default_witnesses=("BVVJ2K7ENPZZ3VYZFWQWK7ISPCATFIW3",
 "DJMMI5JYA5BWQYSXDPRZJVLW3UGL3GJS",
 "FOPUBEUPBC6YLIQDLKL6EW775BMV7YOH",
 "GFK3RDAPQLLNCMQEVGGD2KCPZTLSG3HN",
@@ -104,40 +100,47 @@ foreach (@array_of_witnesses)#last timestamp
 	$witnesses_stats->{$_}->{last_seen_mci}="<center>> 12h</center>";
 	$witnesses_stats->{$_}->{last_seen_mci}=$witnesses_market->{$_}->{last_mci} if(defined $witnesses_market->{$_}->{last_mci});
 	  
-	  $total_value+=$witnesses_stats->{$_}->{validations_count};
+	$total_value+=$witnesses_stats->{$_}->{validations_count};
 	  
-	if($_ eq 'MEJGDND55XNON7UU3ZKERJIZMMXJTVCV'){
-		$witnesses_stats->{$_}->{text}="byteball-cashback-witness.com";
-		$witnesses_stats->{$_}->{status}="Independant Witness";
-		$others_value+=$witnesses_stats->{$_}->{validations_count};
-	}
-	if($_ eq '4GDZSXHEFVFMHCUCSHZVXBVF5T2LJHMU'){
-		$witnesses_stats->{$_}->{text}="Rogier Eijkelhof";
-		$witnesses_stats->{$_}->{status}="Independant Witness";
-		$others_value+=$witnesses_stats->{$_}->{validations_count};
-	}
-	if($_ eq '7ULGTPFB72TOYA67YNGMX2Y445FSTL7O'){
-		$witnesses_stats->{$_}->{text}="Portabella (slack user)";
-		$witnesses_stats->{$_}->{status}="Independant Witness";
-		$others_value+=$witnesses_stats->{$_}->{validations_count};
-	}
-	if($_ eq 'Z65GI4TTOZ6KOXDX7LQN4AVOFI6DLSJG'){
-		$witnesses_stats->{$_}->{text}="rubbish0815 (slack user)";
-		$witnesses_stats->{$_}->{status}="Independant Witness";
-		$others_value+=$witnesses_stats->{$_}->{validations_count};
-	}
-	if($_ eq 'D3FLI2E6SQS437P57DKBYIBL3EZTZXCQ'){
-		$witnesses_stats->{$_}->{text}="Piiper (slack user)";
-		$witnesses_stats->{$_}->{status}="Independant Witness";
-		$others_value+=$witnesses_stats->{$_}->{validations_count};
-	}
 	my $buff=$_;
-	$witnesses_stats->{$_}->{text}="Tonych" if grep( /^$buff$/, @defaul_witnesses );
-	$witnesses_stats->{$_}->{status}="Founder's Witness" if grep( /^$buff$/, @defaul_witnesses );
-	  
+	if($_ eq 'MEJGDND55XNON7UU3ZKERJIZMMXJTVCV'){
+		$witnesses_stats->{$_}->{text}="byteball.fr witness";
+		$witnesses_stats->{$_}->{status}="Independent Witness";
+		$others_value+=$witnesses_stats->{$_}->{validations_count};
+	}
+	elsif($_ eq '4GDZSXHEFVFMHCUCSHZVXBVF5T2LJHMU'){
+		$witnesses_stats->{$_}->{text}="Rogier Eijkelhof";
+		$witnesses_stats->{$_}->{status}="Independent Witness";
+		$others_value+=$witnesses_stats->{$_}->{validations_count};
+	}
+	elsif($_ eq '7ULGTPFB72TOYA67YNGMX2Y445FSTL7O'){
+		$witnesses_stats->{$_}->{text}="Portabella (slack user)";
+		$witnesses_stats->{$_}->{status}="Independent Witness";
+		$others_value+=$witnesses_stats->{$_}->{validations_count};
+	}
+	elsif($_ eq 'Z65GI4TTOZ6KOXDX7LQN4AVOFI6DLSJG'){
+		$witnesses_stats->{$_}->{text}="rubbish0815 (slack user)";
+		$witnesses_stats->{$_}->{status}="Independent Witness";
+		$others_value+=$witnesses_stats->{$_}->{validations_count};
+	}
+	elsif($_ eq 'D3FLI2E6SQS437P57DKBYIBL3EZTZXCQ'){
+		$witnesses_stats->{$_}->{text}="Piiper (slack user)";
+		$witnesses_stats->{$_}->{status}="Independent Witness";
+		$others_value+=$witnesses_stats->{$_}->{validations_count};
+	}
+	elsif ( grep( /^$buff$/, @default_witnesses ) ){
+		$witnesses_stats->{$_}->{text}="Tonych";
+		$witnesses_stats->{$_}->{status}="Founder's Witness";
+	}
+	else{
+		$witnesses_stats->{$_}->{text}="Unknown user";
+		$witnesses_stats->{$_}->{status}="Independent Witness";
+		$witnesses_stats->{$_}->{arrow}="";
+		$others_value+=$witnesses_stats->{$_}->{validations_count};
+	}
 	$stats_range=$max_end_users_seen_units;
 	my $percentage=calculate_percent($witnesses_stats->{$_}->{validations_count});
-	$buff_html_array.="<tr><td><font color=\"green\" valign=\"top\">".$witnesses_stats->{$_}->{arrow}."</font></td><td><b>#".$i."</b></td><td><a href=\"http://explorer.byteball.org/#".$_."\" target=\"_blank\">".$_."</a></td><td><center>".$witnesses_stats->{$_}->{validations_count}."</center></td><td>".$percentage."</td><td><center>".$witnesses_stats->{$_}->{last_seen_mci}."<center></td><td>".$witnesses_stats->{$_}->{last_seen_mci_timestamp}."</td><td>".$witnesses_stats->{$_}->{status}."</td><td>".$witnesses_stats->{$_}->{text}."</td></tr>\n";
+	$buff_html_array.="<tr><td><font color=\"green\" valign=\"top\">".$witnesses_stats->{$_}->{arrow}."</font></td><td><b>#".$i."</b></td><td><a href=\"https://explorer.byteball.org/#".$_."\" target=\"_blank\">".$_."</a></td><td><center>".$witnesses_stats->{$_}->{validations_count}."</center></td><td>".$percentage."</td><td><center>".$witnesses_stats->{$_}->{last_seen_mci}."<center></td><td>".$witnesses_stats->{$_}->{last_seen_mci_timestamp}."</td><td>".$witnesses_stats->{$_}->{status}."</td><td>".$witnesses_stats->{$_}->{text}."</td></tr>\n";
 	
 	if(0){
 		print "$_ nbre validation : $witnesses_stats->{$_}->{validations_count}\n";
@@ -146,12 +149,12 @@ foreach (@array_of_witnesses)#last timestamp
 	}
 	$i++;
 	#insert if needed in table seen_witnesses
-	$Mysql_sth=$Mysql_dbh->prepare("SELECT count(*) as total_count FROM seen_witnesses where address='$_'");
-	$Mysql_sth->execute();
-	my $query_result2 = $Mysql_sth->fetchrow_hashref;
+	$sth=$dbh->prepare("SELECT count(*) as total_count FROM seen_witnesses where address='$_'");
+	$sth->execute();
+	my $query_result2 = $sth->fetchrow_hashref;
 	if($query_result2->{total_count}==0){
-		$Mysql_sth=$Mysql_dbh->prepare("INSERT INTO seen_witnesses (address, first_seen) values('$_',now())");
-		$Mysql_sth->execute();
+		$sth=$dbh->prepare("INSERT INTO seen_witnesses (address) values('$_')");
+		$sth->execute();
 	}
 	 
 }#end of foreach arrayofwitnesses
@@ -169,9 +172,9 @@ $HTML->{Array}=$buff_html_array;
 $HTML->{update}=$update;
 $HTML->{total_active}=$total_active_witnesses;
 #open the stat template and output the stats.php public php script
-my $template='/var/www/html/templates/stats_template.html';
+my $template='stats_template.html';
 my $new_stats=get_content($template,$HTML);
-my $filename = '/var/www/html/stats.php';
+my $filename = 'www/stats.php';
 open(my $fh, '>', $filename) or die "Could not open file '$filename' $!";
 print $fh $new_stats;
 close $fh;
@@ -179,9 +182,8 @@ close $fh;
 
 #pass 2: top 100
 	
-#save the richests in table buff_richests_list
-$Mysql_sth=$Mysql_dbh->prepare ("TRUNCATE buff_richests_list");
-$Mysql_rv = $Mysql_sth->execute;
+$dbh->prepare('BEGIN')->execute();
+$dbh->prepare('DELETE FROM richlist')->execute();
 
 $sth = $dbh->prepare("SELECT sum(amount) as amount,address FROM 'outputs' where is_spent='0' and asset is null group by address order by amount desc");
 $sth->execute();
@@ -192,18 +194,11 @@ while ($query_result = $sth->fetchrow_hashref){
 	next if $query_result->{address} eq 'GVVHBOGQFAZJW54m37LPSHZOYWZ2Z47T';
 	next if $query_result->{address} eq 'ZQ4NJ2YZGUGIPU2F2DOAIIH67MBY4AHG';
 	$total_add_with_balance++;
-	$Mysql_sth=$Mysql_dbh->prepare ("INSERT INTO buff_richests_list (amount,address) values('$query_result->{amount}','$query_result->{address}')");
-	$Mysql_rv = $Mysql_sth->execute;
+	my $sth2=$dbh->prepare ("INSERT INTO richlist (amount,address) values('$query_result->{amount}','$query_result->{address}')");
+	$sth2->execute;
 }
+$dbh->prepare('COMMIT')->execute();
 
-$Mysql_sth=$Mysql_dbh->prepare ("RENAME TABLE richests_list TO tmp_richests_list");
-$Mysql_rv = $Mysql_sth->execute;
-$Mysql_sth=$Mysql_dbh->prepare ("RENAME TABLE buff_richests_list TO richests_list");
-$Mysql_rv = $Mysql_sth->execute;		
-$Mysql_sth=$Mysql_dbh->prepare ("RENAME TABLE tmp_richests_list TO buff_richests_list");
-$Mysql_rv = $Mysql_sth->execute;		
-$Mysql_sth=$Mysql_dbh->prepare ("TRUNCATE buff_richests_list");
-$Mysql_rv = $Mysql_sth->execute;
 
 
 		
@@ -219,12 +214,12 @@ my $total_units=$query_result->{total};
 $sth = $dbh->prepare("select count(*) as total from units where (julianday('now') - julianday(creation_date))* 24 * 60 * 60  < 3600*12 AND is_stable='1'");
 $sth->execute();
 $query_result = $sth->fetchrow_hashref;
-my $total_stables_units=$query_result->{total};
+my $total_stable_units=$query_result->{total};
 
 my $percent=5;#little alarm system to Tonych
-if($total_stables_units < $total_units*(1-$percent/100)){
+if($total_stable_units < $total_units*(1-$percent/100)){
 	my $alerte_subject  = "Alert! Too many non stable units in the Byteball network!";
-	my $body="My current alert trigger is non stable vs total units less than ".$percent." %.\n\nHowever, over the last 12 hours I see:\nTotal units posted: ".$total_units."\nTotal stables units: ".$total_stables_units."\n";
+	my $body="My current alert trigger is non stable vs total units less than ".$percent." %.\n\nHowever, over the last 12 hours I see:\nTotal units posted: ".$total_units."\nTotal stables units: ".$total_stable_units."\n";
 	send_email ('noreply@byteball.fr','byteball@byteball.org',$body, $alerte_subject);
 
 }
@@ -233,7 +228,7 @@ if($total_stables_units < $total_units*(1-$percent/100)){
 $sth = $dbh->prepare("select count(*) as total from units where (julianday('now') - julianday(creation_date))* 24 * 60 * 60  < 3600*12 AND is_stable='1' AND is_on_main_chain='0'");
 $sth->execute();
 $query_result = $sth->fetchrow_hashref;
-my $total_stables_units_sidechain=$query_result->{total};
+my $total_stable_units_sidechain=$query_result->{total};
 
 #all units but witnesses units
 $sth = $dbh->prepare("select units.* from units left join unit_authors on unit_authors.unit = units.unit left join unit_witnesses on unit_witnesses.address = unit_authors.address where ( julianday('now') - julianday(units.creation_date) )* 24 * 60 * 60  < 3600*12 and unit_witnesses.address is NULL group by units.unit");
@@ -283,19 +278,19 @@ while ($query_result = $sth->fetchrow_hashref){
 
 }
 	
-my $ratio=sprintf("%.2f",($total_stables_units/$total_units)*100);
-my $total_payload_for_mysql=$total_payload;
+my $ratio=sprintf("%.2f",($total_stable_units/$total_units)*100);
+my $total_payload_for_db=$total_payload;
 $total_payload=set_coma_separators($total_payload);
 
 #how many hubs and wallets
-$Mysql_sth=$Mysql_dbh->prepare ("select count(*) as total_count from geomap where type='hub'");
-$Mysql_rv = $Mysql_sth->execute;
-$query_result = $Mysql_sth->fetchrow_hashref();
+$sth=$dbh->prepare ("select count(*) as total_count from geomap where type='hub'");
+$sth->execute;
+$query_result = $sth->fetchrow_hashref();
 my $total_hubs=$query_result->{total_count};
 
-$Mysql_sth=$Mysql_dbh->prepare ("select count(*) as total_count from geomap where type='full_wallet'");
-$Mysql_rv = $Mysql_sth->execute;
-$query_result = $Mysql_sth->fetchrow_hashref();
+$sth=$dbh->prepare ("select count(*) as total_count from geomap where type='full_wallet'");
+$sth->execute;
+$query_result = $sth->fetchrow_hashref();
 my $total_full_wallets=$query_result->{total_count};
 
 
@@ -330,12 +325,12 @@ my $accredited=$query_result->{accredited};
 
 #all that into bb_stats table...
 
-$Mysql_sth=$Mysql_dbh->prepare ("INSERT INTO bb_stats ( total_active_witnesses, multisigned_units, smart_contract_units, total_units, total_stables_units, total_units_witnesses_excluded, stable_ratio, total_payload, total_add_with_balance, UTC_datetime, total_stables_units_sidechain, total_sidechain_units_WE, total_full_wallets, total_hubs, registered_users, non_US, accredited_investors) values 
-('$total_active_witnesses','$multisig_count','$smart_contract_count','$total_units','$total_stables_units','$total_units_witnesses_excluded','$ratio','$total_payload_for_mysql','$total_add_with_balance',UTC_TIMESTAMP(),'$total_stables_units_sidechain','$total_sidechain_units_witnesses_excluded','$total_full_wallets','$total_hubs','$registered_profiles_count','$non_US_count','$accredited')");
-$Mysql_rv = $Mysql_sth->execute;
+$sth=$dbh->prepare ("INSERT INTO bb_stats ( total_active_witnesses, multisigned_units, smart_contract_units, total_units, total_stable_units, total_units_witnesses_excluded, stable_ratio, total_payload, total_add_with_balance, total_stable_units_sidechain, total_sidechain_units_WE, total_full_wallets, total_hubs, registered_users, non_US, accredited_investors) values 
+('$total_active_witnesses','$multisig_count','$smart_contract_count','$total_units','$total_stable_units','$total_units_witnesses_excluded','$ratio','$total_payload_for_db','$total_add_with_balance','$total_stable_units_sidechain','$total_sidechain_units_witnesses_excluded','$total_full_wallets','$total_hubs','$registered_profiles_count','$non_US_count','$accredited')");
+$sth->execute;
 
 #json dump
-dump_json("/var/www/xfiles/json/bb_stats.json","bb_stats","UTC_datetime","total_units","total_stables_units","stable_ratio",
+dump_json("www/bb_stats.json","bb_stats","UTC_datetime","total_units","total_stable_units","stable_ratio",
 "total_units_witnesses_excluded","multisigned_units","smart_contract_units","total_payload","registered_users", "non_US");
 		
 
@@ -343,9 +338,6 @@ $sth->finish() if defined $sth;
 $sth2->finish() if defined $sth2;
 $sth3->finish() if defined $sth;
 $dbh->disconnect;
-
-$Mysql_sth->finish();
-$Mysql_dbh->disconnect;
 
 		
 sub dump_json{
@@ -356,11 +348,11 @@ sub dump_json{
 		
 	open(my $fh2, '>', $filename) or die "Could not open file '$filename' $!";
 	my $buff="[\n";
-	$Mysql_sth=$Mysql_dbh->prepare ("select * from $table ORDER BY id ASC");
-	$Mysql_rv = $Mysql_sth->execute;
-	my $row_numbers = $Mysql_sth->rows;
+	$sth=$dbh->prepare ("select * from $table ORDER BY id ASC");
+	$sth->execute;
+	my $row_numbers = $sth->rows;
 	my $i=1;
-	while (my $query_result = $Mysql_sth->fetchrow_hashref){
+	while (my $query_result = $sth->fetchrow_hashref){
 		my $timestamp=convert_to_unix_timestamp($query_result->{$fields[2]});
 		$timestamp=($timestamp+7200)*1000;
 		if($i<$row_numbers){
@@ -421,18 +413,6 @@ sub calculate_percent {
 }
 
 
-sub connect_Mysql_base {
-	my $local_dbh;
-	my $host="localhost";
-	my $database="byteball";
-	my $USER="root";
-	my $PASSWORD="your Mysql password";
-	eval {$local_dbh = DBI->connect("DBI:mysql:database=$database;host=$host",
-                            $USER, $PASSWORD, {RaiseError => 1})};
-	if ($@) {
-		exit;
-	} else {return $local_dbh;}
-}
 
 sub send_email {
 	my ($mailfrom, $mailto, $message, $subject) = @_;

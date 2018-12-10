@@ -1,7 +1,7 @@
 Free of copyright
 
 //This script extract some hubs and full wallets peer events from the Byteball sqlite database
-//then uses this information to fill the byteball.fr Mysql geomap database
+//then uses this information to fill the byteball.fr sql geomap database
 //then dumps a json file that will be queried later by the byteballworldmap.php publis script to render the map.
 //This script should be periodically executed in a cron job.
 //An api key is required to access to http://api.ipstack.com (free access)
@@ -23,17 +23,17 @@ Free of copyright
 
 
 <?php
-include_once '/path_to_your_mysql_credentials/mysql.php';//user and password of our Mysql database to the geomap table
-$db = new SQLite3('/root/.config/byteball-hub/byteball.sqlite');
+include_once('conf.php');
+$db = new SQLite3($_SERVER['HOME'].'/.config/byteball-hub/byteball.sqlite');
 $max_alea=0.025;# in degree, 1/100 deg=1km
 
 
 #flag everything down in the geomap table
 $query = "update geomap set is_ok=0 where 1"; 
-	$q = mysqli_query($mysqli, $query);    
-	if ( ! $q ) {
+	$results = $db->query($query);    
+	if ( ! $results ) {
 		echo "Problem here...";
-		echo mysqli_error( $mysqli );
+		echo $db->lastErrorMsg();
 		exit;       
 	}
 
@@ -49,28 +49,28 @@ if (! $results) {
 while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 	#Do we know this IP ?
 	$query = "select * from geomap where type='hub' and IP LIKE '".$row[ 'peer_host' ]."' and description LIKE '".$row[ 'url' ]."'";
-	$q = mysqli_query($mysqli, $query);
-	if ( ! $q ) {
-		echo mysqli_error( $mysqli );
+	$results2 = $db->query($query);
+	if ( ! $results2 ) {
+		echo $db->lastErrorMsg();
 		exit;
 	}
-	if(mysqli_num_rows ( $q )==1 && is_hub_listening ($row[ 'url' ])){#already exists
-		$query = "update geomap set is_ok=1,date=now() where IP LIKE '".$row[ 'peer_host' ]."' and description LIKE '".$row[ 'url' ]."'";
+	if($results2->fetchArray(SQLITE3_ASSOC) && is_hub_listening ($row[ 'url' ])){#already exists
+		$query = "update geomap set is_ok=1,date=datetime('now') where IP LIKE '".$row[ 'peer_host' ]."' and description LIKE '".$row[ 'url' ]."'";
 		//echo $query;
 		//echo "\n";
 		//echo $row[ 'url' ]." is known and listening\n";
-		$q = mysqli_query($mysqli, $query);
-		if ( ! $q ) {
-			echo mysqli_error( $mysqli );
+		$results3 = $db->query($query);
+		if ( ! $results3 ) {
+			echo $db->lastErrorMsg();
 			exit;
 		}
 	} else if(is_hub_listening ($row[ 'url' ])) {#insert
 		$data_array= json_decode(get_coord($row[ 'peer_host' ]), true);
-		$query = "INSERT INTO geomap (type, IP, longit, latt, description, date) VALUES ('hub', '" . $row[ 'peer_host' ] . "', '" . addslashes ($data_array[ 'longitude' ]+insert_alea($max_alea)) . "', '" . addslashes ($data_array[ 'latitude' ]+insert_alea($max_alea)) . "', '" . $row[ 'url' ] . "',now())";
-		$q = mysqli_query($mysqli, $query);    
-		if ( ! $q ) { 
+		$query = "INSERT INTO geomap (type, IP, longit, latt, description) VALUES ('hub', '" . $row[ 'peer_host' ] . "', '" . addslashes ($data_array[ 'longitude' ]+insert_alea($max_alea)) . "', '" . addslashes ($data_array[ 'latitude' ]+insert_alea($max_alea)) . "', '" . $row[ 'url' ] . "')";
+		$results3 = $db->query($query);
+		if ( ! $results3 ) { 
 			echo "Problem here... query insert";
-			echo mysqli_error( $mysqli );
+			echo $db->lastErrorMsg();
 			exit;
 		}
 	} else {
@@ -81,27 +81,27 @@ while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 #adding byteball.org and byteball.fr
 $row[ 'peer_host' ]="163.172.89.110";
 $query = "select * from geomap where type='hub' and IP='".$row[ 'peer_host' ]."'";
-$q = mysqli_query($mysqli, $query);
-if ( ! $q ) { 
-	echo mysqli_error( $mysqli );
+$results = $db->query($query);
+if ( ! $results ) { 
+	echo $db->lastErrorMsg();
 	exit;
 }
 $row[ 'url' ]="wss://byteball.fr/bb";
 if(is_hub_listening ($row[ 'url' ])){
-	if(mysqli_num_rows ( $q )<1){
+	if(!$results->fetchArray(SQLITE3_ASSOC)){
 		$data_array= json_decode(get_coord($row[ 'peer_host' ]), true);
-		$query = "INSERT INTO geomap (type, IP, longit, latt, description, date) VALUES ('hub', '" . $row[ 'peer_host' ] . "', '" . addslashes ($data_array[ 'longitude' ]+insert_alea($max_alea)) . "', '" . addslashes ($data_array[ 'latitude' ]+insert_alea($max_alea)) . "', '" . $row[ 'url' ] . "',now())";
-		$q = mysqli_query($mysqli, $query);    
-		if ( ! $q ) {
+		$query = "INSERT INTO geomap (type, IP, longit, latt, description) VALUES ('hub', '" . $row[ 'peer_host' ] . "', '" . addslashes ($data_array[ 'longitude' ]+insert_alea($max_alea)) . "', '" . addslashes ($data_array[ 'latitude' ]+insert_alea($max_alea)) . "', '" . $row[ 'url' ] . "')";
+		$results = $db->query($query);
+		if ( ! $results ) {
 			echo "argh";
-			echo mysqli_error( $mysqli );
+			echo $db->lastErrorMsg();
 			exit;
 		}
 	} else {
-		$query = "update geomap set is_ok=1, date=now() where IP='".$row[ 'peer_host' ]."'";
-		$q = mysqli_query($mysqli, $query);
-		if ( ! $q ) {
-			echo mysqli_error( $mysqli );
+		$query = "update geomap set is_ok=1, date=datetime('now') where IP='".$row[ 'peer_host' ]."'";
+		$results = $db->query($query);
+		if ( ! $results ) {
+			echo $db->lastErrorMsg();
 			exit;
 		}
 	}
@@ -109,27 +109,27 @@ if(is_hub_listening ($row[ 'url' ])){
 
 $row[ 'peer_host' ]="144.76.217.155";
 $query = "select * from geomap where type='hub' and IP='".$row[ 'peer_host' ]."'";
-$q = mysqli_query($mysqli, $query);
-if ( ! $q ) { 
-	echo mysqli_error( $mysqli );
+$results = $db->query($query);
+if ( ! $results ) { 
+	echo $db->lastErrorMsg();
 	exit;
 }
 $row[ 'url' ]="wss://byteball.org/bb";
 if(is_hub_listening ($row[ 'url' ])){
-	if(mysqli_num_rows ( $q )<1){
+	if(!$results->fetchArray(SQLITE3_ASSOC)){
 
 		$data_array= json_decode(get_coord($row[ 'peer_host' ]), true);
-		$query = "INSERT INTO geomap (type, IP, longit, latt, description, date) VALUES ('hub', '" . $row[ 'peer_host' ] . "', '" . addslashes ($data_array[ 'longitude' ]+insert_alea($max_alea)) . "', '" . addslashes ($data_array[ 'latitude' ]+insert_alea($max_alea)) . "', '" . $row[ 'url' ] . "',now())";
-		$q = mysqli_query($mysqli, $query);    
-		if ( ! $q ) { 
-			echo mysqli_error( $mysqli );
+		$query = "INSERT INTO geomap (type, IP, longit, latt, description) VALUES ('hub', '" . $row[ 'peer_host' ] . "', '" . addslashes ($data_array[ 'longitude' ]+insert_alea($max_alea)) . "', '" . addslashes ($data_array[ 'latitude' ]+insert_alea($max_alea)) . "', '" . $row[ 'url' ] . "')";
+		$results = $db->query($query);
+		if ( ! $results ) { 
+			echo $db->lastErrorMsg();
 			exit;
 		}
 	} else {
-		$query = "update geomap set is_ok=1, date=now() where IP='".$row[ 'peer_host' ]."'";
-		$q = mysqli_query($mysqli, $query);
-		if ( ! $q ) {
-			echo mysqli_error( $mysqli );
+		$query = "update geomap set is_ok=1, date=datetime('now') where IP='".$row[ 'peer_host' ]."'";
+		$results = $db->query($query);
+		if ( ! $results ) {
+			echo $db->lastErrorMsg();
 			exit;
 		} 					
 	}
@@ -137,17 +137,17 @@ if(is_hub_listening ($row[ 'url' ])){
 
 #erase all failed hubs
 $query = "delete from geomap where is_ok=0 and type='hub'"; 
-$q = mysqli_query($mysqli, $query);    
-if ( ! $q ) {
+$results = $db->query($query);    
+if ( ! $results ) {
 	echo "Problem here...";
-	echo mysqli_error( $mysqli );
+	echo $db->lastErrorMsg();
 	exit;
 }
 
 
 # ******** PASS 2 *************   search for full wallets
 # Lord says "peer_events come from full wallets only"
-$results = $db->query( "select * from peer_events where (julianday('now') - julianday(event_date))* 24 * 60 * 60  < 3600*24 group by peer_host" );
+$results = $db->query( "select * from peer_events where event_date > datetime('now', '-1 DAY') group by peer_host" );
 
 if (! $results) {
 	echo "argh";
@@ -159,30 +159,30 @@ while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 	if(preg_match('/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\z/', $row[ 'peer_host' ])){
 		
 		$query = "select * from geomap where IP='".$row[ 'peer_host' ]."' and type <> 'hub'";
-		$q = mysqli_query($mysqli, $query);
-		if ( ! $q ) {
-			echo mysqli_error( $mysqli );
+		$results2 = $db->query($query);
+		if ( ! $results2 ) {
+			echo $db->lastErrorMsg();
 			exit;
 		}
-		if(mysqli_num_rows ( $q )==1){#if exists
+		if($results2->fetchArray(SQLITE3_ASSOC)){#if exists
 
-			$query = "update geomap set is_ok=1, date=now() where IP='".$row[ 'peer_host' ]."'";
-			$q = mysqli_query($mysqli, $query);
-		} else {#insert it if if it is not known as a hub
+			$query = "update geomap set is_ok=1, date=datetime('now') where IP='".$row[ 'peer_host' ]."'";
+			$results2 = $db->query($query);
+		} else {#insert it if it is not known as a hub
 			$query = "select * from geomap where IP='".$row[ 'peer_host' ]."' and type = 'hub'";
-			$q = mysqli_query($mysqli, $query);
-			if ( ! $q ) {
-				echo mysqli_error( $mysqli );
+			$results2 = $db->query($query);
+			if ( ! $results2 ) {
+				echo $db->lastErrorMsg();
 				exit;
 			}
-			if(mysqli_num_rows ( $q )==0){
+			if(!$results2->fetchArray(SQLITE3_ASSOC)){
 				$data_array= json_decode(get_coord($row[ 'peer_host' ]), true);
 
-				$query = "INSERT INTO geomap (type, IP, longit, latt, description, date) VALUES ('full_wallet', '" . $row[ 'peer_host' ] . "', '" . addslashes ($data_array[ 'longitude' ]+insert_alea($max_alea)) . "', '" . addslashes ($data_array[ 'latitude' ]+insert_alea($max_alea)) . "', '" . "Full wallet" . "',now())";
-				$q = mysqli_query($mysqli, $query);    
-				if ( ! $q ) {
+				$query = "INSERT INTO geomap (type, IP, longit, latt, description) VALUES ('full_wallet', '" . $row[ 'peer_host' ] . "', '" . addslashes ($data_array[ 'longitude' ]+insert_alea($max_alea)) . "', '" . addslashes ($data_array[ 'latitude' ]+insert_alea($max_alea)) . "', '" . "Full wallet" . "')";
+				$results2 = $db->query($query);
+				if ( ! $results2 ) {
 					echo "Problem here... query insert";
-					echo mysqli_error( $mysqli );
+					echo $db->lastErrorMsg();
 					exit;
 				}
 			}
@@ -194,10 +194,10 @@ while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 
 #erase all not alive previous records (aka is_ok=0) before Json dump
 $query = "delete from geomap where is_ok=0"; 
-$q = mysqli_query($mysqli, $query);    
-if ( ! $q ) {
+$results = $db->query($query);
+if ( ! $results ) {
 	echo "Problem here...";
-	echo mysqli_error( $mysqli );
+	echo $db->lastErrorMsg();
 	exit;
 }
 
@@ -205,44 +205,44 @@ if ( ! $q ) {
 #json Dump
 
 $query = "SELECT * FROM geomap"; 
-$q = mysqli_query($mysqli, $query);    
-if ( ! $q ) {
+$results = $db->query($query);
+if ( ! $results ) {
 	echo "Problem here...";
-	echo mysqli_error( $mysqli );
+	echo $db->lastErrorMsg();
 	exit;
 }
 
 $hub_result_array=[];
 $result_json="";
-if(mysqli_num_rows ( $q )>0){
-	while( $row = mysqli_fetch_assoc ( $q ) ){
-		//echo "id:".$row[ 'id' ]." type:".$row[ 'type' ]." IP:".$row[ 'IP' ]." longit:".$row[ 'longit' ]." latt:".$row[ 'latt' ]." description:".$row[ 'description' ]." <br>";
-		if(preg_match('/hub/',$row[ 'type' ])) {
-			$buff_description="<b> Hub: ".$row[ 'description' ]."<br>IP: ".$row[ 'IP' ]."</b>";
-		} else if(preg_match('/relay/',$row[ 'type' ])) {
-			$buff_description="<b> Relay: ".$row[ 'description' ]."<br>IP: ".$row[ 'IP' ]."</b>";
+while( $row = $results->fetchArray(SQLITE3_ASSOC) ){
+	//echo "id:".$row[ 'id' ]." type:".$row[ 'type' ]." IP:".$row[ 'IP' ]." longit:".$row[ 'longit' ]." latt:".$row[ 'latt' ]." description:".$row[ 'description' ]." <br>";
+	if(preg_match('/hub/',$row[ 'type' ])) {
+		$buff_description="<b> Hub: ".$row[ 'description' ]."<br>IP: ".$row[ 'IP' ]."</b>";
+	} else if(preg_match('/relay/',$row[ 'type' ])) {
+		$buff_description="<b> Relay: ".$row[ 'description' ]."<br>IP: ".$row[ 'IP' ]."</b>";
 
-		} else {
-			//$buff_description="<b>".$row[ 'description' ]."<br>IP: ".$row[ 'IP' ]."</b>";
-			$buff_description="<b>".$row[ 'description' ]."</b>";
-		}
-		$buff_hub_result=array(
-			"type" => "Feature",
-			"geometry" => array(
-				"type" => "Point",
-				"coordinates" => array($row[ 'longit' ],$row[ 'latt' ]),
-			),
-			"properties" =>array(
-				"id"=>$row[ 'id' ],
-				"name"=>$buff_description,
-			),
-		);
-
-		array_push($hub_result_array,$buff_hub_result);
+	} else {
+		//$buff_description="<b>".$row[ 'description' ]."<br>IP: ".$row[ 'IP' ]."</b>";
+		$buff_description="<b>".$row[ 'description' ]."</b>";
 	}
+	$buff_hub_result=array(
+		"type" => "Feature",
+		"geometry" => array(
+			"type" => "Point",
+			"coordinates" => array($row[ 'longit' ],$row[ 'latt' ]),
+		),
+		"properties" =>array(
+			"id"=>$row[ 'id' ],
+			"name"=>$buff_description,
+		),
+	);
 
+	array_push($hub_result_array,$buff_hub_result);
+}
+
+if($hub_result_array){
 	$result_json=json_encode($hub_result_array);
-	file_put_contents('/var/www/public_html/json/byteball_map.json', $result_json);
+	file_put_contents('www/byteball_map.json', $result_json);
 							
 }else{
 	echo "Not found.";
@@ -297,7 +297,7 @@ function insert_alea ($my_max_alea){   #randomize a little spots display on the 
 
 function get_coord($IP)
 {
-	$json = file_get_contents("http://api.ipstack.com/$IP?access_key=xxxxxxxxxxxxx");  //<---- your API key here
+	$json = file_get_contents("http://api.ipstack.com/$IP?access_key=".$IPSTACK_API_KEY);  //<---- your API key here
 
 	if(!$json) {
 		echo "pas pu recuperer coordonnées";
