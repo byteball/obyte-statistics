@@ -8,7 +8,7 @@ date_default_timezone_set('UTC');
 $time_in = time();
 
 $db = new SQLite3($_SERVER['HOME'].'/.config/byteball-hub/byteball.sqlite');
-
+$db->busyTimeout(30*1000);
 
 /*
  * where are we ?
