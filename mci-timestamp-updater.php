@@ -3,7 +3,7 @@
 //and updates the mci_timestamps table.
 //Should be run every minute from a cron job.
 
-
+date_default_timezone_set('UTC');
 
 $time_in = time();
 
@@ -41,11 +41,10 @@ $results = $db->query( $query );
 
 while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 
-	echo "<br>".print_r($row,true);
-	echo " " . date( 'Y-m-d H:i:s', round($row[ 'int_value' ]/1000) );
+//	echo "<br>".print_r($row,true);
+//	echo " " . date( 'Y-m-d H:i:s', round($row[ 'int_value' ]/1000) );
 
-	$query = "insert into mci_timestamps set main_chain_index = '$row[main_chain_index]'";
-	$query .= ", date = '" . date( 'Y-m-d H:i:s', round($row[ 'int_value' ]/1000) ) . "'";
+	$query = "insert into mci_timestamps (main_chain_index, date) VALUES ($row[main_chain_index], '".date('Y-m-d H:i:s', round($row['int_value']/1000))."')";
 
 	$db->query($query);
     
@@ -96,7 +95,7 @@ function interpolate_timestamp( $from_mci, $from_timestamp, $to_mci, $to_timesta
 		$interpolated_time = round( $from_timestamp + ( $mci - $from_mci ) / $delta_mci * $delta_time ) ;
 //         echo "<br>interpolated_time of mci $mci : ".date( 'Y-m-d H:i:s', $interpolated_time);
         
-		$db->query("insert into mci_timestamps set main_chain_index='$mci', date='" . date( 'Y-m-d H:i:s', $interpolated_time) . "'" );
+		$db->query("insert into mci_timestamps (main_chain_index, date) VALUES($mci, '" . date( 'Y-m-d H:i:s', $interpolated_time) . "')" );
         
     
     }
