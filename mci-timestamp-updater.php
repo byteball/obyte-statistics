@@ -20,7 +20,7 @@ $row = $results->fetchArray(SQLITE3_ASSOC);
 
 $max_MCI = $row[ 'max_MCI' ];
 
-$last_timestamped_mci = $max_MCI;
+$last_timestamped_mci = $max_MCI ? $max_MCI : 0;
 
 /*
  * first get timestamp oracle info
@@ -107,6 +107,6 @@ function interpolate_timestamp( $from_mci, $from_timestamp, $to_mci, $to_timesta
 
 
 $total_time = time() - $time_in;
-echo "\n<br><br>done in " . $total_time . " sec";
+echo "\n<br><br>done in " . $total_time . " sec\n";
 
 ?>
