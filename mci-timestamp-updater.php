@@ -8,17 +8,18 @@ date_default_timezone_set('UTC');
 $time_in = time();
 
 $db = new SQLite3($_SERVER['HOME'].'/.config/byteball-hub/byteball.sqlite');
-$db->busyTimeout(30*1000);
-$db->exec("PRAGMA foreign_keys = 1");
-$db->exec("PRAGMA journal_mode=WAL");
-$db->exec("PRAGMA synchronous=FULL");
-$db->exec("PRAGMA temp_store=MEMORY");
+$stats_db = new SQLite3($_SERVER['HOME'].'/.config/byteball-hub/stats.sqlite');
+$stats_db->busyTimeout(30*1000);
+$stats_db->exec("PRAGMA foreign_keys = 1");
+$stats_db->exec("PRAGMA journal_mode=WAL");
+$stats_db->exec("PRAGMA synchronous=FULL");
+$stats_db->exec("PRAGMA temp_store=MEMORY");
 
 /*
  * where are we ?
  */
  
-$results = $db->query("select max(main_chain_index) as max_MCI from mci_timestamps" );
+$results = $stats_db->query("select max(main_chain_index) as max_MCI from mci_timestamps" );
 
 $row = $results->fetchArray(SQLITE3_ASSOC);
 
@@ -51,7 +52,7 @@ while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 
 	$query = "insert OR IGNORE into mci_timestamps (main_chain_index, date) VALUES ($row[main_chain_index], '".date('Y-m-d H:i:s', round($row['int_value']/1000))."')";
 
-	$db->query($query);
+	$stats_db->query($query);
     
 }
 
@@ -61,7 +62,7 @@ while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
  * then complete by filling the holes
  */
 
-$results = $db->query("select main_chain_index, strftime('%s', date) as timestamp from mci_timestamps order by main_chain_index" );
+$results = $stats_db->query("select main_chain_index, strftime('%s', date) as timestamp from mci_timestamps order by main_chain_index" );
 
 
 $from_mci = 0;
@@ -100,7 +101,7 @@ function interpolate_timestamp( $from_mci, $from_timestamp, $to_mci, $to_timesta
 		$interpolated_time = round( $from_timestamp + ( $mci - $from_mci ) / $delta_mci * $delta_time ) ;
 //         echo "<br>interpolated_time of mci $mci : ".date( 'Y-m-d H:i:s', $interpolated_time);
         
-		$db->query("insert into mci_timestamps (main_chain_index, date) VALUES($mci, '" . date( 'Y-m-d H:i:s', $interpolated_time) . "')" );
+		$stats_db->query("insert into mci_timestamps (main_chain_index, date) VALUES($mci, '" . date( 'Y-m-d H:i:s', $interpolated_time) . "')" );
         
     
     }
