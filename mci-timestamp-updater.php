@@ -15,6 +15,7 @@ $stats_db->exec("PRAGMA journal_mode=WAL");
 $stats_db->exec("PRAGMA synchronous=FULL");
 $stats_db->exec("PRAGMA temp_store=MEMORY");
 
+$stats_db->exec('BEGIN');
 /*
  * where are we ?
  */
@@ -84,12 +85,14 @@ while( $row = $results->fetchArray(SQLITE3_ASSOC) ){
 
 }
 
+$stats_db->exec('COMMIT');
+
 
 
 function interpolate_timestamp( $from_mci, $from_timestamp, $to_mci, $to_timestamp ){
 
 //     echo "<br>interpolate_timestamp( $from_mci, $from_timestamp, $to_mci, $to_timestamp )";
-    
+    global $stats_db;
 	$delta_time = $to_timestamp-$from_timestamp;
 	$delta_mci = $to_mci - $from_mci;
     
