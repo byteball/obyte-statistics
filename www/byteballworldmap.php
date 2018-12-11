@@ -94,7 +94,10 @@ html {
 
 <?php
 	
-	$stats_db = new SQLite3($_SERVER['HOME'].'/.config/byteball-hub/stats.sqlite');
+	$home_dir = $_SERVER['HOME'];
+	if (!$home_dir)
+		$home_dir = $_SERVER['DOCUMENT_ROOT'].'../..';
+	$stats_db = new SQLite3($home_dir.'/.config/byteball-hub/stats.sqlite');
 
 	$query = "select count(*) as total_count from geomap where type='hub'";
 	$results = $stats_db->query($query);
