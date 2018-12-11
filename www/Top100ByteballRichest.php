@@ -85,11 +85,11 @@ echo "
 	</tr>
 ";
 
-$db = new SQLite3($_SERVER['HOME'].'/.config/byteball-hub/byteball.sqlite');
+$stats_db = new SQLite3($_SERVER['HOME'].'/.config/byteball-hub/stats.sqlite');
 
 $query = "SELECT * FROM richlist order by amount DESC LIMIT 100";
 
-$results = $db->query($query);    
+$results = $stats_db->query($query);    
 if ( ! $results ) {
 	echo "Problem here..."; 
 	exit;

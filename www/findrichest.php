@@ -1,6 +1,6 @@
 <?php 
 
-	$db = new SQLite3($_SERVER['HOME'].'/.config/byteball-hub/byteball.sqlite');
+	$stats_db = new SQLite3($_SERVER['HOME'].'/.config/byteball-hub/stats.sqlite');
 
 	$address=trim($_POST['address']);
   
@@ -21,7 +21,7 @@
 	$query = "SELECT * FROM richlist where address='".addslashes($address)."' LIMIT 1"; 
 
 
-	$results = $db->query($query);    
+	$results = $stats_db->query($query);    
 	if ( ! $results ) {
 		echo "Problem here...";
 		exit;

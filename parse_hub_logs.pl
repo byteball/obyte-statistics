@@ -26,12 +26,11 @@ $timestamp=$timestamp*1000;
 my $connected_users=0;
 my $HTML;
 
-my $dbh;
+my $stats_dbh;
 my $sth;
 
-my $dbfile=$ENV{"HOME"}."/.config/byteball-hub/byteball.sqlite";
-
-$dbh = DBI->connect("dbi:SQLite:dbname=$dbfile","","") or die $DBI::errstr;
+my $stats_dbfile=$ENV{"HOME"}."/.config/byteball-hub/stats.sqlite";
+$stats_dbh = DBI->connect("dbi:SQLite:dbname=$stats_dbfile","","") or die $DBI::errstr;
 
 my $log=`grep connections ../byteball-hub/log | tail`;
 
@@ -53,7 +52,7 @@ if ($log_array[$log_array_length-2] =~ m/(\d+) incoming/) {
 
 if ($connected_users>0){
 	my $peers_string="";
-	$sth = $dbh->prepare("SELECT peer_host FROM peers");
+	$sth = $stats_dbh->prepare("SELECT peer_host FROM peers");
 	$sth->execute();
 	while (my $query_result = $sth->fetchrow_hashref){
 		$peers_string.=$query_result->{peer_host}.="<br>" if($query_result->{peer_host} !~/byteball\.fr/);
@@ -62,7 +61,7 @@ if ($connected_users>0){
 	#print $peers_string;
 	$sth->finish();
 	#insertion 
-	$sth=$dbh->prepare ("INSERT INTO hub_stats (connected_wallets) values ('$connected_users')");
+	$sth=$stats_dbh->prepare ("INSERT INTO hub_stats (connected_wallets) values ('$connected_users')");
 	$sth->execute;
 
 	dump_json("www/hub_stats.json","hub_stats","UTC_datetime","connected_wallets");
@@ -77,7 +76,7 @@ sub dump_json{
 		
 	open(my $fh2, '>', $filename) or die "Could not open file '$filename' $!";
 	my $buff="[\n";
-	$sth=$dbh->prepare ("select * from $table ORDER BY id ASC");
+	$sth=$stats_dbh->prepare ("select * from $table ORDER BY id ASC");
 	$sth->execute;
 	my $row_numbers = $sth->rows;
 	my $i=1;

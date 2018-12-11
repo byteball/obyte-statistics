@@ -7,6 +7,7 @@ $time_in = time();
 echo "\n<br>script lauched at " . date('Y-m-d H:i:s');
 
 $db = new SQLite3($_SERVER['HOME'].'/.config/byteball-hub/byteball.sqlite');
+$stats_db = new SQLite3($_SERVER['HOME'].'/.config/byteball-hub/stats.sqlite');
 
 
 
@@ -18,11 +19,11 @@ $query = "CREATE TEMPORARY TABLE witnesses_tmp";
 $query .= " ( ";
 $query .= " address VARCHAR(32) NOT NULL PRIMARY KEY )";
 
-$results = $db->query( $query );
+$results = $stats_db->query( $query );
 
 if (! $results) {
 	echo "<p>There was an error in query: $query</p>";
-	echo $db->lastErrorMsg();
+	echo $stats_db->lastErrorMsg();
 	exit;
 }
 
@@ -42,7 +43,7 @@ if (! $results) {
 while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 
 //     echo "\n<br>" . print_r($row, true);
-	$db->query( "insert into witnesses_tmp (address) VALUES ('" . $row[ 'address' ] . "')" );
+	$stats_db->query( "insert into witnesses_tmp (address) VALUES ('" . $row[ 'address' ] . "')" );
 
 }
 
@@ -56,11 +57,11 @@ while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 
 // 
 
-$results = $db->query("select max( main_chain_index ) as max_MCI from mci_timestamps where date( date ) = date( (select max( day ) from daily_stats) )" );
+$results = $stats_db->query("select max( main_chain_index ) as max_MCI from mci_timestamps where date( date ) = date( (select max( day ) from daily_stats) )" );
 
 if ( ! $results ) {
 	 
-	die("erreur : " .  $db->lastErrorMsg());
+	die("erreur : " .  $stats_db->lastErrorMsg());
 	
 }
 
@@ -80,11 +81,11 @@ $query .= " ( ";
 $query .= " main_chain_index INT UNSIGNED NOT NULL PRIMARY KEY,";
 $query .= " date TIMESTAMP NOT NULL )";
 
-$results = $db->query( $query );
+$results = $stats_db->query( $query );
 
 if (! $results) {
 	echo "<p>There was an error in query: $query</p>";
-	echo $db->lastErrorMsg();
+	echo $stats_db->lastErrorMsg();
 	exit;
 }
 
@@ -93,17 +94,17 @@ if (! $results) {
  * fill sqlite mci_timestamps_tmp from the full db
  */
  
-$results2 = $db->query("select * from mci_timestamps where main_chain_index > '$max_MCI' order by main_chain_index" );
+$results2 = $stats_db->query("select * from mci_timestamps where main_chain_index > '$max_MCI' order by main_chain_index" );
 
 while( $row = $results2->fetchArray(SQLITE3_ASSOC) ){
 
 	$query =  "insert into mci_timestamps_tmp (main_chain_index, date) VALUES ('" . $row[ 'main_chain_index' ] . "', '" . $row[ 'date' ] . "' )";
 
-	$results = $db->query( $query );
+	$results = $stats_db->query( $query );
 	
 	if (! $results) {
 		echo "<p>There was an error in query: $query</p>";
-		echo $db->lastErrorMsg();
+		echo $stats_db->lastErrorMsg();
 		exit;
 	}
 
@@ -156,7 +157,7 @@ while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 	$query .= ", addresses = '" . $row[ 'authors' ] . "'";
 	$query .= ", new_addresses = '" . $row[ 'new_authors' ] . "'";
 	
-	$db->query($query );
+	$stats_db->query($query );
 	
 
 }
@@ -169,7 +170,7 @@ while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
  
 $res = array();
  
-$results = $db->query("select strftime('%s', day)*1000 as t, units_w, units_nw, payload_nw, payload_w, round(sidechain_units/(units_w+units_nw)*100) as sidechain_units, addresses, new_addresses from daily_stats order by day" );
+$results = $stats_db->query("select strftime('%s', day)*1000 as t, units_w, units_nw, payload_nw, payload_w, round(sidechain_units/(units_w+units_nw)*100) as sidechain_units, addresses, new_addresses from daily_stats order by day" );
 
 while( $row = $results->fetchArray(SQLITE3_ASSOC) ){
 

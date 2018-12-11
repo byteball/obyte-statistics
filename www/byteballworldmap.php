@@ -94,12 +94,12 @@ html {
 
 <?php
 	
-	$db = new SQLite3($_SERVER['HOME'].'/.config/byteball-hub/byteball.sqlite');
+	$stats_db = new SQLite3($_SERVER['HOME'].'/.config/byteball-hub/stats.sqlite');
 
 	$query = "select count(*) as total_count from geomap where type='hub'";
-	$results = $db->query($query);
+	$results = $stats_db->query($query);
 	if ( ! $results ) {
-		echo $db->lastErrorMsg();
+		echo $stats_db->lastErrorMsg();
 		exit;       
 	}
 	while( $row = $results->fetchArray(SQLITE3_ASSOC) ){
@@ -107,9 +107,9 @@ html {
 	}
 
 	$query = "select count(*) as total_count from geomap where type='full_wallet'";
-	$results = $db->query($query);
+	$results = $stats_db->query($query);
 	if ( ! $results ) {
-		echo $db->lastErrorMsg();
+		echo $stats_db->lastErrorMsg();
 		exit;       
 	}
 	while( $row = $results->fetchArray(SQLITE3_ASSOC) ){
@@ -117,9 +117,9 @@ html {
 	}
 	
 	$query = "select date from geomap order by date desc limit 1";
-	$results = $db->query($query);
+	$results = $stats_db->query($query);
 	if ( ! $results ) { 
-		echo $db->lastErrorMsg();
+		echo $stats_db->lastErrorMsg();
 		exit;       
 	}
 	while( $row = $results->fetchArray(SQLITE3_ASSOC) ){

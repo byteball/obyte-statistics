@@ -13,13 +13,17 @@ use utf8;
 
 use DBI;
 my $dbh;
+my $stats_dbh;
 my $sth;
 my $sth2;
 my $sth3;
 
 my $dbfile=$ENV{"HOME"}."/.config/byteball-hub/byteball.sqlite";
-
 $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile","","") or die $DBI::errstr;
+
+my $stats_dbfile=$ENV{"HOME"}."/.config/byteball-hub/stats.sqlite";
+$stats_dbh = DBI->connect("dbi:SQLite:dbname=$stats_dbfile","","") or die $DBI::errstr;
+
 my $total_value=0;
 my $others_value=0;
 my $diversity_index=0;
@@ -149,11 +153,11 @@ foreach (@array_of_witnesses)#last timestamp
 	}
 	$i++;
 	#insert if needed in table seen_witnesses
-	$sth=$dbh->prepare("SELECT count(*) as total_count FROM seen_witnesses where address='$_'");
+	$sth=$stats_dbh->prepare("SELECT count(*) as total_count FROM seen_witnesses where address='$_'");
 	$sth->execute();
 	my $query_result2 = $sth->fetchrow_hashref;
 	if($query_result2->{total_count}==0){
-		$sth=$dbh->prepare("INSERT INTO seen_witnesses (address) values('$_')");
+		$sth=$stats_dbh->prepare("INSERT INTO seen_witnesses (address) values('$_')");
 		$sth->execute();
 	}
 	 
@@ -182,10 +186,10 @@ close $fh;
 
 #pass 2: top 100
 	
-$dbh->prepare('BEGIN')->execute();
-$dbh->prepare('DELETE FROM richlist')->execute();
+$stats_dbh->prepare('BEGIN')->execute();
+$stats_dbh->prepare('DELETE FROM richlist')->execute();
 
-$sth = $dbh->prepare("SELECT sum(amount) as amount,address FROM 'outputs' where is_spent='0' and asset is null group by address order by amount desc");
+$sth = $dbh->prepare("SELECT sum(amount) as amount,address FROM outputs where is_spent=0 and asset is null group by address order by amount desc");
 $sth->execute();
 my $total_add_with_balance=0;
 while ($query_result = $sth->fetchrow_hashref){
@@ -194,10 +198,10 @@ while ($query_result = $sth->fetchrow_hashref){
 	next if $query_result->{address} eq 'GVVHBOGQFAZJW54m37LPSHZOYWZ2Z47T';
 	next if $query_result->{address} eq 'ZQ4NJ2YZGUGIPU2F2DOAIIH67MBY4AHG';
 	$total_add_with_balance++;
-	my $sth2=$dbh->prepare ("INSERT INTO richlist (amount,address) values('$query_result->{amount}','$query_result->{address}')");
+	my $sth2=$stats_dbh->prepare ("INSERT INTO richlist (amount,address) values('$query_result->{amount}','$query_result->{address}')");
 	$sth2->execute;
 }
-$dbh->prepare('COMMIT')->execute();
+$stats_dbh->prepare('COMMIT')->execute();
 
 
 
@@ -283,12 +287,12 @@ my $total_payload_for_db=$total_payload;
 $total_payload=set_coma_separators($total_payload);
 
 #how many hubs and wallets
-$sth=$dbh->prepare ("select count(*) as total_count from geomap where type='hub'");
+$sth=$stats_dbh->prepare ("select count(*) as total_count from geomap where type='hub'");
 $sth->execute;
 $query_result = $sth->fetchrow_hashref();
 my $total_hubs=$query_result->{total_count};
 
-$sth=$dbh->prepare ("select count(*) as total_count from geomap where type='full_wallet'");
+$sth=$stats_dbh->prepare ("select count(*) as total_count from geomap where type='full_wallet'");
 $sth->execute;
 $query_result = $sth->fetchrow_hashref();
 my $total_full_wallets=$query_result->{total_count};
@@ -325,7 +329,7 @@ my $accredited=$query_result->{accredited};
 
 #all that into bb_stats table...
 
-$sth=$dbh->prepare ("INSERT INTO bb_stats ( total_active_witnesses, multisigned_units, smart_contract_units, total_units, total_stable_units, total_units_witnesses_excluded, stable_ratio, total_payload, total_add_with_balance, total_stable_units_sidechain, total_sidechain_units_WE, total_full_wallets, total_hubs, registered_users, non_US, accredited_investors) values 
+$sth=$stats_dbh->prepare ("INSERT INTO bb_stats ( total_active_witnesses, multisigned_units, smart_contract_units, total_units, total_stable_units, total_units_witnesses_excluded, stable_ratio, total_payload, total_add_with_balance, total_stable_units_sidechain, total_sidechain_units_WE, total_full_wallets, total_hubs, registered_users, non_US, accredited_investors) values 
 ('$total_active_witnesses','$multisig_count','$smart_contract_count','$total_units','$total_stable_units','$total_units_witnesses_excluded','$ratio','$total_payload_for_db','$total_add_with_balance','$total_stable_units_sidechain','$total_sidechain_units_witnesses_excluded','$total_full_wallets','$total_hubs','$registered_profiles_count','$non_US_count','$accredited')");
 $sth->execute;
 
@@ -338,6 +342,7 @@ $sth->finish() if defined $sth;
 $sth2->finish() if defined $sth2;
 $sth3->finish() if defined $sth;
 $dbh->disconnect;
+$stats_dbh->disconnect;
 
 		
 sub dump_json{
@@ -348,7 +353,7 @@ sub dump_json{
 		
 	open(my $fh2, '>', $filename) or die "Could not open file '$filename' $!";
 	my $buff="[\n";
-	$sth=$dbh->prepare ("select * from $table ORDER BY id ASC");
+	$sth=$stats_dbh->prepare ("select * from $table ORDER BY id ASC");
 	$sth->execute;
 	my $row_numbers = $sth->rows;
 	my $i=1;
