@@ -97,7 +97,7 @@ html {
 //	$home_dir = $_SERVER['HOME'];
 //	if (!$home_dir)
 //		$home_dir = $_SERVER['DOCUMENT_ROOT'].'/../..';
-	$stats_db = new SQLite3('../stats.sqlite');
+	$stats_db = new SQLite3('../stats.sqlite', SQLITE3_OPEN_READONLY);
 
 	$query = "select count(*) as total_count from geomap where type='hub'";
 	$results = $stats_db->query($query);

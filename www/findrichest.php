@@ -3,7 +3,7 @@
 //	$home_dir = $_SERVER['HOME'];
 //	if (!$home_dir)
 //		$home_dir = $_SERVER['DOCUMENT_ROOT'].'/../..';
-	$stats_db = new SQLite3('../stats.sqlite');
+	$stats_db = new SQLite3('../stats.sqlite', SQLITE3_OPEN_READONLY);
 
 	$address=trim($_POST['address']);
   
