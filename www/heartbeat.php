@@ -1,6 +1,6 @@
 <?php
 
-include_once '/var/www/chart-functions.php';
+include_once 'chart-functions.php';
 
 ?><!DOCTYPE html>
 <html>
