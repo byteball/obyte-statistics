@@ -6,7 +6,7 @@
 date_default_timezone_set('UTC');
 
 $time_in = time();
-echo "\n<br>script lauched at " . date('Y-m-d H:i:s');
+echo "\n<br>script lauched at " . date('Y-m-d H:i:s') . "\n";
 
 $db = new SQLite3($_SERVER['HOME'].'/.config/byteball-hub/byteball.sqlite');
 $stats_db = new SQLite3($_SERVER['HOME'].'/.config/byteball-hub/stats.sqlite');
@@ -70,7 +70,7 @@ if ( ! $results ) {
 $row = $results->fetchArray(SQLITE3_ASSOC);
 
 $max_MCI = $row[ 'max_MCI' ]; 
-
+echo "max mci ".$max_MCI."\n";
 
 
 
