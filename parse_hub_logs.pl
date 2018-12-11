@@ -86,7 +86,7 @@ sub dump_json{
 	while (my $query_result = $sth->fetchrow_hashref){
 		my $timestamp=convert_to_unix_timestamp($query_result->{$fields[2]});
 		$timestamp=$timestamp*1000;
-		if (i>0){
+		if ($i>0){
 			$buff.=",";
 		}
 		$buff.="{\"t\":".$timestamp.",\"a\":".$query_result->{$fields[3]}."}";	
