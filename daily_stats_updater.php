@@ -167,14 +167,7 @@ while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 
 	echo "\n<br>" . print_r($row, true);
 	
-	$query = "insert into daily_stats set day='" . $row[ 'day' ] . "'";
-	$query .= ", units_w = '" . $row[ 'units_w_count' ] . "'";
-	$query .= ", units_nw = '" . $row[ 'units_nw_count' ] . "'";
-	$query .= ", payload_nw = '" . $row[ 'payload_nw' ] . "'";
-	$query .= ", payload_w = '" . $row[ 'payload_w' ] . "'";
-	$query .= ", sidechain_units  = '" . $row[ 'sidechain_units' ] . "'";
-	$query .= ", addresses = '" . $row[ 'authors' ] . "'";
-	$query .= ", new_addresses = '" . $row[ 'new_authors' ] . "'";
+	$query = "insert into daily_stats (day, units_w, units_nw, payload_nw, payload_w, sidechain_units, addresses, new_addresses) VALUES ('" . $row[ 'day' ] . "', '" . $row[ 'units_w_count' ] . "', '" . $row[ 'units_nw_count' ] . "', '" . $row[ 'payload_nw' ] . "', '" . $row[ 'payload_w' ] . "', '" . $row[ 'sidechain_units' ] . "', '" . $row[ 'authors' ] . "', '" . $row[ 'new_authors' ] . "')";
 	
 	$stats_db->query($query );
 }
