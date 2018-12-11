@@ -162,5 +162,7 @@ function make_443_get ($url) {
 	}
 
 	// close curl resource to free up system resources 
-}   
+}
+
+include('footer.php');
 ?>
