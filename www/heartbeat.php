@@ -300,7 +300,7 @@ $args = array(
 	'json' => 'daily_stats',
 	'tooltip_pointFormat' => '<span style="color:{series.color}">{series.name}</span>: <b>{point.y} addresses</b><br/>',
 	'tooltip_valueDecimals' => 0,
-	'tooltip_split' => 'false',
+	'tooltip_split' => 'true',
 	'plotOptions_compare' => '',
 );
 
