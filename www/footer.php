@@ -5,7 +5,7 @@
 <a href="http://papabyte.com/byteball-sport-betting-bot.html"><img src="https://byteball.fr/papabytebanners-02.png"></a>
 <br><br>
 <a href="https://byteball.fr">Home</a> | 
-<a href="./Top100ByteballRichest.html">Top 100 richest</a> | 
+<a href="./Top100Richest.php">Top 100 richest</a> | 
 <a href="./byteballworldmap.php">Byteball world map</a> | 
 <a href="./stats.php">Witnesses monitoring page</a> | 
 <a href="./heartbeat.php">Byteball Statistics</a>

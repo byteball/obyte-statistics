@@ -47,7 +47,7 @@
 					<tr>
 						<td><font size=-1>
 						<a href="/byteballworldmap.php">Click here</a> to see the Byteball World Map.<br>
-						<a href="/Top100ByteballRichest.html">Click here</a> to get the Byteball Top 100 richest list.<br>
+						<a href="/Top100Richest.php">Click here</a> to get the Byteball Top 100 richest list.<br>
 						<a href="/heartbeat.php">Click here</a> to see the global network stats.<br>
 						<a href="/stats.php">Click here</a> to get a picture of all Witnesses activity on the network.
 						</font></td>
