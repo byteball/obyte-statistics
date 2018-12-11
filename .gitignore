@@ -5,3 +5,6 @@ package-lock.json
 conf.php
 www/*.json
 www/witnesses.php
+stats.sqlite*
+*.err
+*.log
