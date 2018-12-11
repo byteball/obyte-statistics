@@ -4,4 +4,4 @@ node_modules
 package-lock.json
 conf.php
 www/*.json
-www/stats.php
+www/witnesses.php

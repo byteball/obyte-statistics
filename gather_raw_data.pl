@@ -175,10 +175,10 @@ my $total_active_witnesses=$i-1;
 $HTML->{Array}=$buff_html_array;
 $HTML->{update}=$update;
 $HTML->{total_active}=$total_active_witnesses;
-#open the stat template and output the stats.php public php script
-my $template='stats_template.html';
+#open the stat template and output the witnesses.php public php script
+my $template='witnesses_template.html';
 my $new_stats=get_content($template,$HTML);
-my $filename = 'www/stats.php';
+my $filename = 'www/witnesses.php';
 open(my $fh, '>', $filename) or die "Could not open file '$filename' $!";
 print $fh $new_stats;
 close $fh;

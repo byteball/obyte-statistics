@@ -7,7 +7,7 @@
 <a href="/">Home</a> | 
 <a href="./Top100Richest.php">Top 100 richest</a> | 
 <a href="./byteballworldmap.php">Byteball world map</a> | 
-<a href="./stats.php">Witnesses monitoring page</a> | 
+<a href="./witnesses.php">Witnesses</a> | 
 <a href="./heartbeat.php">Byteball Statistics</a>
 </center>
 <br><br>
