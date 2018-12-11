@@ -165,7 +165,7 @@ $stats_db->exec("BEGIN");
 
 while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 
-	echo "\n<br>" . print_r($row, true);
+//	echo "\n<br>" . print_r($row, true);
 	
 	$query = "insert into daily_stats (day, units_w, units_nw, payload_nw, payload_w, sidechain_units, addresses, new_addresses) VALUES ('" . $row[ 'day' ] . "', '" . $row[ 'units_w_count' ] . "', '" . $row[ 'units_nw_count' ] . "', '" . $row[ 'payload_nw' ] . "', '" . $row[ 'payload_w' ] . "', '" . $row[ 'sidechain_units' ] . "', '" . $row[ 'authors' ] . "', '" . $row[ 'new_authors' ] . "')";
 	
