@@ -26,8 +26,12 @@ $timestamp=$timestamp*1000;
 my $connected_users=0;
 my $HTML;
 
+my $dbh;
 my $stats_dbh;
 my $sth;
+
+my $dbfile=$ENV{"HOME"}."/.config/byteball-hub/byteball.sqlite";
+$dbh = DBI->connect("dbi:SQLite:dbname=$dbfile","","") or die $DBI::errstr;
 
 my $stats_dbfile=$ENV{"HOME"}."/.config/byteball-hub/stats.sqlite";
 $stats_dbh = DBI->connect("dbi:SQLite:dbname=$stats_dbfile","","") or die $DBI::errstr;
@@ -52,7 +56,7 @@ if ($log_array[$log_array_length-2] =~ m/(\d+) incoming/) {
 
 if ($connected_users>0){
 	my $peers_string="";
-	$sth = $stats_dbh->prepare("SELECT peer_host FROM peers");
+	$sth = $dbh->prepare("SELECT peer_host FROM peers");
 	$sth->execute();
 	while (my $query_result = $sth->fetchrow_hashref){
 		$peers_string.=$query_result->{peer_host}.="<br>" if($query_result->{peer_host} !~/byteball\.fr/);
