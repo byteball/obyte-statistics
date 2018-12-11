@@ -8,7 +8,7 @@
 <a href="./Top100Richest.php">Top 100 richest</a> | 
 <a href="./byteballworldmap.php">Byteball world map</a> | 
 <a href="./witnesses.php">Witnesses</a> | 
-<a href="./heartbeat.php">Byteball Statistics</a>
+<a href="./heartbeat.php">Byteball HeartBeat</a>
 </center>
 <br><br>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
