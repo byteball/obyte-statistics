@@ -41,6 +41,9 @@
 	});
 </script>
 <style>
+body {
+	width: 800px;
+}
 #search {
 	width: 700px;
 	padding: 10px;
@@ -60,14 +63,14 @@
 <table>
 	<tr>
 		<td><a href="https://byteball.org"><img src="https://byteball.org/static/android-icon-192x192.png" height="100" width="100"></a></td>
-		<td><center><h1>Byteball Top 100 richest list</h1></center></td>
+		<td style="padding-left: 10px"><center><h1>Byteball Top 100 richest list</h1></center></td>
 	</tr>
 </table>
 
 <br><br>
 
 <div id="container" style="position: relative">
-	<font size="+1">Find yourself among the richest!</font>
+	<font size="+1">Find yourself among the richest!</font><br>
 	<input type="text" id="search" placeholder="Your Byteball address here."/>
 
 	<table>
