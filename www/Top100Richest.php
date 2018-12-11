@@ -40,6 +40,19 @@
 		});
 	});
 </script>
+<style>
+#search {
+	width: 700px;
+	padding: 10px;
+}
+#button {
+	display: block;
+	width: 100px;
+	height: 30px;
+	border: solid #366FEB 1px;
+	background: #91B2FA;
+}
+</style>
 
 </head>
 <body>
