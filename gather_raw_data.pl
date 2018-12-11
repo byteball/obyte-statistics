@@ -355,7 +355,7 @@ sub dump_json{
 	my $buff="[\n";
 	$sth=$stats_dbh->prepare ("select * from $table ORDER BY id ASC");
 	$sth->execute;
-	my $i=1;
+	my $i=0;
 	while (my $query_result = $sth->fetchrow_hashref){
 		my $timestamp=convert_to_unix_timestamp($query_result->{$fields[2]});
 		$timestamp=($timestamp+7200)*1000;
