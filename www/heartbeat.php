@@ -1,7 +1,6 @@
 <?php
 
 include_once '/var/www/chart-functions.php';
-include_once '/var/www/where_are_your_mysql_credentials/mysql.php';
 
 ?><!DOCTYPE html>
 <html>
