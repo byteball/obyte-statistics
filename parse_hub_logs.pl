@@ -82,16 +82,14 @@ sub dump_json{
 	my $buff="[\n";
 	$sth=$stats_dbh->prepare ("select * from $table ORDER BY id ASC");
 	$sth->execute;
-	my $row_numbers = $sth->rows;
 	my $i=1;
 	while (my $query_result = $sth->fetchrow_hashref){
 		my $timestamp=convert_to_unix_timestamp($query_result->{$fields[2]});
 		$timestamp=$timestamp*1000;
-		if($i<$row_numbers){
-			$buff.="{\"t\":".$timestamp.",\"a\":".$query_result->{$fields[3]}."},";	
-		}else{
-			$buff.="{\"t\":".$timestamp.",\"a\":".$query_result->{$fields[3]}."}";	
-		}		
+		if (i>0){
+			$buff.=",";
+		}
+		$buff.="{\"t\":".$timestamp.",\"a\":".$query_result->{$fields[3]}."}";	
 		$i++;
 	}
 	$buff.="]";

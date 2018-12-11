@@ -355,16 +355,14 @@ sub dump_json{
 	my $buff="[\n";
 	$sth=$stats_dbh->prepare ("select * from $table ORDER BY id ASC");
 	$sth->execute;
-	my $row_numbers = $sth->rows;
 	my $i=1;
 	while (my $query_result = $sth->fetchrow_hashref){
 		my $timestamp=convert_to_unix_timestamp($query_result->{$fields[2]});
 		$timestamp=($timestamp+7200)*1000;
-		if($i<$row_numbers){
-			$buff.="{\"t\":".$timestamp.",\"a\":".$query_result->{$fields[3]}.",\"b\":".$query_result->{$fields[4]}.",\"c\":".$query_result->{$fields[5]}.",\"d\":".$query_result->{$fields[6]}.",\"e\":".$query_result->{$fields[7]}.",\"f\":".$query_result->{$fields[8]}.",\"g\":".$query_result->{$fields[9]}.",\"h\":".$query_result->{$fields[10]}.",\"i\":".$query_result->{$fields[11]}."},";	
-		 }else{
-			$buff.="{\"t\":".$timestamp.",\"a\":".$query_result->{$fields[3]}.",\"b\":".$query_result->{$fields[4]}.",\"c\":".$query_result->{$fields[5]}.",\"d\":".$query_result->{$fields[6]}.",\"e\":".$query_result->{$fields[7]}.",\"f\":".$query_result->{$fields[8]}.",\"g\":".$query_result->{$fields[9]}.",\"h\":".$query_result->{$fields[10]}.",\"i\":".$query_result->{$fields[11]}."}";	
-			}		
+		if (i>0){
+			$buff.=",";
+		}
+		$buff.="{\"t\":".$timestamp.",\"a\":".$query_result->{$fields[3]}.",\"b\":".$query_result->{$fields[4]}.",\"c\":".$query_result->{$fields[5]}.",\"d\":".$query_result->{$fields[6]}.",\"e\":".$query_result->{$fields[7]}.",\"f\":".$query_result->{$fields[8]}.",\"g\":".$query_result->{$fields[9]}.",\"h\":".$query_result->{$fields[10]}.",\"i\":".$query_result->{$fields[11]}."}";	
 		$i++;
 	}
 	$buff.="]";
