@@ -103,6 +103,7 @@ foreach (@array_of_witnesses)#last timestamp
 	$witnesses_stats->{$_}->{last_seen_mci_timestamp}=$witnesses_market->{$_}->{last_seen} if ($witnesses_market->{$_}->{last_seen});
 	$witnesses_stats->{$_}->{last_seen_mci}="<center>> 12h</center>";
 	$witnesses_stats->{$_}->{last_seen_mci}=$witnesses_market->{$_}->{last_mci} if(defined $witnesses_market->{$_}->{last_mci});
+	$witnesses_stats->{$_}->{arrow}="";
 	  
 	$total_value+=$witnesses_stats->{$_}->{validations_count};
 	  
@@ -139,7 +140,6 @@ foreach (@array_of_witnesses)#last timestamp
 	else{
 		$witnesses_stats->{$_}->{text}="Unknown user";
 		$witnesses_stats->{$_}->{status}="Independent Witness";
-		$witnesses_stats->{$_}->{arrow}="";
 		$others_value+=$witnesses_stats->{$_}->{validations_count};
 	}
 	$stats_range=$max_end_users_seen_units;
