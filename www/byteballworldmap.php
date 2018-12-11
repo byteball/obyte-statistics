@@ -204,7 +204,7 @@ $(function() {
 
 
 
-		var monuments = JSON.parse(jsondata);
+		var monuments = jsondata;
 
 
 		$.each( monuments, function() {
