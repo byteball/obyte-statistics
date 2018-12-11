@@ -305,6 +305,7 @@ function insert_alea ($my_max_alea){   #randomize a little spots display on the 
 
 function get_coord($IP)
 {
+	global $IPSTACK_API_KEY;
 	$json = file_get_contents("http://api.ipstack.com/$IP?access_key=".$IPSTACK_API_KEY);  //<---- your API key here
 
 	if(!$json) {
