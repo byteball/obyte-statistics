@@ -19,7 +19,7 @@
 		<td><img src="https://byteball.org/static/android-icon-192x192.png" height="100" width="100"></td>
 		<td width=20></td>
 		<td>
-			Hubs status: <img src="green_button.jpg" height="15" width="15"><br>
+			Hub status: <img src="green_button.jpg" height="15" width="15" style="vertical-align: middle"><br>
 		</td>
 		<td>
 
