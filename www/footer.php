@@ -28,12 +28,6 @@ New to Byteball? Check out <a href="https://byteball.org" target="_blank">byteba
 	</div>
 	
 	</div>
-	
-	<div id="sidebar">
-				
-		<a href="https://byteball.org" target="_blank"><img src="https://byteball.org/img/inphone/wallet.png?v2" height="230" width="120"></a>
-	
-	</div>
 		
 </body>
 
