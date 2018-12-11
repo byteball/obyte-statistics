@@ -9,7 +9,18 @@ $time_in = time();
 echo "\n<br>script lauched at " . date('Y-m-d H:i:s') . "\n";
 
 $db = new SQLite3($_SERVER['HOME'].'/.config/byteball-hub/byteball.sqlite');
+$db->busyTimeout(30*1000);
+$db->exec("PRAGMA foreign_keys = 1");
+$db->exec("PRAGMA journal_mode=WAL");
+$db->exec("PRAGMA synchronous=FULL");
+$db->exec("PRAGMA temp_store=MEMORY");
+
 $stats_db = new SQLite3($_SERVER['HOME'].'/.config/byteball-hub/stats.sqlite');
+$stats_db->busyTimeout(30*1000);
+$stats_db->exec("PRAGMA foreign_keys = 1");
+$stats_db->exec("PRAGMA journal_mode=WAL");
+$stats_db->exec("PRAGMA synchronous=FULL");
+$stats_db->exec("PRAGMA temp_store=MEMORY");
 
 
 
@@ -34,7 +45,7 @@ if (! $results) {
  * fill witnesses_tmp
  */
  
-$results = $db->query( "select address from unit_witnesses where 1 group by address" );
+$results = $db->query( "select DISTINCT address from unit_witnesses" );
 
 if (! $results) {
 	echo "<p>There was an error in query: $query</p>";
@@ -69,7 +80,7 @@ if ( ! $results ) {
 
 $row = $results->fetchArray(SQLITE3_ASSOC);
 
-$max_MCI = $row[ 'max_MCI' ]; 
+$max_MCI = $row[ 'max_MCI' ] ? $row[ 'max_MCI' ] : 0; 
 echo "max mci ".$max_MCI."\n";
 
 
@@ -98,6 +109,8 @@ if (! $results) {
  
 $results2 = $stats_db->query("select * from mci_timestamps where main_chain_index > '$max_MCI' order by main_chain_index" );
 
+$db->exec("BEGIN");
+
 while( $row = $results2->fetchArray(SQLITE3_ASSOC) ){
 
 	$query =  "insert into mci_timestamps_tmp (main_chain_index, date) VALUES ('" . $row[ 'main_chain_index' ] . "', '" . $row[ 'date' ] . "' )";
@@ -111,7 +124,9 @@ while( $row = $results2->fetchArray(SQLITE3_ASSOC) ){
 	}
 
 }
- 
+
+$db->exec("COMMIT");
+
 
 /*
  * counting query
@@ -146,6 +161,8 @@ if (! $results) {
 	exit;
 }
 
+$stats_db->exec("BEGIN");
+
 while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 
 	echo "\n<br>" . print_r($row, true);
@@ -160,10 +177,9 @@ while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 	$query .= ", new_addresses = '" . $row[ 'new_authors' ] . "'";
 	
 	$stats_db->query($query );
-	
-
 }
 
+$stats_db->exec("COMMIT");
 
 
 /*
