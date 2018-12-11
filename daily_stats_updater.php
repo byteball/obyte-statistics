@@ -3,6 +3,8 @@
 //This script should be ran from a periodic cron job once a day.
 //Fills the table daily_stat then dumps daily_stats.json
 
+date_default_timezone_set('UTC');
+
 $time_in = time();
 echo "\n<br>script lauched at " . date('Y-m-d H:i:s');
 
@@ -19,11 +21,11 @@ $query = "CREATE TEMPORARY TABLE witnesses_tmp";
 $query .= " ( ";
 $query .= " address VARCHAR(32) NOT NULL PRIMARY KEY )";
 
-$results = $stats_db->query( $query );
+$results = $db->query( $query );
 
 if (! $results) {
 	echo "<p>There was an error in query: $query</p>";
-	echo $stats_db->lastErrorMsg();
+	echo $db->lastErrorMsg();
 	exit;
 }
 
@@ -43,7 +45,7 @@ if (! $results) {
 while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 
 //     echo "\n<br>" . print_r($row, true);
-	$stats_db->query( "insert into witnesses_tmp (address) VALUES ('" . $row[ 'address' ] . "')" );
+	$db->query( "insert into witnesses_tmp (address) VALUES ('" . $row[ 'address' ] . "')" );
 
 }
 
@@ -81,11 +83,11 @@ $query .= " ( ";
 $query .= " main_chain_index INT UNSIGNED NOT NULL PRIMARY KEY,";
 $query .= " date TIMESTAMP NOT NULL )";
 
-$results = $stats_db->query( $query );
+$results = $db->query( $query );
 
 if (! $results) {
 	echo "<p>There was an error in query: $query</p>";
-	echo $stats_db->lastErrorMsg();
+	echo $db->lastErrorMsg();
 	exit;
 }
 
@@ -100,11 +102,11 @@ while( $row = $results2->fetchArray(SQLITE3_ASSOC) ){
 
 	$query =  "insert into mci_timestamps_tmp (main_chain_index, date) VALUES ('" . $row[ 'main_chain_index' ] . "', '" . $row[ 'date' ] . "' )";
 
-	$results = $stats_db->query( $query );
+	$results = $db->query( $query );
 	
 	if (! $results) {
 		echo "<p>There was an error in query: $query</p>";
-		echo $stats_db->lastErrorMsg();
+		echo $db->lastErrorMsg();
 		exit;
 	}
 
