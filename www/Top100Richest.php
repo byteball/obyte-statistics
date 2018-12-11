@@ -43,16 +43,18 @@
 
 </head>
 <body>
-	<table>
-<tr>
-<td><a href="https://byteball.org"><img src="https://byteball.org/static/android-icon-192x192.png" height="100" width="100"></a></td>
-<td><center><h1>Byteball Top 100 richest list</h1></center></td>
-</tr>
+
+<table>
+	<tr>
+		<td><a href="https://byteball.org"><img src="https://byteball.org/static/android-icon-192x192.png" height="100" width="100"></a></td>
+		<td><center><h1>Byteball Top 100 richest list</h1></center></td>
+	</tr>
 </table>
+
 <br><br>
 
 <div id="container" style="position: relative">
-	<font size="+1">Find yourself among the richests!</font>
+	<font size="+1">Find yourself among the richest!</font>
 	<input type="text" id="search" placeholder="Your Byteball address here."/>
 
 	<table>
@@ -85,10 +87,10 @@ echo "
 	</tr>
 ";
 
-$home_dir = $_SERVER['HOME'];
-if (!$home_dir)
-	$home_dir = $_SERVER['DOCUMENT_ROOT'].'/../..';
-$stats_db = new SQLite3($home_dir.'/.config/byteball-hub/stats.sqlite');
+//$home_dir = $_SERVER['HOME'];
+//if (!$home_dir)
+//	$home_dir = $_SERVER['DOCUMENT_ROOT'].'/../..';
+$stats_db = new SQLite3('../stats.sqlite');
 
 $query = "SELECT * FROM richlist order by amount DESC LIMIT 100";
 

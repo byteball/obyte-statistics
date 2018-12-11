@@ -6,26 +6,13 @@ Free of copyright
 //This script should be periodically executed in a cron job.
 //An api key is required to access to http://api.ipstack.com (free access)
 
-//The geomap table structure is as follow 
-/*CREATE TABLE `geomap` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `type` enum('hub','relay','full_wallet') NOT NULL,
-  `IP` varchar(15) NOT NULL,
-  `longit` float NOT NULL,
-  `latt` float NOT NULL,
-  `description` varchar(50) NOT NULL,
-  `is_ok` tinyint(1) NOT NULL DEFAULT '1',
-  `date` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;*/
-
 
 
 
 <?php
 include_once('conf.php');
 $db = new SQLite3($_SERVER['HOME'].'/.config/byteball-hub/byteball.sqlite');
-$stats_db = new SQLite3($_SERVER['HOME'].'/.config/byteball-hub/stats.sqlite');
+$stats_db = new SQLite3('stats.sqlite');
 $stats_db->busyTimeout(30*1000);
 $stats_db->exec("PRAGMA foreign_keys = 1");
 $stats_db->exec("PRAGMA journal_mode=WAL");

@@ -21,7 +21,7 @@ my $sth3;
 my $dbfile=$ENV{"HOME"}."/.config/byteball-hub/byteball.sqlite";
 $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile","","") or die $DBI::errstr;
 
-my $stats_dbfile=$ENV{"HOME"}."/.config/byteball-hub/stats.sqlite";
+my $stats_dbfile="stats.sqlite";
 $stats_dbh = DBI->connect("dbi:SQLite:dbname=$stats_dbfile","","") or die $DBI::errstr;
 
 my $total_value=0;
