@@ -230,9 +230,9 @@ $(function() {
 
 </script>
 
-</body>
 <br>
 <font size="-1">
 <i>Updated hourly.<br><br></i>
 </font>
 <center>
+<?php include('footer.php'); ?>
