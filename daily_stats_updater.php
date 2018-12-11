@@ -181,7 +181,7 @@ $stats_db->exec("COMMIT");
  
 $res = array();
  
-$results = $stats_db->query("select strftime('%s', day)*1000 as t, units_w, units_nw, payload_nw, payload_w, round(sidechain_units/(units_w+units_nw)*100) as sidechain_units, addresses, new_addresses from daily_stats order by day" );
+$results = $stats_db->query("select strftime('%s', day)*1000 as t, units_w, units_nw, payload_nw, payload_w, round(1.0*sidechain_units/(units_w+units_nw)*100) as sidechain_units, addresses, new_addresses from daily_stats order by day" );
 
 while( $row = $results->fetchArray(SQLITE3_ASSOC) ){
 
