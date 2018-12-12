@@ -12,10 +12,15 @@ Free of copyright
 <?php
 include_once('conf.php');
 $db = new SQLite3($_SERVER['HOME'].'/.config/byteball-hub/byteball.sqlite');
+$db->exec("PRAGMA foreign_keys = 1");
+$db->exec("PRAGMA journal_mode=WAL");
+$db->exec("PRAGMA synchronous=FULL");
+$db->exec("PRAGMA temp_store=MEMORY");
+
 $stats_db = new SQLite3('stats.sqlite');
 $stats_db->busyTimeout(30*1000);
 $stats_db->exec("PRAGMA foreign_keys = 1");
-$stats_db->exec("PRAGMA journal_mode=WAL");
+//$stats_db->exec("PRAGMA journal_mode=WAL");
 $stats_db->exec("PRAGMA synchronous=FULL");
 $stats_db->exec("PRAGMA temp_store=MEMORY");
 

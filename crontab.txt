@@ -2,4 +2,4 @@
 0 * * * * cd Byteball-statistics; php dump_map_json.php 1>>dump_map_json.log 2>>dump_map_json.err
 0 0 * * * cd Byteball-statistics; php daily_stats_updater.php 1>>daily_stats_updater.log 2>>daily_stats_updater.err
 */5 * * * * cd Byteball-statistics; perl parse_hub_logs.pl 1>>parse_hub_logs.log 2>>parse_hub_logs.err
-0 * * * * cd Byteball-statistics; perl gather_raw_data.pl 1>>gather_raw_data.log 2>>gather_raw_data.err
+1 * * * * cd Byteball-statistics; perl gather_raw_data.pl 1>>gather_raw_data.log 2>>gather_raw_data.err
