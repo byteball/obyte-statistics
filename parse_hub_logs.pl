@@ -44,15 +44,14 @@ my $log_array_length=scalar @log_array;
 
 #search for:
 #GMT+0100 (CET): 10 incoming connections,
-if ($log_array[$log_array_length-2] =~ m/(\d+) incoming/) {
-	$connected_users=$1;
-} elsif ($log_array[$log_array_length-3] =~ m/(\d+) incoming/){#maybe in previous line ?
-	$connected_users=$1;
-} elsif ($log_array[$log_array_length-4] =~ m/(\d+) incoming/){#maybe in previous line ?
-	$connected_users=$1;
-}else{
-
+for (my $i=$log_array_length-1; $i>=0; $i--){
+	if ($log_array[$i] =~ m/(\d+) incoming/) {
+		$connected_users=$1;
+		last;
+	}
 }
+
+print $connected_users, " connections\n";
 
 if ($connected_users>0){
 	my $peers_string="";
