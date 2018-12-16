@@ -20,9 +20,11 @@ my $sth3;
 
 my $dbfile=$ENV{"HOME"}."/.config/byteball-hub/byteball.sqlite";
 $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile","","") or die $DBI::errstr;
+$dbh->prepare("PRAGMA busy_timeout=30000")->execute();
 
 my $stats_dbfile="stats.sqlite";
 $stats_dbh = DBI->connect("dbi:SQLite:dbname=$stats_dbfile","","") or die $DBI::errstr;
+$stats_dbh->prepare("PRAGMA busy_timeout=30000")->execute();
 
 my $total_value=0;
 my $others_value=0;

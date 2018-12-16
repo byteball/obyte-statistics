@@ -4,6 +4,7 @@
 //	if (!$home_dir)
 //		$home_dir = $_SERVER['DOCUMENT_ROOT'].'/../..';
 	$stats_db = new SQLite3('../stats.sqlite', SQLITE3_OPEN_READONLY);
+	$stats_db->busyTimeout(30*1000);
 
 	$address=trim($_POST['address']);
   

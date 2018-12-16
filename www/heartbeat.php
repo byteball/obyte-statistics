@@ -24,6 +24,7 @@ include_once 'chart-functions.php';
 
 <?php
 $stats_db = new SQLite3('../stats.sqlite', SQLITE3_OPEN_READONLY);
+$stats_db->busyTimeout(30*1000);
 
 $query = "SELECT * FROM bb_stats order by id DESC LIMIT 1";
 
