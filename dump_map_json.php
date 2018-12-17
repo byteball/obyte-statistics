@@ -1,4 +1,5 @@
-Free of copyright
+<?php
+// Free of copyright
 
 //This script extract some hubs and full wallets peer events from the Byteball sqlite database
 //then uses this information to fill the byteball.fr sql geomap database
@@ -6,10 +7,6 @@ Free of copyright
 //This script should be periodically executed in a cron job.
 //An api key is required to access to http://api.ipstack.com (free access)
 
-
-
-
-<?php
 include_once('conf.php');
 $db = new SQLite3($_SERVER['HOME'].'/.config/byteball-hub/byteball.sqlite');
 $db->exec("PRAGMA foreign_keys = 1");
