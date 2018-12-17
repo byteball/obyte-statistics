@@ -38,7 +38,7 @@ $query = "update geomap set is_ok=0 where 1";
 	}
 
 ##################pass 1 : search for all active hubs in byteball sqlite database
-$results = $db->query( "select * from peer_host_urls where is_active=1 group by url order by creation_date asc" );
+$results = $db->query( "select peer AS url, peer_host from peers" );
 
 if (! $results) {
 	echo "<p>There was an error in query: $query</p>";
