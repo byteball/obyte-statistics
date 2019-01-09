@@ -137,10 +137,10 @@ echo "<div id=\"map\" style=\"height: 400px; min-width: 310px; width: 100%\">
   <div id=\"info\">
   <table>
 	<tr>
-		<td><img src=\"https://byteball.org/static/android-icon-192x192.png\" height=\"25\" width=\"25\"></td><td width=\"5\"></td><td><font size=\"+1\">Hubs and full wallets</font></td>
+		<td><img src=\"https://byteball.org/static/android-icon-192x192.png\" height=\"25\" width=\"25\"></td><td width=\"5\"></td><td><font size=\"+1\">Hubs/relays and full wallets</font></td>
 	</tr>
 	<tr>
-		<td></td><td></td><td><font size=\"-1\"><b>".$hub_numbers."</b> hubs and <b>".$full_wallets_numbers."</b> full wallets counted today</font></td>
+		<td></td><td></td><td><font size=\"-1\"><b>".$hub_numbers."</b> hubs/relays and <b>".$full_wallets_numbers."</b> full wallets counted today</font></td>
 	</tr>
 	<tr>
 	<td></td><td></td><td><font size=\"-1\"><i>Last update: ".$mytime." UTC+2</i></font></td>
@@ -214,10 +214,10 @@ $(function() {
 				map.geomap("append", this, { color: "#006400", fillOpacity: "0",height:8,width: 16 }, '<span class="' + this.properties.id + '">' +  this.properties.name + '</span>', false);
 			} else if(this.properties.name.match(/byteball\.org\/bb/)){//"#006400"
 				var buff="<table><tr><td><img src=\"https://byteball.org/static/android-icon-192x192.png\" width=\"30\" height=\"30\"></td><td width=\"5\"></td><td><b>Default Hub: byteball.org/bb<br>IP: 144.76.217.155</b></td></tr></table>";
-				map.geomap("append", this, { color: "#006400", fillOpacity: "0",height:10,width: 20 }, '<span class="' + this.properties.id + '">' +  buff + '</span>', false);
+				map.geomap("append", this, { color: "#006400", strokeWidth: "3px", fillOpacity: "0",height:10,width: 20 }, '<span class="' + this.properties.id + '">' +  buff + '</span>', false);
 			}
 			else if (this.properties.name.match((/Full/g))){
-				map.geomap("append", this, { color: "#e75480", strokeWidth: "1px", opacity: "10", fillOpacity: "0",height:4, width: 4, }, '<span class="' + this.properties.id + '">' +  this.properties.name + '</span>', false);
+				map.geomap("append", this, { color: "#1560bd", strokeWidth: "5px", opacity: "0.8", fillOpacity: "0",height:5, width: 5, }, '<span class="' + this.properties.id + '">' +  this.properties.name + '</span>', false);
 			}
 
 		} );
