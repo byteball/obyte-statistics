@@ -200,7 +200,7 @@ while ($query_result = $sth->fetchrow_hashref){
 	next if $query_result->{address} eq 'GVVHBOGQFAZJW54m37LPSHZOYWZ2Z47T';
 	next if $query_result->{address} eq 'ZQ4NJ2YZGUGIPU2F2DOAIIH67MBY4AHG';
 	$total_add_with_balance++;
-	my $sth2=$stats_dbh->prepare ("INSERT INTO richlist (amount,address) values('$query_result->{amount}','$query_result->{address}')");
+	my $sth2=$stats_dbh->prepare ("INSERT INTO richlist (id, amount,address) values($total_add_with_balance, '$query_result->{amount}','$query_result->{address}')");
 	$sth2->execute;
 }
 $stats_dbh->prepare('COMMIT')->execute();
