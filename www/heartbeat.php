@@ -5,17 +5,17 @@ include_once 'chart-functions.php';
 ?><!DOCTYPE html>
 <html>
 <head>
-<title>Byteball HeartBeat</title>
+<title>Obyte HeartBeat</title>
 <link rel="stylesheet" type="text/css" href="mystyle.css">
-<meta name="Description" CONTENT="byteball stats">
-<meta name="keywords" content="byteball, witness, hub, relay, statistics" />
-<link rel="icon" href="https://byteball.org/static/android-icon-192x192.png">
+<meta name="Description" CONTENT="obyte stats">
+<meta name="keywords" content="obyte, witness, hub, relay, statistics" />
+<link rel="icon" href="https://obyte.org/static/android-icon-192x192.png">
 
 	
 <table>
 <tr>
-<td><a href="/"><img src="https://byteball.org/static/android-icon-192x192.png" height="100" width="100"></a><img src="HeartBeat.png" height="100" width="100"></td>
-<td><center><h1>Byteball HeartBeat</h1></center></td>
+<td><a href="/"><img src="https://obyte.org/static/android-icon-192x192.png" height="100" width="100"></a><img src="HeartBeat.png" height="100" width="100"></td>
+	<td><center><h1>O<sub>byte</sub> HeartBeat</h1></center></td>
 </tr>
 </table>
 
@@ -59,7 +59,7 @@ echo "
 		<td width=\"250\"><b>Total stable units</b></td><td>".$row[ 'total_stable_units' ]."</font></td><td></td><td></td>
 	</tr>
 	<tr>
-		<td width=\"250\"><b>Total users units </b><font size=\"-2\">(Witnesses posts excluded)</font></td><td>".$row[ 'total_units_witnesses_excluded' ]."</td><td></td><td></td>
+		<td width=\"250\"><b>Total users units </b><font size=\"-2\">(Witnesses' posts excluded)</font></td><td>".$row[ 'total_units_witnesses_excluded' ]."</td><td></td><td></td>
 	</tr>
 	<tr>
 	<td width=\"250\"><b>Multisigned addresses units</font></b></td><td>".$row[ 'multisigned_units' ]."</td><td></td><td></td>
@@ -164,7 +164,7 @@ $params = array(
 );
 
 $args = array(
-	'title' => 'Recent Byteball trend',
+	'title' => 'Recent Obyte trend',
 	'subtitle' => '12 hours sliding window snapshots - updated hourly',
 	'container_id' => 'container_units_2',
 	'params' => $params,
