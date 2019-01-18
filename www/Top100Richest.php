@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Byteball Top 100 richest list</title>
+<title>Obyte Top 100 richest list</title>
 <link rel="stylesheet" type="text/css" href="mystyle.css">
-<meta name="Description" CONTENT="Byteball Top 100 richest list">
-<meta name="keywords" content="byteball, witness, hub, relay, statistics" />
-<link rel="icon" href="https://byteball.org/static/android-icon-192x192.png">
+<meta name="Description" CONTENT="Obyte Top 100 richest list">
+<meta name="keywords" content="obyte, witness, hub, relay, statistics" />
+<link rel="icon" href="https://obyte.org/static/android-icon-192x192.png">
 
 <script
   src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -62,8 +62,8 @@ body {
 
 <table>
 	<tr>
-		<td><a href="https://byteball.org"><img src="https://byteball.org/static/android-icon-192x192.png" height="100" width="100"></a></td>
-		<td style="padding-left: 10px"><center><h1>Byteball Top 100 richest list</h1></center></td>
+		<td><a href="https://obyte.org"><img src="https://obyte.org/static/android-icon-192x192.png" height="100" width="100"></a></td>
+		<td style="padding-left: 10px"><center><h1>O<sub>byte</sub> Top 100 richest list</h1></center></td>
 	</tr>
 </table>
 
@@ -71,7 +71,7 @@ body {
 
 <div id="container" style="position: relative">
 	<font size="+1">Find yourself among the richest!</font><br>
-	<input type="text" id="search" placeholder="Your Byteball address here."/>
+	<input type="text" id="search" placeholder="Your Obyte address here."/>
 
 	<table>
 		<tr>
@@ -118,7 +118,7 @@ if ( ! $results ) {
 }
 $i=1;
 while( $row = $results->fetchArray(SQLITE3_ASSOC) ){
-	echo "<tr><td><b>#".$i."</b></td><td>".number_format ($row[ 'amount' ])."</td><td>$".number_format (($row[ 'amount' ]/1000000000)*$dollar_value)."</td><td><a href=\"https://explorer.byteball.org/#".$row[ 'address' ]."\">".$row[ 'address' ]."</a></td></tr><tr>";
+	echo "<tr><td><b>#".$i."</b></td><td>".number_format ($row[ 'amount' ])."</td><td>$".number_format (($row[ 'amount' ]/1000000000)*$dollar_value)."</td><td><a href=\"https://explorer.obyte.org/#".$row[ 'address' ]."\">".$row[ 'address' ]."</a></td></tr><tr>";
 	$i++;
 }
 
