@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>The O<sub>byte</sub> world map</title>
+	<title>The Obyte world map</title>
 <link rel="stylesheet" type="text/css" href="mystyle.css">
 <meta name="Description" CONTENT="The Obyte world map">
 <meta name="keywords" content="obyte, witness, hub, relay, statistics, map" />
