@@ -3,7 +3,7 @@
 
 //This script extract some hubs and full wallets peer events from the Obyte sqlite database
 //then uses this information to fill the sql geomap database
-//then dumps a json file that will be queried later by the byteballworldmap.php public script to render the map.
+//then dumps a json file that will be queried later by the worldmap.php public script to render the map.
 //This script should be periodically executed in a cron job.
 //An api key is required to access to http://api.ipstack.com (free access)
 

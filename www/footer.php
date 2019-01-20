@@ -6,7 +6,7 @@
 <br><br>
 <a href="/">Home</a> | 
 <a href="./Top100Richest.php">Top 100 richest</a> | 
-<a href="./byteballworldmap.php">O<sub>byte</sub> world map</a> | 
+<a href="./worldmap.php">O<sub>byte</sub> world map</a> | 
 <a href="./witnesses.php">Witnesses</a> | 
 <a href="./heartbeat.php">O<sub>byte</sub> HeartBeat</a>
 </center>

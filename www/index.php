@@ -46,7 +46,7 @@
 
 					<tr>
 						<td><font size=-1>
-						<a href="/byteballworldmap.php">Click here</a> to see the O<sub>byte</sub> World Map.<br>
+						<a href="/worldmap.php">Click here</a> to see the O<sub>byte</sub> World Map.<br>
 						<a href="/Top100Richest.php">Click here</a> to get the O<sub>byte</sub> Top 100 richest list.<br>
 						<a href="/heartbeat.php">Click here</a> to see the global network stats.<br>
 						<a href="/witnesses.php">Click here</a> to get a picture of all Witnesses activity on the network.
