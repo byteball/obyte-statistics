@@ -1,14 +1,14 @@
 <?php
 // Free of copyright
 
-//This script extract some hubs and full wallets peer events from the Byteball sqlite database
-//then uses this information to fill the byteball.fr sql geomap database
-//then dumps a json file that will be queried later by the byteballworldmap.php publis script to render the map.
+//This script extract some hubs and full wallets peer events from the Obyte sqlite database
+//then uses this information to fill the sql geomap database
+//then dumps a json file that will be queried later by the byteballworldmap.php public script to render the map.
 //This script should be periodically executed in a cron job.
 //An api key is required to access to http://api.ipstack.com (free access)
 
 include_once('conf.php');
-$db = new SQLite3($_SERVER['HOME'].'/.config/byteball-hub/byteball.sqlite');
+$db = new SQLite3($_SERVER['HOME'].'/.config/obyte-hub/byteball.sqlite');
 $db->exec("PRAGMA foreign_keys = 1");
 $db->exec("PRAGMA journal_mode=WAL");
 $db->exec("PRAGMA synchronous=FULL");
@@ -75,7 +75,7 @@ while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 	}
 }
 
-#adding byteball.org and byteball.fr
+#adding obyte.org and byteball.fr
 $row[ 'peer_host' ]="163.172.89.110";
 $query = "select * from geomap where type='hub' and IP='".$row[ 'peer_host' ]."'";
 $results = $stats_db->query($query);
@@ -111,7 +111,7 @@ if ( ! $results ) {
 	echo $stats_db->lastErrorMsg();
 	exit;
 }
-$row[ 'url' ]="wss://byteball.org/bb";
+$row[ 'url' ]="wss://obyte.org/bb";
 if(is_hub_listening ($row[ 'url' ])){
 	if(!$results->fetchArray(SQLITE3_ASSOC)){
 
@@ -239,7 +239,7 @@ while( $row = $results->fetchArray(SQLITE3_ASSOC) ){
 
 if($hub_result_array){
 	$result_json=json_encode($hub_result_array);
-	file_put_contents('www/byteball_map.json', $result_json);
+	file_put_contents('www/obyte_map.json', $result_json);
 							
 }else{
 	echo "Not found.";
