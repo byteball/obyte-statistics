@@ -5,17 +5,17 @@ include_once 'chart-functions.php';
 ?><!DOCTYPE html>
 <html>
 <head>
-<title>Byteball HeartBeat</title>
+<title>Obyte HeartBeat</title>
 <link rel="stylesheet" type="text/css" href="mystyle.css">
-<meta name="Description" CONTENT="byteball stats">
-<meta name="keywords" content="byteball, witness, hub, relay, statistics" />
-<link rel="icon" href="https://byteball.org/static/android-icon-192x192.png">
+<meta name="Description" CONTENT="obyte stats">
+<meta name="keywords" content="obyte, byteball, witness, hub, relay, statistics" />
+<link rel="icon" href="https://obyte.org/static/android-icon-192x192.png">
 
 	
 <table>
 <tr>
-<td><a href="/"><img src="https://byteball.org/static/android-icon-192x192.png" height="100" width="100"></a><img src="HeartBeat.png" height="100" width="100"></td>
-<td><center><h1>Byteball HeartBeat</h1></center></td>
+<td><a href="/"><img src="https://obyte.org/static/android-icon-192x192.png" height="100" width="100"></a><img src="HeartBeat.png" height="100" width="100"></td>
+<td><center><h1>Obyte HeartBeat</h1></center></td>
 </tr>
 </table>
 
@@ -164,7 +164,7 @@ $params = array(
 );
 
 $args = array(
-	'title' => 'Recent Byteball trend',
+	'title' => 'Recent Obyte trend',
 	'subtitle' => '12 hours sliding window snapshots - updated hourly',
 	'container_id' => 'container_units_2',
 	'params' => $params,

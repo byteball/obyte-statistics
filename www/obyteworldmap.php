@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>The Byteball world map</title>
+	<title>The Obyte world map</title>
 <link rel="stylesheet" type="text/css" href="mystyle.css">
-<meta name="Description" CONTENT="The Byteball world map">
-<meta name="keywords" content="byteball, witness, hub, relay, statistics, map" />
-<link rel="icon" href="https://byteball.org/static/android-icon-192x192.png">
+<meta name="Description" CONTENT="The Obyte world map">
+<meta name="keywords" content="obyte, witness, hub, relay, statistics, map" />
+<link rel="icon" href="https://obyte.org/static/android-icon-192x192.png">
 
 <style>
 	#page-wrap { width: 800px; margin: 15px auto; position: relative; }
@@ -81,8 +81,8 @@ html {
 		<div id="main">
 			<table>
 				<tr>
-					<td><a href="https://byteball.org"><img src="https://byteball.org/static/android-icon-192x192.png" height="100" width="100"></a></td>
-					<td><center><h1>The Byteball World map</h1></center></td>
+					<td><a href="https://obyte.org"><img src="https://obyte.org/static/android-icon-192x192.png" height="100" width="100"></a></td>
+					<td><center><h1>The O<sub>byte</sub> World map</h1></center></td>
 				</tr>
 				<tr>
 					<td></td><td></td>
@@ -137,7 +137,7 @@ echo "<div id=\"map\" style=\"height: 400px; min-width: 310px; width: 100%\">
   <div id=\"info\">
   <table>
 	<tr>
-		<td><img src=\"https://byteball.org/static/android-icon-192x192.png\" height=\"25\" width=\"25\"></td><td width=\"5\"></td><td><font size=\"+1\">Hubs/relays and full wallets</font></td>
+		<td><img src=\"https://obyte.org/static/android-icon-192x192.png\" height=\"25\" width=\"25\"></td><td width=\"5\"></td><td><font size=\"+1\">Hubs/relays and full wallets</font></td>
 	</tr>
 	<tr>
 		<td></td><td></td><td><font size=\"-1\"><b>".$hub_numbers."</b> hubs/relays and <b>".$full_wallets_numbers."</b> full wallets counted today</font></td>

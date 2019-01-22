@@ -6,11 +6,13 @@
 <br><br>
 <a href="/">Home</a> | 
 <a href="./Top100Richest.php">Top 100 richest</a> | 
+
 <a href="./obyteworldmap.php">O<sub>byte</sub> world map</a> | 
 <a href="./witnesses.php">Witnesses</a> | 
 <a href="./heartbeat.php">O<sub>byte</sub> HeartBeat</a>
 </center>
 <br><br>
+
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
 	<center>
@@ -21,6 +23,7 @@ New to Byteball? Check out <a href="https://byteball.org" target="_blank">byteba
 &nbsp;Slack <a href="http://slack.byteball.org" target="_blank" title="Slack"><i class="fab fa-slack"></i></a>
 &nbsp;Wiki <a href="https://wiki.byteball.org/" target="_blank" title="Wiki"><i class="fab fa-wikipedia-w"></i></a>
 &nbsp;and Discord <a href="https://discord.gg/Qn6JWfT" target="_blank" title="Discord"><i class="fab fa-discord"></i></a>
+
 
 </center>
 </font>
