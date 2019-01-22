@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Byteball stats</title>
+	<title>Obyte stats</title>
 	<link rel="stylesheet" type="text/css" href="mystyle.css">
-	<meta name="Description" CONTENT="byteball stats">
-	<meta name="keywords" content="byteball, witness, hub, relay, statistics" />
+	<meta name="Description" CONTENT="Obyte stats">
+	<meta name="keywords" content="obyte, byteball, witness, hub, relay, statistics" />
 	<meta http-equiv="refresh" content="120" >
-	<link rel="icon" href="https://byteball.org/static/android-icon-192x192.png">
+	<link rel="icon" href="https://obyte.org/static/android-icon-192x192.png">
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
-<center><h1>Byteball Stats</h1>
+<center><h1>O<sub>byte</sub> Stats</h1>
 
 <table>
 	<tr>
-		<td><img src="https://byteball.org/static/android-icon-192x192.png" height="100" width="100"></td>
+		<td><img src="https://obyte.org/static/android-icon-192x192.png" height="100" width="100"></td>
 		<td width=20></td>
 		<td>
 			Hub status: <img src="green_button.jpg" height="15" width="15" style="vertical-align: middle"><br>
@@ -31,7 +31,7 @@
 <table>
 	<tr>
 		<td>Connected wallets:</td>
-		<td align="center"><b>byteball.org </b><b id="EUConnected"></b></td><td width="10"></td>
+		<td align="center"><b>obyte.org </b><b id="EUConnected"></b></td><td width="10"></td>
 	</tr>
 </table>
 
@@ -46,8 +46,8 @@
 
 					<tr>
 						<td><font size=-1>
-						<a href="/byteballworldmap.php">Click here</a> to see the Byteball World Map.<br>
-						<a href="/Top100Richest.php">Click here</a> to get the Byteball Top 100 richest list.<br>
+						<a href="/worldmap.php">Click here</a> to see the O<sub>byte</sub> World Map.<br>
+						<a href="/Top100Richest.php">Click here</a> to get the O<sub>byte</sub> Top 100 richest list.<br>
 						<a href="/heartbeat.php">Click here</a> to see the global network stats.<br>
 						<a href="/witnesses.php">Click here</a> to get a picture of all Witnesses activity on the network.
 						</font></td>
@@ -60,11 +60,11 @@
 </center></p>
 <br><br>Point your wallet to the nearest hub to get efficient messaging communication, faster wallet synch.</p>
 	
-	<br>New to Byteball? Check out <a href="https://byteball.org" target="_blank">byteball.org</a>
-&nbsp;also on Twitter <a href="https://twitter.com/ByteballOrg" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a>
+	<br>New to O<sub>byte</sub>? Check out <a href="https://obyte.org" target="_blank">obyte.org</a>
+&nbsp;also on Twitter <a href="https://twitter.com/ObyteOrg" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a>
 &nbsp;Bitcointalk <a href="https://bitcointalk.org/index.php?topic=1608859.0" target="_blank" title="BitcoinTalk thread"><i class="fa fa-bitcoin"></i></a>
-&nbsp;Medium <a href="https://medium.com/Byteball" target="_blank" title="Medium"><i class="fa fa-medium"></i></a>
-&nbsp;Slack <a href="http://slack.byteball.org" target="_blank" title="Slack"><i class="fa fa-slack"></i></a>
+&nbsp;Medium <a href="https://medium.com/byteball" target="_blank" title="Medium"><i class="fa fa-medium"></i></a>
+&nbsp;Slack <a href="http://slack.obyte.org" target="_blank" title="Slack"><i class="fa fa-slack"></i></a>
 &nbsp;and Wiki <a href="https://wiki.byteball.org/" target="_blank" title="Wiki"><i class="fa fa-wikipedia-w"></i></a>
 
 <p><br></p>
@@ -109,8 +109,8 @@ var example = 'basic-line',
 
 			credits: {
 				enabled: true,
-				text: 'Credit: Byteball.org',
-				href: "https://byteball.org",
+				text: 'Credit: obyte.org',
+				href: "https://obyte.org",
 			},
 
 			series: [{
