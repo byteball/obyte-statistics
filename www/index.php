@@ -3,8 +3,8 @@
 <head>
 	<title>Obyte stats</title>
 	<link rel="stylesheet" type="text/css" href="mystyle.css">
-	<meta name="Description" CONTENT="obyte stats">
-	<meta name="keywords" content="obyte, witness, hub, relay, statistics" />
+	<meta name="Description" CONTENT="Obyte stats">
+	<meta name="keywords" content="obyte, byteball, witness, hub, relay, statistics" />
 	<meta http-equiv="refresh" content="120" >
 	<link rel="icon" href="https://obyte.org/static/android-icon-192x192.png">
 
@@ -12,7 +12,7 @@
 </head>
 
 <body>
-	<center><h1>O<sub>byte</sub> Stats</h1>
+<center><h1>O<sub>byte</sub> Stats</h1>
 
 <table>
 	<tr>
@@ -46,9 +46,9 @@
 
 					<tr>
 						<td><font size=-1>
-							<a href="/obyteworldmap.php">Click here</a> to see the O<sub>byte</sub> World Map.<br>
-							<a href="/Top100Richest.php">Click here</a> to get the O<sub>byte</sub> Top 100 richest list.<br>
-							<a href="/heartbeat.php">Click here</a> to see the global O<sub>byte</sub> network stats.<br>
+						<a href="/obyteworldmap.php">Click here</a> to see the O<sub>byte</sub> World Map.<br>
+						<a href="/Top100Richest.php">Click here</a> to get the O<sub>byte</sub> Top 100 richest list.<br>
+						<a href="/heartbeat.php">Click here</a> to see the global network stats.<br>
 						<a href="/witnesses.php">Click here</a> to get a picture of all Witnesses activity on the network.
 						</font></td>
 					</tr>
@@ -61,6 +61,7 @@
 <br><br>Point your wallet to the nearest hub to get efficient messaging communication, faster wallet synch.</p>
 	
 	<br>New to O<sub>byte</sub>? Check out <a href="https://obyte.org" target="_blank">obyte.org</a>
+
 &nbsp;also on Twitter <a href="https://twitter.com/ByteballOrg" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
 &nbsp;Bitcointalk <a href="https://bitcointalk.org/index.php?topic=1608859.0" target="_blank" title="BitcoinTalk thread"><i class="fab fa-bitcoin"></i></a>
 &nbsp;Medium <a href="https://medium.com/Byteball" target="_blank" title="Medium"><i class="fab fa-medium"></i></a>
@@ -110,7 +111,8 @@ var example = 'basic-line',
 
 			credits: {
 				enabled: true,
-				text: 'Credit: Obyte.org',
+
+				text: 'Credit: obyte.org',
 				href: "https://obyte.org",
 			},
 

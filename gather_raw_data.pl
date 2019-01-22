@@ -18,7 +18,7 @@ my $sth;
 my $sth2;
 my $sth3;
 
-my $dbfile=$ENV{"HOME"}."/.config/byteball-hub/byteball.sqlite";
+my $dbfile=$ENV{"HOME"}."/.config/obyte-hub/byteball.sqlite";
 $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile","","") or die $DBI::errstr;
 $dbh->prepare("PRAGMA busy_timeout=30000")->execute();
 
@@ -146,7 +146,7 @@ foreach (@array_of_witnesses)#last timestamp
 	}
 	$stats_range=$max_end_users_seen_units;
 	my $percentage=calculate_percent($witnesses_stats->{$_}->{validations_count});
-	$buff_html_array.="<tr><td><font color=\"green\" valign=\"top\">".$witnesses_stats->{$_}->{arrow}."</font></td><td><b>#".$i."</b></td><td><a href=\"https://explorer.byteball.org/#".$_."\" target=\"_blank\">".$_."</a></td><td><center>".$witnesses_stats->{$_}->{validations_count}."</center></td><td>".$percentage."</td><td><center>".$witnesses_stats->{$_}->{last_seen_mci}."<center></td><td>".$witnesses_stats->{$_}->{last_seen_mci_timestamp}."</td><td>".$witnesses_stats->{$_}->{status}."</td><td>".$witnesses_stats->{$_}->{text}."</td></tr>\n";
+	$buff_html_array.="<tr><td><font color=\"green\" valign=\"top\">".$witnesses_stats->{$_}->{arrow}."</font></td><td><b>#".$i."</b></td><td><a href=\"https://explorer.obyte.org/#".$_."\" target=\"_blank\">".$_."</a></td><td><center>".$witnesses_stats->{$_}->{validations_count}."</center></td><td>".$percentage."</td><td><center>".$witnesses_stats->{$_}->{last_seen_mci}."<center></td><td>".$witnesses_stats->{$_}->{last_seen_mci_timestamp}."</td><td>".$witnesses_stats->{$_}->{status}."</td><td>".$witnesses_stats->{$_}->{text}."</td></tr>\n";
 	
 	if(0){
 		print "$_ nbre validation : $witnesses_stats->{$_}->{validations_count}\n";
@@ -224,7 +224,7 @@ my $total_stable_units=$query_result->{total};
 
 my $percent=5;#little alarm system to Tonych
 if($total_stable_units < $total_units*(1-$percent/100)){
-	my $alerte_subject  = "Alert! Too many non stable units in the Byteball network!";
+	my $alerte_subject  = "Alert! Too many non stable units in the Obyte network!";
 	my $body="My current alert trigger is non stable vs total units less than ".$percent." %.\n\nHowever, over the last 12 hours I see:\nTotal units posted: ".$total_units."\nTotal stables units: ".$total_stable_units."\n";
 	send_email ('noreply@byteball.fr','byteball@byteball.org',$body, $alerte_subject);
 
