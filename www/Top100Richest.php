@@ -4,7 +4,9 @@
 <title>Obyte Top 100 richest list</title>
 <link rel="stylesheet" type="text/css" href="mystyle.css">
 <meta name="Description" CONTENT="Obyte Top 100 richest list">
+
 <meta name="keywords" content="obyte, witness, hub, relay, statistics" />
+
 <link rel="icon" href="https://obyte.org/static/android-icon-192x192.png">
 
 <script

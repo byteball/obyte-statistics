@@ -12,7 +12,7 @@
 
 		if( ! preg_match( "@^[A-Z2-7]{32}$@", $address ) ){
 
-			echo "Incorrect Byteball address.";
+			echo "Incorrect Obyte address.";
 			exit;
 		}
 
