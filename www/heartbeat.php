@@ -9,13 +9,16 @@ include_once 'chart-functions.php';
 <link rel="stylesheet" type="text/css" href="mystyle.css">
 <meta name="Description" CONTENT="obyte stats">
 <meta name="keywords" content="obyte, witness, hub, relay, statistics" />
+
 <link rel="icon" href="https://obyte.org/static/android-icon-192x192.png">
 
 	
 <table>
 <tr>
 <td><a href="/"><img src="https://obyte.org/static/android-icon-192x192.png" height="100" width="100"></a><img src="HeartBeat.png" height="100" width="100"></td>
+
 	<td><center><h1>O<sub>byte</sub> HeartBeat</h1></center></td>
+
 </tr>
 </table>
 

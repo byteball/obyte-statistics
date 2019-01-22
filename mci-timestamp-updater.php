@@ -7,7 +7,7 @@ date_default_timezone_set('UTC');
 
 $time_in = time();
 
-$db = new SQLite3($_SERVER['HOME'].'/.config/byteball-hub/byteball.sqlite');
+$db = new SQLite3($_SERVER['HOME'].'/.config/obyte-hub/byteball.sqlite');
 $stats_db = new SQLite3('stats.sqlite');
 $stats_db->busyTimeout(30*1000);
 $stats_db->exec("PRAGMA foreign_keys = 1");

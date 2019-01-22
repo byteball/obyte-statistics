@@ -8,7 +8,7 @@ date_default_timezone_set('UTC');
 $time_in = time();
 echo "\n<br>script lauched at " . date('Y-m-d H:i:s') . "\n";
 
-$db = new SQLite3($_SERVER['HOME'].'/.config/byteball-hub/byteball.sqlite');
+$db = new SQLite3($_SERVER['HOME'].'/.config/obyte-hub/byteball.sqlite');
 $db->busyTimeout(30*1000);
 $db->exec("PRAGMA foreign_keys = 1");
 $db->exec("PRAGMA journal_mode=WAL");

@@ -79,8 +79,8 @@ function show_chart( $args ){
 
 					credits: {
 						enabled: true,
-						text: 'Credit: byteball.org',
-						href: "https://byteball.org",
+						text: 'Credit: obyte.org',
+						href: "https://obyte.org",
 					},
 
 					rangeSelector: {
