@@ -79,7 +79,7 @@ function show_chart( $args ){
 
 					credits: {
 						enabled: true,
-						text: 'Credit: obyte.org',
+						text: 'Credit: Obyte.org',
 						href: "https://obyte.org",
 					},
 
