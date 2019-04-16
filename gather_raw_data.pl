@@ -120,6 +120,11 @@ foreach (@array_of_witnesses)#last timestamp
 		$witnesses_stats->{$_}->{status}="Independent Witness";
 		$others_value+=$witnesses_stats->{$_}->{validations_count};
 	}
+	elsif($_ eq 'FAB6TH7IRAVHDLK2AAWY5YBE6CEBUACF'){
+		$witnesses_stats->{$_}->{text}="Fabien Marino";
+		$witnesses_stats->{$_}->{status}="Independent Witness";
+		$others_value+=$witnesses_stats->{$_}->{validations_count};
+	}
 	elsif($_ eq '7ULGTPFB72TOYA67YNGMX2Y445FSTL7O'){
 		$witnesses_stats->{$_}->{text}="Portabella (slack user)";
 		$witnesses_stats->{$_}->{status}="Independent Witness";
