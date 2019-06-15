@@ -140,6 +140,21 @@ foreach (@array_of_witnesses)#last timestamp
 		$witnesses_stats->{$_}->{status}="Independent Witness";
 		$others_value+=$witnesses_stats->{$_}->{validations_count};
 	}
+	elsif($_ eq '4FIZC3KZ3ZQSSVOKFEUHKCTQWAWD6YMF'){
+		$witnesses_stats->{$_}->{text}="Raivo Malter";
+		$witnesses_stats->{$_}->{status}="Independent Witness";
+		$others_value+=$witnesses_stats->{$_}->{validations_count};
+	}
+	elsif($_ eq 'IMMP5FWQXY6IZ53OIYQ46PHSI5T3MAYQ'){
+		$witnesses_stats->{$_}->{text}="Demelza Hays";
+		$witnesses_stats->{$_}->{status}="Independent Witness";
+		$others_value+=$witnesses_stats->{$_}->{validations_count};
+	}
+	elsif($_ eq '25XDFVFRP7BZ2SNSESFKUTF52W42JCSL'){
+		$witnesses_stats->{$_}->{text}="Brad Morrison";
+		$witnesses_stats->{$_}->{status}="Independent Witness";
+		$others_value+=$witnesses_stats->{$_}->{validations_count};
+	}
 	elsif ( grep( /^$buff$/, @default_witnesses ) ){
 		$witnesses_stats->{$_}->{text}="Tonych";
 		$witnesses_stats->{$_}->{status}="Founder's Witness";
