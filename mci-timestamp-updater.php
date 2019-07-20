@@ -116,5 +116,3 @@ function interpolate_timestamp( $from_mci, $from_timestamp, $to_mci, $to_timesta
 
 $total_time = time() - $time_in;
 echo "\n<br><br>done in " . $total_time . " sec\n";
-
-?>

@@ -106,8 +106,20 @@ html {
 		echo $stats_db->lastErrorMsg();
 		exit;       
 	}
+	$hub_count = 0;
 	while( $row = $results->fetchArray(SQLITE3_ASSOC) ){
-		$hub_numbers=$row[ 'total_count' ];
+		$hub_count=$row[ 'total_count' ];
+	}
+
+	$query = "select count(*) as total_count from geomap where type='relay'";
+	$results = $stats_db->query($query);
+	if ( ! $results ) {
+		echo $stats_db->lastErrorMsg();
+		exit;       
+	}
+	$relay_count = 0;
+	while( $row = $results->fetchArray(SQLITE3_ASSOC) ){
+		$relay_count=$row[ 'total_count' ];
 	}
 
 	$query = "select count(*) as total_count from geomap where type='full_wallet'";
@@ -116,8 +128,9 @@ html {
 		echo $stats_db->lastErrorMsg();
 		exit;       
 	}
+	$full_wallet_count = 0;
 	while( $row = $results->fetchArray(SQLITE3_ASSOC) ){
-		$full_wallets_numbers=$row[ 'total_count' ];
+		$full_wallet_count=$row[ 'total_count' ];
 	}
 	
 	$query = "select date from geomap order by date desc limit 1";
@@ -137,10 +150,10 @@ echo "<div id=\"map\" style=\"height: 400px; min-width: 310px; width: 100%\">
   <div id=\"info\">
   <table>
 	<tr>
-		<td><img src=\"https://obyte.org/static/android-icon-192x192.png\" height=\"25\" width=\"25\"></td><td width=\"5\"></td><td><font size=\"+1\">Hubs/relays and full wallets</font></td>
+		<td><img src=\"https://obyte.org/static/android-icon-192x192.png\" height=\"25\" width=\"25\"></td><td width=\"5\"></td><td><font size=\"+1\">Hubs, relays and full wallets</font></td>
 	</tr>
 	<tr>
-		<td></td><td></td><td><font size=\"-1\"><b>".$hub_numbers."</b> hubs/relays and <b>".$full_wallets_numbers."</b> full wallets counted today</font></td>
+		<td></td><td></td><td><font size=\"-1\"><b>".$hub_count."</b> hubs, <b>".$relay_count."</b> relays and <b>".$full_wallet_count."</b> full wallets counted today</font></td>
 	</tr>
 	<tr>
 	<td></td><td></td><td><font size=\"-1\"><i>Last update: ".$mytime." UTC+2</i></font></td>
@@ -210,9 +223,10 @@ $(function() {
 
 		$.each( monuments, function() {
 
-			if (this.properties.name.match(/Hub/g) && !this.properties.name.match(/obyte\.org\/bb/g) ){
+			if ((this.properties.name.match(/Hub/g) || this.properties.name.match(/Relay/g)) && !this.properties.name.match(/obyte\.org\/bb/g) ){
 				map.geomap("append", this, { color: "#006400", fillOpacity: "0",height:8,width: 16 }, '<span class="' + this.properties.id + '">' +  this.properties.name + '</span>', false);
-			} else if(this.properties.name.match(/obyte\.org\/bb/)){//"#006400"
+			}
+			else if(this.properties.name.match(/Hub/g) && this.properties.name.match(/obyte\.org\/bb/)){//"#006400"
 				var buff="<table><tr><td><img src=\"https://obyte.org/static/android-icon-192x192.png\" width=\"30\" height=\"30\"></td><td width=\"5\"></td><td><b>Default Hub: obyte.org/bb<br>IP: 144.76.217.155</b></td></tr></table>";
 				map.geomap("append", this, { color: "#006400", strokeWidth: "3px", fillOpacity: "0",height:10,width: 20 }, '<span class="' + this.properties.id + '">' +  buff + '</span>', false);
 			}
@@ -236,4 +250,4 @@ $(function() {
 <i>Updated hourly.<br><br></i>
 </font>
 <center>
-<?php include('footer.php'); ?>
+<?php include('footer.php');

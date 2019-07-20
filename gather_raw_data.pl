@@ -198,7 +198,7 @@ $HTML->{Array}=$buff_html_array;
 $HTML->{update}=$update;
 $HTML->{total_active}=$total_active_witnesses;
 #open the stat template and output the witnesses.php public php script
-my $template='witnesses_template.html';
+my $template='witnesses_template.php';
 my $new_stats=get_content($template,$HTML);
 my $filename = 'www/witnesses.php';
 open(my $fh, '>', $filename) or die "Could not open file '$filename' $!";
