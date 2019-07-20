@@ -171,4 +171,3 @@ function make_443_get ($url) {
 }
 
 include('footer.php');
-?>

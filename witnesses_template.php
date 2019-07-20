@@ -43,7 +43,4 @@ Total active Witnesses on the network: <b>{{total_active}}</b></i></font>
 
 <br><br><br>
 
-<?php include('footer.php') ?>
-
-
-
+<?php include('footer.php');

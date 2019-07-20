@@ -1,26 +1,25 @@
-# Byteball-statistics
-A collection of scripts to render various stats about the Byteball network
+# Obyte statistics
+A collection of scripts to render various stats about the Obyte network
 
-# requirements
-Php 5+
-Mysql 5+
-Perl 5+
+## Requirements
+* Php 5+
+* SQLite 3+
+* Perl 5+
+* Obyte full node
+* jquery-2.2.4.min.js
+* ipstack.com API key. 
+* A licence for HighStock js from https://www.highcharts.com (free for non commercial purpose)
 
-A full Byteball node (or a hub)
+## Screenshots
 
-jquery-2.2.4.min.js
- 
-A licence for HighStock js from https://www.highcharts.com (free for non commercial purpose)
+### Obyte world map:
+![Obyte world map](./screenshots/bbwm.png "Obyte world map")
 
-## screenshots
+### Top 100 richest:
+![Top 100 richest](./screenshots/top100.png "Top 100 richest")
 
-## Top 100 richests:
-![Top 100 richests](../../../screenshots/blob/master/top100.png?raw=true "Top 100 richests")
+### Witnesses:
+![Witnesses](./screenshots/wm.png "Witnesses")
 
-
-## Witnesses monitoring:
-![Witnesses monitoring](../../../screenshots/blob/master/wm.png?raw=true "Witnesses monitoring")
-
-
-## Byteball heartbeat:
-![Byteball heartbeat](../../../screenshots/blob/master/bbhb.png?raw=true "Byteball heartbeat")
+### Obyte heartbeat:
+![Obyte heartbeat](./screenshots/bbhb.png "Obyte heartbeat")

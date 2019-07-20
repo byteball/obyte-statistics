@@ -144,4 +144,3 @@ function show_chart( $args ){
 
 }
 
-?>

@@ -197,5 +197,3 @@ file_put_contents('www/daily_stats.json', $json);
 
 $total_time = time() - $time_in;
 echo "\n<br><br>done in " . $total_time . " sec\n";
-
-?>
