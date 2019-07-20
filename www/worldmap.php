@@ -82,7 +82,7 @@ html {
 			<table>
 				<tr>
 					<td><a href="https://obyte.org"><img src="https://obyte.org/static/android-icon-192x192.png" height="100" width="100"></a></td>
-					<td><center><h1>Obyte World map</h1></center></td>
+					<td><center><h1>O<sub>byte</sub> World map</h1></center></td>
 				</tr>
 				<tr>
 					<td></td><td></td>

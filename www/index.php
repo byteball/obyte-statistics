@@ -8,7 +8,7 @@
 	<meta http-equiv="refresh" content="120" >
 	<link rel="icon" href="https://obyte.org/static/android-icon-192x192.png">
 
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 </head>
 
 <body>
@@ -46,10 +46,10 @@
 
 					<tr>
 						<td><font size=-1>
-						<a href="/worldmap.php">Click here</a> to see the O<sub>byte</sub> World Map.<br>
-						<a href="/Top100Richest.php">Click here</a> to get the O<sub>byte</sub> Top 100 richest list.<br>
-						<a href="/heartbeat.php">Click here</a> to see the global network stats.<br>
-						<a href="/witnesses.php">Click here</a> to get a picture of all Witnesses activity on the network.
+						<a href="/worldmap.php">Click here</a> to see the World Map.<br>
+						<a href="/Top100Richest.php">Click here</a> to get the Top 100 richest list.<br>
+						<a href="/witnesses.php">Click here</a> to get a picture of all Witnesses activity on the network.<br>
+						<a href="/heartbeat.php">Click here</a> to see the global network stats.
 						</font></td>
 					</tr>
 				</table>
@@ -60,12 +60,7 @@
 </center></p>
 <br><br>Point your wallet to the nearest hub to get efficient messaging communication, faster wallet synch.</p>
 	
-	<br>New to O<sub>byte</sub>? Check out <a href="https://obyte.org" target="_blank">obyte.org</a>
-&nbsp;also on Twitter <a href="https://twitter.com/ObyteOrg" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a>
-&nbsp;Bitcointalk <a href="https://bitcointalk.org/index.php?topic=1608859.0" target="_blank" title="BitcoinTalk thread"><i class="fa fa-bitcoin"></i></a>
-&nbsp;Medium <a href="https://medium.com/byteball" target="_blank" title="Medium"><i class="fa fa-medium"></i></a>
-&nbsp;Slack <a href="http://slack.obyte.org" target="_blank" title="Slack"><i class="fa fa-slack"></i></a>
-&nbsp;and Wiki <a href="https://wiki.byteball.org/" target="_blank" title="Wiki"><i class="fa fa-wikipedia-w"></i></a>
+<?php include('socials.php'); ?>
 
 <p><br></p>
 
