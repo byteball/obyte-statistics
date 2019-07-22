@@ -26,7 +26,7 @@ $max_alea=0.025;# in degree, 1/100 deg=1km
 
 
 #flag everything down in the geomap table
-$query = "UPDATE geomap SET is_ok=0 WHERE 1"; 
+$query = 'UPDATE geomap SET is_ok=0 WHERE 1;'; 
 $results = $stats_db->query($query);    
 if ( ! $results ) {
 	echo "Problem here...";
@@ -36,6 +36,7 @@ if ( ! $results ) {
 
 $known_peers = [];
 $known_peers['wss://obyte.org/bb'] = false;
+//$known_peers['wss://byteball.fr/bb'] = false;
 $known_peers['wss://relay.papabyte.com/bb'] = false;
 $known_peers['wss://obyte-hub.com/bb'] = false;
 $known_peers['wss://hub.byteball.ee'] = false;
@@ -44,7 +45,7 @@ $known_peers['wss://relay.bytes.cash/bb'] = false;
 $known_peers['wss://hub.connectory.io/bb'] = false;
 
 ##################pass 1 : search for all active hubs in byteball sqlite database
-$results = $db->query( "SELECT peer AS `url`, peer_host FROM peers" );
+$results = $db->query( 'SELECT peer AS `url`, peer_host FROM peers;' );
 
 if (! $results) {
 	echo "<p>There was an error in query: $query</p>";
@@ -63,15 +64,24 @@ foreach ($known_peers as $peer_url => $old_host) {
 	}
 	$peer_type = get_peer_type($peer_url);
 	$query = sprintf('SELECT * FROM geomap WHERE `type`="%s" AND IP = "%s" AND `description` = "%s";',
-		SQLite3::escapeString($peer_type),
-		SQLite3::escapeString($old_host ? $old_host : $new_host),
+		$peer_type,
+		SQLite3::escapeString($new_host),
 		SQLite3::escapeString($peer_url)
 	);
 	$results = $stats_db->query($query);
 	if ( !$results ) { 
 		die($stats_db->lastErrorMsg());
 	}
-	if( !$results->fetchArray(SQLITE3_ASSOC) ){
+	if( $peer = $results->fetchArray(SQLITE3_ASSOC) ){
+		$query = sprintf('UPDATE geomap SET is_ok=1, `date`=DATETIME("now") WHERE id = %d;',
+			$peer[ 'id' ]
+		);
+		$results = $stats_db->query($query);
+		if ( !$results ) {
+			die($stats_db->lastErrorMsg());
+		}
+	}
+	else {
 		$data_array = json_decode(get_coord($new_host), true);
 		$query = sprintf('INSERT INTO geomap (`type`, `IP`, `longit`, `latt`, `description`) VALUES ("%s", "%s", "%s", "%s", "%s");',
 			$peer_type,
@@ -85,20 +95,10 @@ foreach ($known_peers as $peer_url => $old_host) {
 			die($stats_db->lastErrorMsg());
 		}
 	}
-	else {
-		$query = sprintf('UPDATE geomap SET is_ok=1, `date`=DATETIME("now"), IP = "%s" WHERE IP="%s";',
-			SQLite3::escapeString($new_host),
-			SQLite3::escapeString($old_host ? $old_host : $new_host)
-		);
-		$results = $stats_db->query($query);
-		if ( !$results ) {
-			die($stats_db->lastErrorMsg());
-		}
-	}
 }
 
-#erase all failed hubs
-$query = "DELETE FROM geomap WHERE is_ok=0 AND `type` IN ('hub', 'relay')"; 
+#erase all failed hubs/relays
+$query = 'DELETE FROM geomap WHERE is_ok=0 AND `type` <> "full_wallet";'; 
 $results = $stats_db->query($query);    
 if ( ! $results ) {
 	echo "Problem here...";
@@ -109,7 +109,7 @@ if ( ! $results ) {
 
 # ******** PASS 2 *************   search for full wallets
 # Lord says "peer_events come from full wallets only"
-$results = $db->query( "SELECT * FROM peer_events WHERE event_date > DATETIME('now', '-1 DAY') GROUP BY peer_host" );
+$results = $db->query( 'SELECT * FROM peer_events WHERE event_date > DATETIME("now", "-1 DAY") GROUP BY peer_host;' );
 
 if (! $results) {
 	echo "argh";
@@ -118,32 +118,37 @@ if (! $results) {
 }
 
 while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
+	# full wallets are with IP as peer_host
 	if(preg_match('/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\z/', $row[ 'peer_host' ])){
 		
-		$query = sprintf('SELECT * FROM geomap WHERE IP="%s" AND `type` NOT IN ("hub", "relay");',
-			SQLite3::escapeString($row[ 'peer_host' ])
+		$query = sprintf('SELECT * FROM geomap WHERE IP="%s" AND `type` = "%s";',
+			SQLite3::escapeString($row[ 'peer_host' ]),
+			"full_wallet"
 		);
 		$results2 = $stats_db->query($query);
-		if ( ! $results2 ) {
+		if ( !$results2 ) {
 			echo $stats_db->lastErrorMsg();
 			exit;
 		}
-		if($results2->fetchArray(SQLITE3_ASSOC)){#if exists
-
-			$query = sprintf('UPDATE geomap SET is_ok=1, `date`=DATETIME("now") WHERE IP="%s";',
-				SQLite3::escapeString($row[ 'peer_host' ])
+		# if peer alreay exists
+		if( $peer = $results2->fetchArray(SQLITE3_ASSOC) ){
+			$query = sprintf('UPDATE geomap SET is_ok=1, `date`=DATETIME("now") WHERE id = %d;',
+				$peer[ 'id' ]
 			);
 			$results2 = $stats_db->query($query);
-		} else {#insert it if it is not known as a hub
-			$query = sprintf('SELECT * FROM geomap WHERE IP="%s" AND `type` IN ("hub", "relay");',
-				SQLite3::escapeString($row[ 'peer_host' ])
+		}
+		else {
+			$query = sprintf('SELECT * FROM geomap WHERE IP="%s" AND `type` <> "%s";',
+				SQLite3::escapeString($row[ 'peer_host' ]),
+				"full_wallet"
 			);
 			$results2 = $stats_db->query($query);
-			if ( ! $results2 ) {
+			if ( !$results2 ) {
 				echo $stats_db->lastErrorMsg();
 				exit;
 			}
-			if(!$results2->fetchArray(SQLITE3_ASSOC)){
+			# insert it if it's full wallet
+			if( !$results2->fetchArray(SQLITE3_ASSOC) ){
 				$data_array= json_decode(get_coord($row[ 'peer_host' ]), true);
 
 				$query = sprintf('INSERT INTO geomap (`type`, `IP`, `longit`, `latt`, `description`) VALUES ("%s", "%s", "%s", "%s", "%s");',
@@ -167,7 +172,7 @@ while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 
 
 #erase all not alive previous records (aka is_ok=0) before Json dump
-$query = "DELETE FROM geomap WHERE is_ok=0"; 
+$query = 'DELETE FROM geomap WHERE is_ok=0;'; 
 $results = $stats_db->query($query);
 if ( ! $results ) {
 	echo "Problem here...";
@@ -178,7 +183,7 @@ if ( ! $results ) {
 
 #json Dump
 
-$query = "SELECT * FROM geomap"; 
+$query = 'SELECT * FROM geomap;'; 
 $results = $stats_db->query($query);
 if ( ! $results ) {
 	echo "Problem here...";
@@ -227,6 +232,7 @@ function get_peer_type($wss_url){
 	if ($wss_url === 'wss://byteball.org/bb' ||
 		$wss_url === 'wss://byteball.fr/bb' ||
 		$wss_url === 'wss://obyte.org/bb' ||
+		$wss_url === 'wss://obyte.org/bb-test' ||
 		(strpos($wss_url, 'hub') !== false && strpos($wss_url, 'relay') === false)) {
 		return 'hub';
 	}

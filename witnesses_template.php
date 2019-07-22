@@ -11,7 +11,7 @@
 <table>
 	<tr>
 		<td><a href="https://obyte.org"><img src="https://obyte.org/static/android-icon-192x192.png" height="100" width="100"></a></td>
-		<td style="padding-left: 10px"><center><h1>Obyte Witnesses monitoring service</h1></center></td>
+		<td style="padding-left: 10px"><center><h1>O<sub>byte</sub> Witnesses monitoring service</h1></center></td>
 	</tr>
 </table>
 
