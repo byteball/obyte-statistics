@@ -166,7 +166,7 @@ foreach (@array_of_witnesses)#last timestamp
 	}
 	$stats_range=$max_end_users_seen_units;
 	my $percentage=calculate_percent($witnesses_stats->{$_}->{validations_count});
-	$buff_html_array.="<tr><td><font color=\"green\" valign=\"top\">".$witnesses_stats->{$_}->{arrow}."</font></td><td><b>#".$i."</b></td><td><a href=\"https://explorer.obyte.org/#".$_."\" target=\"_blank\">".$_."</a></td><td><center>".$witnesses_stats->{$_}->{validations_count}."</center></td><td>".$percentage."</td><td><center>".$witnesses_stats->{$_}->{last_seen_mci}."<center></td><td>".$witnesses_stats->{$_}->{last_seen_mci_timestamp}."</td><td>".$witnesses_stats->{$_}->{status}."</td><td>".$witnesses_stats->{$_}->{text}."</td></tr>\n";
+	$buff_html_array.="<tr><td><font color=\"green\" valign=\"top\">".$witnesses_stats->{$_}->{arrow}."</font></td><td><b>#".$i."</b></td><td><a class=\"address\" href=\"https://explorer.obyte.org/#".$_."\" target=\"_blank\">".$_."</a></td><td><center>".$witnesses_stats->{$_}->{validations_count}."</center></td><td>".$percentage."</td><td><center>".$witnesses_stats->{$_}->{last_seen_mci}."<center></td><td>".$witnesses_stats->{$_}->{last_seen_mci_timestamp}."</td><td>".$witnesses_stats->{$_}->{status}."</td><td>".$witnesses_stats->{$_}->{text}."</td></tr>\n";
 	
 	if(0){
 		print "$_ nbre validation : $witnesses_stats->{$_}->{validations_count}\n";

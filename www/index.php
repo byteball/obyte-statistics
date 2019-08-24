@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>Obyte stats</title>
-	<link rel="stylesheet" type="text/css" href="mystyle.css">
+	<link rel="stylesheet" type="text/css" href="mystyle.css?v2">
 	<meta name="Description" CONTENT="Obyte stats">
 	<meta name="keywords" content="obyte, byteball, witness, hub, relay, statistics" />
 	<meta http-equiv="refresh" content="120" >
