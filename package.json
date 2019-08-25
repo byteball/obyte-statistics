@@ -3,7 +3,18 @@
   "description": "Obyte statistics",
   "author": "Obyte",
   "license": "MIT",
+  "repository": {
+    "url": "git://github.com/byteball/obyte-statistics.git",
+    "type": "git"
+  },
   "dependencies": {
     "ocore": "git+https://github.com/byteball/ocore.git"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0"
+  },
+  "scripts": {
+    "es5-witness": "babel dump_witness_json.js --out-file dump_witness_json_es5.js"
   }
 }

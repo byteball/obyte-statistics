@@ -6,5 +6,6 @@ conf.php
 www/*.json
 www/witnesses.php
 stats.sqlite*
+*_es5.js
 *.err
 *.log
