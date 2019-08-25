@@ -3,3 +3,4 @@
 0 0 * * * cd obyte-statistics; php daily_stats_updater.php 1>>daily_stats_updater.log 2>>daily_stats_updater.err
 */5 * * * * cd obyte-statistics; perl parse_hub_logs.pl 1>>parse_hub_logs.log 2>>parse_hub_logs.err
 1 * * * * cd obyte-statistics; perl gather_raw_data.pl 1>>gather_raw_data.log 2>>gather_raw_data.err
+*/10 * * * * cd obyte-statistics; node dump_witness_json.js 1>>dump_witness_json.log 2>>dump_witness_json.err

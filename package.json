@@ -1,0 +1,9 @@
+{
+  "name": "obyte-statistics",
+  "description": "Obyte statistics",
+  "author": "Obyte",
+  "license": "MIT",
+  "dependencies": {
+    "ocore": "git+https://github.com/byteball/ocore.git"
+  }
+}

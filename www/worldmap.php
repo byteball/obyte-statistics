@@ -2,75 +2,12 @@
 <html>
 <head>
 <title>Obyte world map</title>
-<link rel="stylesheet" type="text/css" href="mystyle.css">
+<link rel="stylesheet" type="text/css" href="mystyle.css?v2">
 <meta name="Description" CONTENT="Obyte world map">
 <meta name="keywords" content="obyte, byteball, witness, hub, relay, statistics, map" />
 <link rel="icon" href="https://obyte.org/static/android-icon-192x192.png">
-
-<style>
-	#page-wrap { width: 800px; margin: 15px auto; position: relative; }
-	p { margin: 0 0 15px 0; }
-	p:first-child { background: #fffcde; padding: 10px; }
-	#sidebar ul { background: #eee; padding: 10px; }
-	li { margin: 0 0 0 20px; }
-	#main { width: 800px; float: left; }
-	#sidebar { width: 190px; position: fixed; left: 78%; top: 100px; margin: 0 0 0 110px; }
-	body {
-		width: 80em;
-		margin: 0 auto;
-		font-family: Tahoma, Verdana, Arial, sans-serif;
-		font-size: 13px;
-		color: #333333;
-	}
-</style>
-<style id="jsbin-css">
-/* example style */
-
-.geo-label {
-	margin: -2em 0 0 1em;
-	padding: .25em .5em;
-	font-family: Arial;
-	font-size: .7em;
-	color: #444;
-	background: #ffffff;
-	border-radius: 0px;
-	border: solid 1px #444;
-	width: auto;
-
-	/* we will show it on geomapmove */
-	display: none;
-}
-
-/* template style */
-
-html {
-	font-family: Tahoma, Verdana, Arial, sans-serif;
-	font-size: 100%;
-}
-
-#map {
-	position: relative;
-	top: 0em;
-	right: 0;
-	bottom: 0;
-	left: 0;
-}
-
-#info {
-	background: #f0f0f0;
-	border-radius: .0em;
-	box-shadow: .2em .2em .4em #222;
-	font-size: 1em;
-	max-width: 66%;
-	padding: .25em .5em;
-	position: absolute;
-	left: 1em;
-	top: 1em;
-}
-
-</style>
 </head>
-<body>
+<body class="worldmap">
 
 	
 	<div id="ie6-wrap">

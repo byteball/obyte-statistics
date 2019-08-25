@@ -8,6 +8,104 @@ body {
 }
 table.simple {
 	border: 1px solid;
-	td{ height: 14px };
 	color: #006400;
+}
+table.simple td {
+	height: 14px
+}
+
+a {
+	color: #1560BD;
+}
+a:active {
+	color: #1560BD;
+}
+
+.address {
+	font-family: monospace;
+}
+
+body.richest {
+	width: 800px;
+}
+.richest #search {
+	width: 700px;
+	padding: 10px;
+}
+.richest #button {
+	display: block;
+	width: 100px;
+	height: 30px;
+	border: solid #366FEB 1px;
+	background: #91B2FA;
+}
+
+
+body.worldmap {
+	width: 80em;
+	margin: 0 auto;
+	font-family: Tahoma, Verdana, Arial, sans-serif;
+	font-size: 13px;
+	color: #333333;
+}
+.worldmap #map {
+	position: relative;
+	top: 0em;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+.worldmap #info {
+	background: #f0f0f0;
+	border-radius: .0em;
+	box-shadow: .2em .2em .4em #222;
+	font-size: 1em;
+	max-width: 66%;
+	padding: .25em .5em;
+	position: absolute;
+	left: 1em;
+	top: 1em;
+}
+.worldmap #page-wrap { width: 800px; margin: 15px auto; position: relative; }
+.worldmap p { margin: 0 0 15px 0; }
+.worldmap p:first-child { background: #fffcde; padding: 10px; }
+.worldmap #sidebar ul { background: #eee; padding: 10px; }
+.worldmap li { margin: 0 0 0 20px; }
+.worldmap #main { width: 800px; float: left; }
+.worldmap #sidebar { width: 190px; position: fixed; left: 78%; top: 100px; margin: 0 0 0 110px; }
+.worldmap .geo-label {
+	margin: -2em 0 0 1em;
+	padding: .25em .5em;
+	font-family: Arial;
+	font-size: .7em;
+	color: #444;
+	background: #ffffff;
+	border-radius: 0px;
+	border: solid 1px #444;
+	width: auto;
+
+	/* we will show it on geomapmove */
+	display: none;
+}
+
+#witnessTable table {
+	border-collapse: collapse;
+	width: 100%;
+}
+#witnessTable th {
+	background: whitesmoke;
+	text-align: center;
+	padding: 2px 6px;
+}
+#witnessTable td {
+	text-align: center;
+	padding: 2px 6px;
+	border: 1px solid silver;
+}
+.witnessing-own {
+	color: #1560BD;
+	font-weight: bold;
+}
+.witnessing-other {
+	color: #1560BD;
 }

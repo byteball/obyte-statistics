@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Obyte Top 100 richest list</title>
-<link rel="stylesheet" type="text/css" href="mystyle.css">
+<link rel="stylesheet" type="text/css" href="mystyle.css?v2">
 <meta name="Description" CONTENT="Obyte Top 100 richest list">
 
 <meta name="keywords" content="obyte, witness, hub, relay, statistics" />
@@ -42,25 +42,10 @@
 		});
 	});
 </script>
-<style>
-body {
-	width: 800px;
-}
-#search {
-	width: 700px;
-	padding: 10px;
-}
-#button {
-	display: block;
-	width: 100px;
-	height: 30px;
-	border: solid #366FEB 1px;
-	background: #91B2FA;
-}
-</style>
+
 
 </head>
-<body>
+<body class="richest">
 
 <table>
 	<tr>
@@ -120,7 +105,7 @@ if ( ! $results ) {
 }
 $i=1;
 while( $row = $results->fetchArray(SQLITE3_ASSOC) ){
-	echo "<tr><td><b>#".$i."</b></td><td>".number_format ($row[ 'amount' ])."</td><td>$".number_format (($row[ 'amount' ]/1000000000)*$dollar_value)."</td><td><a href=\"https://explorer.obyte.org/#".$row[ 'address' ]."\">".$row[ 'address' ]."</a></td></tr><tr>";
+	echo "<tr><td><b>#".$i."</b></td><td>".number_format ($row[ 'amount' ])."</td><td>$".number_format (($row[ 'amount' ]/1000000000)*$dollar_value)."</td><td><a class=\"address\" href=\"https://explorer.obyte.org/#".$row[ 'address' ]."\">".$row[ 'address' ]."</a></td></tr><tr>";
 	$i++;
 }
 
