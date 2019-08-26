@@ -91,6 +91,10 @@ body.worldmap {
 	display: none;
 }
 
+.witnesses td {
+	text-align: right;
+}
+
 #witnessTable table {
 	border-collapse: collapse;
 	width: 100%;

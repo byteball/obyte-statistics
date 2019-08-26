@@ -6,7 +6,8 @@
 <meta name="keywords" content="obyte, byteball, witness, hub, relay, statistics" />
 <link rel="icon" href="https://obyte.org/static/android-icon-192x192.png">
 <link rel="stylesheet" type="text/css" href="mystyle.css?v2">
-
+</head>
+<body class="witnesses">
 
 <table>
 	<tr>
