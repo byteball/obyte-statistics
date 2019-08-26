@@ -124,7 +124,7 @@ async function witnessTable() {
 	// 	// draws nice table in console on Node.js v10 and above
 	// 	console.table(witness_table);
 	// }
-	let json_output = {last_updated: new Date().toString(), table: witness_table};
+	let json_output = {last_updated: new Date().toUTCString(), table: witness_table};
 	fs.writeFileSync(__dirname +'/www/obyte_witnesses.json', JSON.stringify(json_output));
 	process.exit();
 }
