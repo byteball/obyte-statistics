@@ -1,4 +1,14 @@
 // .babelrc
 {
-	"presets": ["env"]
+	"presets": [
+		"env"
+	],
+	"plugins": [
+		[
+			"transform-runtime",
+			{
+				"regenerator": true
+			}
+		]
+	]
 }
