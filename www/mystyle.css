@@ -39,6 +39,9 @@ body.richest {
 	border: solid #366FEB 1px;
 	background: #91B2FA;
 }
+.richest td {
+	text-align: right;
+}
 
 
 body.worldmap {
@@ -88,9 +91,15 @@ body.worldmap {
 	display: none;
 }
 
+.witnesses table {
+	width: 100%;
+}
+.witnesses td {
+	text-align: right;
+}
+
 #witnessTable table {
 	border-collapse: collapse;
-	width: 100%;
 }
 #witnessTable th {
 	background: whitesmoke;
