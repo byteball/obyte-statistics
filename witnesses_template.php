@@ -69,9 +69,12 @@ jQuery.noConflict();
 		}
 		return '<td class="'+ cell_class +'">'+ cell_value +'</td>';
 	}
-	$.getJSON('/obyte_witnesses.json', function(data) {
+	$.getJSON('/obyte_witnesses.json?minute=' + Math.round(new Date().getTime()/1000/60), function(data) {
 		var table_rows = '';
-		var rows = Object.keys(data.table);
+		var rows = data.table ? Object.keys(data.table) : [];
+		if (!rows.length) {
+			return;
+		}
 		table_rows = '<thead><tr>';
 		table_rows = '<th></th>';
 		var columns = Object.keys(data.table[rows[0]]);
