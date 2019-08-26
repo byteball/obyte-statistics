@@ -39,6 +39,9 @@ body.richest {
 	border: solid #366FEB 1px;
 	background: #91B2FA;
 }
+.richest td {
+	text-align: right;
+}
 
 
 body.worldmap {
