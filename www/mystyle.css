@@ -22,14 +22,14 @@ a:active {
 }
 
 .address {
-	font-family: monospace;
+	font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
 }
 
 body.richest {
 	width: 800px;
 }
 .richest #search {
-	width: 700px;
+	width: 100%;
 	padding: 10px;
 }
 .richest #button {
@@ -91,25 +91,26 @@ body.worldmap {
 	display: none;
 }
 
-.witnesses table {
+.witnesses table, #richList {
 	width: 100%;
+	border-collapse: collapse;
+}
+.witnesses table th, #richList th {
+	background: whitesmoke;
+	text-align: right;
+	padding: 3px 6px;
 }
 .witnesses td {
 	text-align: right;
 }
 
-#witnessTable table {
-	border-collapse: collapse;
-}
-#witnessTable th {
-	background: whitesmoke;
-	text-align: center;
-	padding: 2px 6px;
-}
 #witnessTable td {
 	text-align: center;
-	padding: 2px 6px;
+	padding: 3px 6px;
 	border: 1px solid silver;
+}
+#richList td {
+	padding: 3px 6px;
 }
 .witnessing-own {
 	color: #1560BD;

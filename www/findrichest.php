@@ -31,7 +31,7 @@ if ( ! $results ) {
 
 
 if( $row = $results->fetchArray(SQLITE3_ASSOC) ){
-	echo "Congratulations! You are the <b>#".$row[ 'id' ]."</b> richest with a value of <b>".number_format ( $row[ 'amount' ] , 0 , "." , "," )." </b>bytes.";
+	echo "Congratulations! You are the <b>#".$row[ 'id' ]."</b> richest with a value of <b>".number_format ( $row[ 'amount' ]/1000000000, 9)." </b>GBYTE.";
 }
 else{
 	echo "Not found.";

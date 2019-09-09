@@ -5,7 +5,7 @@
 <meta name="Description" CONTENT="Obyte Witnesses monitoring service">
 <meta name="keywords" content="obyte, byteball, witness, hub, relay, statistics" />
 <link rel="icon" href="https://obyte.org/static/android-icon-192x192.png">
-<link rel="stylesheet" type="text/css" href="mystyle.css?v2">
+<link rel="stylesheet" type="text/css" href="mystyle.css?v3">
 </head>
 <body class="witnesses">
 
@@ -20,17 +20,17 @@
 
 <h2>Over the last 12 hours:</h2>
 <br>
-<table>
+<table id="witnessList">
 	<tr>
-		<td></td>
-		<td><b>Rank</b></td>
-		<td><b><center>Witness Address</center></b></td>
-		<td><center><b>Views</b></center></td>
-		<td><b><center>in %</center></b></td>
-		<td width="100"><center><b>MC unit<br>last seen on</b></center></td>
-		<td width="130"><center><b>last seen<br>UTC Timestamp</b></center></td>
-		<td width="125"><b>Origin</b></td>
-		<td><b>Operated by</b></td>
+		<th></th>
+		<th>Rank</th>
+		<th><center>Witness Address</center></th>
+		<th><center>Views</center></th>
+		<th><center>in %</center></th>
+		<th width="100"><center>MC unit<br>last seen on</center></th>
+		<th width="130"><center>last seen<br>UTC Timestamp</center></th>
+		<th width="125">Origin</th>
+		<th>Operated by</th>
 	
 	</tr>
 	{{Array}}
