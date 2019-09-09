@@ -6,7 +6,7 @@ include_once 'chart-functions.php';
 <html>
 <head>
 <title>Obyte HeartBeat</title>
-<link rel="stylesheet" type="text/css" href="mystyle.css?v2">
+<link rel="stylesheet" type="text/css" href="mystyle.css?v3">
 <meta name="Description" CONTENT="obyte stats">
 <meta name="keywords" content="obyte, witness, hub, relay, statistics" />
 

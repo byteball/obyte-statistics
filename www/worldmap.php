@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Obyte world map</title>
-<link rel="stylesheet" type="text/css" href="mystyle.css?v2">
+<link rel="stylesheet" type="text/css" href="mystyle.css?v3">
 <meta name="Description" CONTENT="Obyte world map">
 <meta name="keywords" content="obyte, byteball, witness, hub, relay, statistics, map" />
 <link rel="icon" href="https://obyte.org/static/android-icon-192x192.png">

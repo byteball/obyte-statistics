@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Obyte Top 100 richest list</title>
-<link rel="stylesheet" type="text/css" href="mystyle.css?v2">
+<link rel="stylesheet" type="text/css" href="mystyle.css?v3">
 <meta name="Description" CONTENT="Obyte Top 100 richest list">
 
 <meta name="keywords" content="obyte, witness, hub, relay, statistics" />
@@ -67,15 +67,15 @@
 	</table>
 </div>
 <br>
-<table border="0">
+<table id="richList" border="0">
 	<tr>
-		<td width="50"><b>Rank</b></td>
-		<td width="180"><b>Amount (in bytes)</b></td>
+		<th width="50">Rank</th>
+		<th width="180">Amount (in GBYTE)</th>
 
 
 
 <?php
-$rate_url="https://api.coinmarketcap.com/v1/ticker/byteball/";
+$rate_url="https://api.coinmarketcap.com/v1/ticker/obyte/";
 
 $json_array= json_decode(make_443_get ($rate_url), true);
 if(!defined($json_array['0']['price_usd'])){
@@ -85,8 +85,8 @@ if(!defined($json_array['0']['price_usd'])){
 }
 
 echo "
-		<td width=\"180\"><b>USD <font size=\"-2\">(at 1GB=$".$dollar_value.")</font></b></td>
-		<td width=\"200\"><b><center>Address</center></b></td>
+		<th width=\"180\">USD <font size=\"-2\">(at 1 GBYTE = $".$dollar_value.")</font></th>
+		<th width=\"200\"><center>Address</center></th>
 	</tr>
 ";
 
@@ -105,7 +105,7 @@ if ( ! $results ) {
 }
 $i=1;
 while( $row = $results->fetchArray(SQLITE3_ASSOC) ){
-	echo "<tr><td><b>#".$i."</b></td><td>".number_format ($row[ 'amount' ])."</td><td>$".number_format (($row[ 'amount' ]/1000000000)*$dollar_value)."</td><td><a class=\"address\" href=\"https://explorer.obyte.org/#".$row[ 'address' ]."\">".$row[ 'address' ]."</a></td></tr><tr>";
+	echo "<tr><th>#".$i."</th><td>".number_format ($row[ 'amount' ]/1000000000, 9)."</td><td>$".number_format (($row[ 'amount' ]/1000000000)*$dollar_value)."</td><td><a class=\"address\" href=\"https://explorer.obyte.org/#".$row[ 'address' ]."\">".$row[ 'address' ]."</a></td></tr><tr>";
 	$i++;
 }
 

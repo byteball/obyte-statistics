@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>Obyte stats</title>
-	<link rel="stylesheet" type="text/css" href="mystyle.css?v2">
+	<link rel="stylesheet" type="text/css" href="mystyle.css?v3">
 	<meta name="Description" CONTENT="Obyte stats">
 	<meta name="keywords" content="obyte, byteball, witness, hub, relay, statistics" />
 	<meta http-equiv="refresh" content="120" >
@@ -31,7 +31,7 @@
 <table>
 	<tr>
 		<td>Connected wallets:</td>
-		<td align="center"><b>obyte.org </b><b id="EUConnected"></b></td><td width="10"></td>
+		<td align="center"><b><?php echo implode('.', array_slice(explode('.', $_SERVER['HTTP_HOST']), -2));?> </b><b id="EUConnected"></b></td><td width="10"></td>
 	</tr>
 </table>
 
