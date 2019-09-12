@@ -155,6 +155,11 @@ foreach (@array_of_witnesses)#last timestamp
 		$witnesses_stats->{$_}->{status}="Independent Witness";
 		$others_value+=$witnesses_stats->{$_}->{validations_count};
 	}
+	elsif($_ eq 'QR542JXX7VJ5UJOZDKHTJCXAYWOATID2'){
+		$witnesses_stats->{$_}->{text}="Bittrex";
+		$witnesses_stats->{$_}->{status}="Exchange";
+		$others_value+=$witnesses_stats->{$_}->{validations_count};
+	}
 	elsif ( grep( /^$buff$/, @default_witnesses ) ){
 		$witnesses_stats->{$_}->{text}="Tonych";
 		$witnesses_stats->{$_}->{status}="Founder's Witness";
