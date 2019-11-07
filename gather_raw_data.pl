@@ -60,7 +60,7 @@ my @array_of_serial_posting_witnesses;
 my $our_witness_count=0;
 $sth = $dbh->prepare("select address, count(*) as total_count from witnessing_outputs where main_chain_index > $start_mci and main_chain_index <=$last_mci group by address order by total_count DESC");
 $sth->execute();
-while ($query_result = $sth->fetchrow_hashref){
+while (my $query_result = $sth->fetchrow_hashref){
 	push @array_of_serial_posting_witnesses, $query_result->{address};
 	$witnesses_stats->{$query_result->{address}}->{text}="Unknown: contact us to be listed here";
 	$witnesses_stats->{$query_result->{address}}->{status}="Unknown";
@@ -73,7 +73,7 @@ my $witnesses_market;
 $sth = $dbh->prepare("select count(distinct units.unit) as total_seen, unit_witnesses_1.address, max(units.main_chain_index) as max_mci, max(units.creation_date) as max_creation_date, min(units.creation_date) as min_creation_date from units left join unit_witnesses as unit_witnesses_1 on ( unit_witnesses_1.unit = units.witness_list_unit or unit_witnesses_1.unit = units.unit ) left join unit_authors on unit_authors.unit = units.unit left join unit_witnesses as unit_witnesses_2 on unit_witnesses_2.address = unit_authors.address where 1 and units.sequence='good' and (julianday('now') - julianday(units.creation_date))* 24 * 60 * 60  < 3600*12 and unit_witnesses_2.address is NULL group by unit_witnesses_1.address order by total_seen desc");
 
 $sth->execute();
-while ($query_result = $sth->fetchrow_hashref){
+while (my $query_result = $sth->fetchrow_hashref){
 	push @array_of_witnesses, $query_result->{address};
 
 	$witnesses_market->{$query_result->{address}}->{total_seen}=$query_result->{total_seen};
@@ -212,30 +212,41 @@ close $fh;
 
 
 #pass 2: top 100
-	
 $stats_dbh->prepare('BEGIN')->execute();
 $stats_dbh->prepare('DELETE FROM richlist')->execute();
 
-$sth = $dbh->prepare("SELECT sum(amount) as amount,address FROM outputs where is_spent=0 and asset is null group by address order by amount desc");
+$sth = $dbh->prepare("SELECT SUM(amount) AS amount, address FROM outputs WHERE is_spent=0 AND asset IS null GROUP BY address ORDER BY amount DESC");
 $sth->execute();
 my $total_add_with_balance=0;
-while ($query_result = $sth->fetchrow_hashref){
+my $circulation_supply=1000000000000000;
+while (my $query_result = $sth->fetchrow_hashref){
 	#problematics addresses
 	next if $query_result->{address} eq 'mtdc7zuhmdu3ph2rrmhcmm4plc2xkhtj';#yes, lowercase
 	next if $query_result->{address} eq 'GVVHBOGQFAZJW54m37LPSHZOYWZ2Z47T';
 	next if $query_result->{address} eq 'ZQ4NJ2YZGUGIPU2F2DOAIIH67MBY4AHG';
+	#not in circulation addresses
+	$circulation_supply -= $query_result->{address} eq 'MZ4GUQC7WUKZKKLGAS3H3FSDKLHI7HFO' ? $query_result->{amount} : 0;
+	$circulation_supply -= $query_result->{address} eq 'BZUAVP5O4ND6N3PVEUZJOATXFPIKHPDC' ? $query_result->{amount} : 0;
+	$circulation_supply -= $query_result->{address} eq 'TUOMEGAZPYLZQBJKLEM2BGKYR2Q5SEYS' ? $query_result->{amount} : 0;
+	#new richlist
 	$total_add_with_balance++;
-	my $sth2=$stats_dbh->prepare ("INSERT INTO richlist (id, amount,address) values($total_add_with_balance, '$query_result->{amount}','$query_result->{address}')");
+	my $sth2=$stats_dbh->prepare ("INSERT INTO richlist (id, amount, address) VALUES($total_add_with_balance, '$query_result->{amount}','$query_result->{address}')");
 	$sth2->execute;
 }
 $stats_dbh->prepare('COMMIT')->execute();
 
+if ($total_add_with_balance) {
+	my $filename_supply = 'www/coin_info.json';
+	open(my $fh_supply, '>', $filename_supply) or die "Could not open file '$filename_supply' $!";
+	my $json_supply = "{\"circulating_supply\":".($circulation_supply/1000000000).",\"total_supply\":1000000,\"max_supply\":1000000}";
+	print $fh_supply $json_supply;
+	close $fh_supply;
+}
 
 
-		
+
 #pass 3: trafic
 #All trafic within the last 12 hours
-
 $sth = $dbh->prepare("select count(*) as total from units where (julianday('now') - julianday(creation_date))* 24 * 60 * 60  < 3600*12");
 $sth->execute();
 $query_result = $sth->fetchrow_hashref;
@@ -274,7 +285,7 @@ my $smart_contract_count=0;
 
 my $latest_definition_cash="";
 
-while ($query_result = $sth->fetchrow_hashref){
+while (my $query_result = $sth->fetchrow_hashref){
 	$total_payload+=$query_result->{payload_commission};
 	$total_units_witnesses_excluded++;
 	$total_sidechain_units_witnesses_excluded+=1 if($query_result->{is_on_main_chain}==0);

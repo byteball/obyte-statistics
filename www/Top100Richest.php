@@ -104,7 +104,12 @@ if ( ! $results ) {
 	exit;
 }
 $i=1;
+$disclaimers = '';
 while( $row = $results->fetchArray(SQLITE3_ASSOC) ){
+	$disclaimers .= ($row[ 'address' ] == 'MZ4GUQC7WUKZKKLGAS3H3FSDKLHI7HFO') ? '#'. $i .' <span class="address">'. $row[ 'address' ] .'</span> is address of distribution fund.<br>' : '';
+	$disclaimers .= ($row[ 'address' ] == 'QR542JXX7VJ5UJOZDKHTJCXAYWOATID2') ? '#'. $i .' <span class="address">'. $row[ 'address' ] .'</span> is address of Bittrex exchange.<br>' : '';
+	$disclaimers .= ($row[ 'address' ] == 'BZUAVP5O4ND6N3PVEUZJOATXFPIKHPDC') ? '#'. $i .' <span class="address">'. $row[ 'address' ] .'</span> is 1% of total supply reserved for the founder.<br>' : '';
+	$disclaimers .= ($row[ 'address' ] == 'TUOMEGAZPYLZQBJKLEM2BGKYR2Q5SEYS') ? '#'. $i .' <span class="address">'. $row[ 'address' ] .'</span> is another address of distribution fund.<br>' : '';
 	echo "<tr><th>#".$i."</th><td>".number_format ($row[ 'amount' ]/1000000000, 9)."</td><td>$".number_format (($row[ 'amount' ]/1000000000)*$dollar_value)."</td><td><a class=\"address\" href=\"https://explorer.obyte.org/#".$row[ 'address' ]."\">".$row[ 'address' ]."</a></td></tr><tr>";
 	$i++;
 }
@@ -113,9 +118,8 @@ while( $row = $results->fetchArray(SQLITE3_ASSOC) ){
 
 </table>
 <br>
-<font size="-1">
 
-#1 MZ4GUQC7WUKZKKLGAS3H3FSDKLHI7HFO holds the remaining disribution amount.<br>
+<?php echo $disclaimers; ?>
 Rate powered by <a href="https://coinmarketcap.com/currencies/byteball/" target="_blank">CoinMarketCap</a><br><br></i>
 
 
