@@ -228,6 +228,7 @@ while (my $query_result = $sth->fetchrow_hashref){
 	$circulation_supply -= $query_result->{address} eq 'MZ4GUQC7WUKZKKLGAS3H3FSDKLHI7HFO' ? $query_result->{amount} : 0;
 	$circulation_supply -= $query_result->{address} eq 'BZUAVP5O4ND6N3PVEUZJOATXFPIKHPDC' ? $query_result->{amount} : 0;
 	$circulation_supply -= $query_result->{address} eq 'TUOMEGAZPYLZQBJKLEM2BGKYR2Q5SEYS' ? $query_result->{amount} : 0;
+	$circulation_supply -= $query_result->{address} eq 'FCXZXQR353XI4FIPQL6U4G2EQJL4CCU2' ? $query_result->{amount} : 0;
 	#new richlist
 	$total_add_with_balance++;
 	my $sth2=$stats_dbh->prepare ("INSERT INTO richlist (id, amount, address) VALUES($total_add_with_balance, '$query_result->{amount}','$query_result->{address}')");
