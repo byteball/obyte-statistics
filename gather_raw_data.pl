@@ -164,7 +164,12 @@ foreach (@array_of_witnesses)#last timestamp
 		$witnesses_stats->{$_}->{text}="Bosch Connectory Stuttgart";
 		$witnesses_stats->{$_}->{status}="Independent Witness";
 		$others_value+=$witnesses_stats->{$_}->{validations_count};
-	}	
+	}
+	elsif($_ eq 'DXYWHSZ72ZDNDZ7WYZXKWBBH425C6WZN'){
+		$witnesses_stats->{$_}->{text}="Bind Creative";
+		$witnesses_stats->{$_}->{status}="Independent Witness";
+		$others_value+=$witnesses_stats->{$_}->{validations_count};
+	}
 	elsif ( grep( /^$buff$/, @default_witnesses ) ){
 		$witnesses_stats->{$_}->{text}="Tonych";
 		$witnesses_stats->{$_}->{status}="Founder's Witness";
@@ -442,7 +447,7 @@ sub get_content {
 	my ($template,$HTML) = @_;
 	open (FILE, "<$template") or die "Couldn't open $template: $!\n";
 	while (<FILE>) {
-		s/{{(.*?)}}/$HTML->{$1}/g;
+		s/\{\{(.*?)\}\}/$HTML->{$1}/g;
 		$content .= $_;
 	} 
 	close FILE;
