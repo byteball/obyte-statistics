@@ -164,7 +164,7 @@ $(function() {
 				map.geomap("append", this, { color: "#006400", fillOpacity: "0",height:8,width: 16 }, '<span class="' + this.properties.id + '">' +  this.properties.name + '</span>', false);
 			}
 			else if(this.properties.name.match(/Hub/g) && this.properties.name.match(/obyte\.org\/bb/)){//"#006400"
-				var buff="<table><tr><td><img src=\"https://obyte.org/static/android-icon-192x192.png\" width=\"30\" height=\"30\"></td><td width=\"5\"></td><td><b>Default Hub: obyte.org/bb<br>IP: 144.76.217.155</b></td></tr></table>";
+				var buff="<table><tr><td><img src=\"https://obyte.org/static/android-icon-192x192.png\" width=\"30\" height=\"30\"></td><td width=\"5\"></td><td><b>Default</b> " +  this.properties.name + "</td></tr></table>";
 				map.geomap("append", this, { color: "#006400", strokeWidth: "3px", fillOpacity: "0",height:10,width: 20 }, '<span class="' + this.properties.id + '">' +  buff + '</span>', false);
 			}
 			else if (this.properties.name.match((/Full/g))){

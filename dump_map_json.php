@@ -35,14 +35,20 @@ if ( ! $results ) {
 }
 
 $known_peers = [];
-$known_peers['wss://obyte.org/bb'] = false;
-//$known_peers['wss://byteball.fr/bb'] = false;
-$known_peers['wss://relay.papabyte.com/bb'] = false;
-$known_peers['wss://obyte-hub.com/bb'] = false;
-$known_peers['wss://hub.byteball.ee'] = false;
-$known_peers['wss://hub.obytechina.org/bb'] = false;
-$known_peers['wss://relay.bytes.cash/bb'] = false;
-$known_peers['wss://hub.connectory.io/bb'] = false;
+if (!empty($TESTNET)) {
+	$known_peers['wss://obyte.org/bb-test'] = false;
+	$known_peers['wss://relay.papabyte.com/bb-test'] = false;
+}
+else {
+	$known_peers['wss://obyte.org/bb'] = false;
+	//$known_peers['wss://byteball.fr/bb'] = false;
+	$known_peers['wss://relay.papabyte.com/bb'] = false;
+	$known_peers['wss://obyte-hub.com/bb'] = false;
+	$known_peers['wss://hub.byteball.ee'] = false;
+	$known_peers['wss://hub.obytechina.org/bb'] = false;
+	$known_peers['wss://relay.bytes.cash/bb'] = false;
+	$known_peers['wss://hub.connectory.io/bb'] = false;
+}
 
 ##################pass 1 : search for all active hubs in byteball sqlite database
 $results = $db->query( 'SELECT peer AS `url`, peer_host FROM peers;' );
@@ -223,13 +229,13 @@ while( $row = $results->fetchArray(SQLITE3_ASSOC) ){
 if($hub_result_array){
 	$result_json=json_encode($hub_result_array);
 	file_put_contents('www/obyte_map.json', $result_json);
-							
 }else{
 	echo "Not found.";
 }
 
 function get_peer_type($wss_url){
 	if ($wss_url === 'wss://byteball.org/bb' ||
+		$wss_url === 'wss://byteball.org/bb-test' ||
 		$wss_url === 'wss://byteball.fr/bb' ||
 		$wss_url === 'wss://obyte.org/bb' ||
 		$wss_url === 'wss://obyte.org/bb-test' ||

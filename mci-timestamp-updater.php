@@ -7,6 +7,7 @@ date_default_timezone_set('UTC');
 
 $time_in = time();
 
+include_once('conf.php');
 $db = new SQLite3($_SERVER['HOME'].'/.config/obyte-hub/byteball.sqlite');
 $stats_db = new SQLite3('stats.sqlite');
 $stats_db->busyTimeout(30*1000);
@@ -33,28 +34,38 @@ echo "last mci ".$last_timestamped_mci."\n";
  * first get timestamp oracle info
  */
 
-$query = "select units.main_chain_index";
-$query .= ", data_feeds.int_value";
-$query .= " from units";
-$query .= " left join unit_authors on unit_authors.unit = units.unit";
-$query .= " left join data_feeds on data_feeds.unit = units.unit";
-$query .= " where 1";
-$query .= " and unit_authors.address='I2ADHGP4HL6J37NQAD73J7E5SKFIXJOT'";
-$query .= " and data_feeds.feed_name='timestamp'";
-$query .= " and units.main_chain_index > '$last_timestamped_mci' ";
-$query .= " order by units.main_chain_index";
+$timestamp_oracle = !empty($TESTNET) ? 'OPNUXBRSSQQGHKQNEPD2GLWQYEUY5XLD' : 'I2ADHGP4HL6J37NQAD73J7E5SKFIXJOT';
+
+if (!empty($ROCKSDB)) {
+	$query = "select units.main_chain_index";
+	$query .= ", units.timestamp";
+	$query .= " from units";
+	$query .= " left join unit_authors on unit_authors.unit = units.unit";
+	$query .= " where 1";
+	$query .= " and unit_authors.address='$timestamp_oracle'";
+	$query .= " and units.main_chain_index > '$last_timestamped_mci'";
+	$query .= " and units.timestamp > 0";
+	$query .= " order by units.main_chain_index";
+}
+else {
+	$query = "select units.main_chain_index";
+	$query .= ", data_feeds.int_value/1000 AS timestamp";
+	$query .= " from units";
+	$query .= " left join unit_authors on unit_authors.unit = units.unit";
+	$query .= " left join data_feeds on data_feeds.unit = units.unit";
+	$query .= " where 1";
+	$query .= " and unit_authors.address='$timestamp_oracle'";
+	$query .= " and data_feeds.feed_name='timestamp'";
+	$query .= " and units.main_chain_index > '$last_timestamped_mci'";
+	$query .= " order by units.main_chain_index";
+}
 
 $results = $db->query( $query );
-
 while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
-
-//	echo "<br>".print_r($row,true);
-//	echo " " . date( 'Y-m-d H:i:s', round($row[ 'int_value' ]/1000) );
-
-	$query = "insert OR IGNORE into mci_timestamps (main_chain_index, date) VALUES ($row[main_chain_index], '".date('Y-m-d H:i:s', round($row['int_value']/1000))."')";
-
+	//	echo "<br>".print_r($row,true);
+	//	echo " " . date( 'Y-m-d H:i:s', round($row[ 'timestamp' ]) );
+	$query = "INSERT OR IGNORE INTO mci_timestamps (main_chain_index, date) VALUES ($row[main_chain_index], '".date('Y-m-d H:i:s', round($row['timestamp']))."')";
 	$stats_db->query($query);
-    
 }
 
 
