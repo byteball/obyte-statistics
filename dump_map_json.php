@@ -42,9 +42,9 @@ if (!empty($TESTNET)) {
 else {
 	$known_peers['wss://obyte.org/bb'] = false;
 	//$known_peers['wss://byteball.fr/bb'] = false;
-	$known_peers['wss://relay.papabyte.com/bb'] = false;
-	$known_peers['wss://obyte-hub.com/bb'] = false;
-	$known_peers['wss://hub.byteball.ee'] = false;
+	//$known_peers['wss://relay.papabyte.com/bb'] = false;
+	//$known_peers['wss://obyte-hub.com/bb'] = false;
+	//$known_peers['wss://hub.byteball.ee'] = false;
 	$known_peers['wss://hub.obytechina.org/bb'] = false;
 	$known_peers['wss://relay.bytes.cash/bb'] = false;
 	$known_peers['wss://hub.connectory.io/bb'] = false;
