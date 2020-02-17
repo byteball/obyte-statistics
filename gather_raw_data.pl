@@ -111,48 +111,48 @@ foreach (@array_of_witnesses)#last timestamp
 	  
 	my $buff=$_;
 	if($_ eq 'MEJGDND55XNON7UU3ZKERJIZMMXJTVCV'){
-		$witnesses_stats->{$_}->{text}="byteball.fr witness";
-		$witnesses_stats->{$_}->{status}="Independent Witness";
+		$witnesses_stats->{$_}->{text}="byteball.fr";
+		$witnesses_stats->{$_}->{status}="Independent";
 		$others_value+=$witnesses_stats->{$_}->{validations_count};
 	}
 	elsif($_ eq '4GDZSXHEFVFMHCUCSHZVXBVF5T2LJHMU'){
 		$witnesses_stats->{$_}->{text}="Rogier Eijkelhof";
-		$witnesses_stats->{$_}->{status}="Independent Witness";
+		$witnesses_stats->{$_}->{status}="Independent";
 		$others_value+=$witnesses_stats->{$_}->{validations_count};
 	}
 	elsif($_ eq 'FAB6TH7IRAVHDLK2AAWY5YBE6CEBUACF'){
 		$witnesses_stats->{$_}->{text}="Fabien Marino";
-		$witnesses_stats->{$_}->{status}="Independent Witness";
+		$witnesses_stats->{$_}->{status}="Independent";
 		$others_value+=$witnesses_stats->{$_}->{validations_count};
 	}
 	elsif($_ eq '7ULGTPFB72TOYA67YNGMX2Y445FSTL7O'){
 		$witnesses_stats->{$_}->{text}="Portabella (slack user)";
-		$witnesses_stats->{$_}->{status}="Independent Witness";
+		$witnesses_stats->{$_}->{status}="Independent";
 		$others_value+=$witnesses_stats->{$_}->{validations_count};
 	}
 	elsif($_ eq 'Z65GI4TTOZ6KOXDX7LQN4AVOFI6DLSJG'){
 		$witnesses_stats->{$_}->{text}="rubbish0815 (slack user)";
-		$witnesses_stats->{$_}->{status}="Independent Witness";
+		$witnesses_stats->{$_}->{status}="Independent";
 		$others_value+=$witnesses_stats->{$_}->{validations_count};
 	}
 	elsif($_ eq 'D3FLI2E6SQS437P57DKBYIBL3EZTZXCQ'){
 		$witnesses_stats->{$_}->{text}="Piiper (slack user)";
-		$witnesses_stats->{$_}->{status}="Independent Witness";
+		$witnesses_stats->{$_}->{status}="Independent";
 		$others_value+=$witnesses_stats->{$_}->{validations_count};
 	}
 	elsif($_ eq '4FIZC3KZ3ZQSSVOKFEUHKCTQWAWD6YMF'){
 		$witnesses_stats->{$_}->{text}="Raivo Malter";
-		$witnesses_stats->{$_}->{status}="Independent Witness";
+		$witnesses_stats->{$_}->{status}="Independent";
 		$others_value+=$witnesses_stats->{$_}->{validations_count};
 	}
 	elsif($_ eq 'IMMP5FWQXY6IZ53OIYQ46PHSI5T3MAYQ'){
 		$witnesses_stats->{$_}->{text}="Demelza Hays";
-		$witnesses_stats->{$_}->{status}="Independent Witness";
+		$witnesses_stats->{$_}->{status}="Independent";
 		$others_value+=$witnesses_stats->{$_}->{validations_count};
 	}
 	elsif($_ eq '25XDFVFRP7BZ2SNSESFKUTF52W42JCSL'){
 		$witnesses_stats->{$_}->{text}="Brad Morrison";
-		$witnesses_stats->{$_}->{status}="Independent Witness";
+		$witnesses_stats->{$_}->{status}="Independent";
 		$others_value+=$witnesses_stats->{$_}->{validations_count};
 	}
 	elsif($_ eq 'QR542JXX7VJ5UJOZDKHTJCXAYWOATID2'){
@@ -162,26 +162,26 @@ foreach (@array_of_witnesses)#last timestamp
 	}
 	elsif($_ eq '2TO6NYBGX3NF5QS24MQLFR7KXYAMCIE5'){
 		$witnesses_stats->{$_}->{text}="Bosch Connectory Stuttgart";
-		$witnesses_stats->{$_}->{status}="Independent Witness";
+		$witnesses_stats->{$_}->{status}="Independent";
 		$others_value+=$witnesses_stats->{$_}->{validations_count};
 	}
 	elsif($_ eq 'DXYWHSZ72ZDNDZ7WYZXKWBBH425C6WZN'){
 		$witnesses_stats->{$_}->{text}="Bind Creative";
-		$witnesses_stats->{$_}->{status}="Independent Witness";
+		$witnesses_stats->{$_}->{status}="Independent";
 		$others_value+=$witnesses_stats->{$_}->{validations_count};
 	}
 	elsif($_ eq 'APABTE2IBKOIHLS2UNK6SAR4T5WRGH2J'){
 		$witnesses_stats->{$_}->{text}="PolloPollo";
-		$witnesses_stats->{$_}->{status}="Independent Witness";
+		$witnesses_stats->{$_}->{status}="Independent";
 		$others_value+=$witnesses_stats->{$_}->{validations_count};
 	}
 	elsif ( grep( /^$buff$/, @default_witnesses ) ){
-		$witnesses_stats->{$_}->{text}="Tonych";
-		$witnesses_stats->{$_}->{status}="Founder's Witness";
+		$witnesses_stats->{$_}->{text}="Tony Churyumoff";
+		$witnesses_stats->{$_}->{status}="Founder";
 	}
 	else{
 		$witnesses_stats->{$_}->{text}="Unknown user";
-		$witnesses_stats->{$_}->{status}="Independent Witness";
+		$witnesses_stats->{$_}->{status}="Independent";
 		$others_value+=$witnesses_stats->{$_}->{validations_count};
 	}
 	$stats_range=$max_end_users_seen_units;
@@ -323,14 +323,16 @@ while (my $query_result = $sth->fetchrow_hashref){
 		my $sth4=$dbh->prepare("SELECT definition FROM definitions where definition_chash='$latest_definition_cash'");
 		$sth4->execute();
 		my $query_result4=$sth4->fetchrow_hashref;
-		my $buff=$query_result4->{definition};
-		my @eclated_result=split/\,/,$buff;
-		if($eclated_result[0] =~ /^\[\"sig\"$/) {
-			$single_sig_count++;
-		}elsif($eclated_result[0] =~ /^\[\"r of set\"$/){
-			$multisig_count++;
-		}else{
-			$smart_contract_count++;
+		if ($query_result4) {
+			my $buff=$query_result4->{definition};
+			my @eclated_result=split/\,/,$buff;
+			if($eclated_result[0] =~ /^\[\"sig\"$/) {
+				$single_sig_count++;
+			}elsif($eclated_result[0] =~ /^\[\"r of set\"$/){
+				$multisig_count++;
+			}else{
+				$smart_contract_count++;
+			}
 		}
 	}
 

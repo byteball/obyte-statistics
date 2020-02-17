@@ -29,7 +29,7 @@
 		<th><center>in %</center></th>
 		<th width="100"><center>MC unit<br>last seen on</center></th>
 		<th width="130"><center>last seen<br>UTC Timestamp</center></th>
-		<th width="125">Origin</th>
+		<th width="80">Origin</th>
 		<th>Operated by</th>
 	
 	</tr>
