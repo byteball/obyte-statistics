@@ -160,19 +160,21 @@ $(function() {
 
 		$.each( monuments, function() {
 
+			var clean_name = this.properties.name.split('<br>')[0].replace(':', ':</b>').replace('wss://', '').replace('ws://', '');
 			if ((this.properties.name.match(/Hub/g) || this.properties.name.match(/Relay/g)) && !this.properties.name.match(/obyte\.org\/bb/g) ){
 				map.geomap("append", this, { color: "#006400", fillOpacity: "0",height:8,width: 16 }, '<span class="' + this.properties.id + '">' +  this.properties.name + '</span>', false);
+				$('#connectable').append('<div>' +  clean_name + '</div>');
 			}
 			else if(this.properties.name.match(/Hub/g) && this.properties.name.match(/obyte\.org\/bb/)){//"#006400"
 				var buff="<table><tr><td><img src=\"https://obyte.org/static/android-icon-192x192.png\" width=\"30\" height=\"30\"></td><td width=\"5\"></td><td><b>Default</b> " +  this.properties.name + "</td></tr></table>";
 				map.geomap("append", this, { color: "#006400", strokeWidth: "3px", fillOpacity: "0",height:10,width: 20 }, '<span class="' + this.properties.id + '">' +  buff + '</span>', false);
+				$('#connectable').append('<div>' +  clean_name + '</div>');
 			}
 			else if (this.properties.name.match((/Full/g))){
 				map.geomap("append", this, { color: "#1560bd", strokeWidth: "5px", opacity: "0.8", fillOpacity: "0",height:5, width: 5, }, '<span class="' + this.properties.id + '">' +  this.properties.name + '</span>', false);
 			}
 
 		} );
-
 
 		map.geomap("refresh");
 
@@ -186,5 +188,6 @@ $(function() {
 <font size="-1">
 <i>Updated hourly.<br><br></i>
 </font>
+<div id="connectable"></div>
 <center>
 <?php include('footer.php');
