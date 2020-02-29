@@ -4,4 +4,4 @@
 
 $IPSTACK_API_KEY = ''; # enter you API key from ipstack.com
 $TESTNET = false;
-$ROCKSDB = false;
+$ROCKSDB = true;
