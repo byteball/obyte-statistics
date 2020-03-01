@@ -47,7 +47,7 @@ else {
 	//$known_peers['wss://hub.byteball.ee'] = false;
 	$known_peers['wss://hub.obytechina.org/bb'] = false;
 	$known_peers['wss://relay.bytes.cash/bb'] = false;
-	$known_peers['wss://hub.connectory.io/bb'] = false;
+	$known_peers['wss://hub.obyte.connectory.io/bb'] = false;
 }
 
 ##################pass 1 : search for all active hubs in byteball sqlite database
