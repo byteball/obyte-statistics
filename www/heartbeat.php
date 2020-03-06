@@ -188,7 +188,7 @@ show_chart( $args );
 <table>
 <tr>
 <td></td>
-<td><center><h2>Historical data since January 2017:</h2></center></td>
+<td><center><h2>Historical daily data:</h2></center></td>
 </tr>
 </table>
 
@@ -200,12 +200,12 @@ show_chart( $args );
  
 $params = array(
 	array(
-		'name' => 'Witnesses units',
-		'json_id' => 'units_w',
+		'name' => 'by others',
+		'json_id' => 'units_nw',
 	),
 	array(
-		'name' => 'Users units',
-		'json_id' => 'units_nw',
+		'name' => 'by Witnesses',
+		'json_id' => 'units_w',
 	),
 );
 

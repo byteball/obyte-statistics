@@ -75,11 +75,11 @@
 
 
 <?php
-$rate_url="https://api.coinmarketcap.com/v1/ticker/obyte/";
+$rate_url="https://api.coinpaprika.com/v1/tickers/gbyte-obyte?quotes=USD";
 
 $json_array= json_decode(make_443_get ($rate_url), true);
-if(!defined($json_array['0']['price_usd'])){
-	$dollar_value=round($json_array['0']['price_usd'],2);
+if(!empty($json_array['quotes']['USD']['price'])){
+	$dollar_value=round($json_array['quotes']['USD']['price'],2);
 } else {
 	$dollar_value="rate missing";
 }
@@ -122,7 +122,7 @@ while( $row = $results->fetchArray(SQLITE3_ASSOC) ){
 <br>
 
 <?php echo $disclaimers; ?>
-Rate powered by <a href="https://coinmarketcap.com/currencies/byteball/" target="_blank">CoinMarketCap</a><br><br></i>
+Rate powered by <a href="https://coinpaprika.com/coin/gbyte-obyte/#!exchanges" target="_blank">CoinPaprika</a><br><br></i>
 
 
 <?php
