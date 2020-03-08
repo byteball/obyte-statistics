@@ -40,16 +40,18 @@
 <p><center>
 	<table>
 		<tr>
+			<!--
 			<td><img src="hot-badge-xxl.png" height="30" width="50"></td>
+			-->
 			<td>
 				<table>
 
 					<tr>
 						<td><font size=-1>
-						<a href="/worldmap.php">Click here</a> to see the World Map.<br>
-						<a href="/Top100Richest.php">Click here</a> to get the Top 100 richest list.<br>
-						<a href="/witnesses.php">Click here</a> to get a picture of all Witnesses activity on the network.<br>
-						<a href="/heartbeat.php">Click here</a> to see the global network stats.
+						<a href="/worldmap.php">Click here</a> to see the World Map of full nodes.<br>
+						<a href="/Top100Richest.php">Click here</a> to see the Top 100 richest list.<br>
+						<a href="/witnesses.php">Click here</a> to see Witnesses that users have picked.<br>
+						<a href="/heartbeat.php">Click here</a> to see the global network statistics.
 						</font></td>
 					</tr>
 				</table>
@@ -59,7 +61,7 @@
 	</table>
 </center></p>
 <br><br>Point your wallet to the nearest hub to get efficient messaging communication, faster wallet synch.</p>
-	
+
 <?php include('socials.php'); ?>
 
 <p><br></p>
@@ -75,17 +77,17 @@
 		<td><b>Connected wallets history</b></td>
 	</tr>
 </table>
-			
+
 <div id="container" style="height: 200px; min-width: 310px"></div>
 <script>
-	
-	
+
+
 jQuery.noConflict();
-var example = 'basic-line', 
+var example = 'basic-line',
 	theme = 'default';
 (function($){ // encapsulate jQuery
 	$('#EUConnected').html("<img src='./ajax-loader2.gif'/>");
-	var processed_json = new Array();   
+	var processed_json = new Array();
 	$.getJSON('/hub_stats.json', function(data) {
 		// Populate series
 		for (i = 0; i < data.length; i++){
