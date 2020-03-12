@@ -40,11 +40,9 @@ if (!empty($ROCKSDB)) {
 	$query = "select units.main_chain_index";
 	$query .= ", units.timestamp";
 	$query .= " from units";
-	$query .= " left join unit_authors on unit_authors.unit = units.unit";
 	$query .= " where 1";
-	$query .= " and unit_authors.address='$timestamp_oracle'";
 	$query .= " and units.main_chain_index > '$last_timestamped_mci'";
-	$query .= " and units.timestamp > 0";
+	$query .= " and +is_on_main_chain = 1";
 	$query .= " order by units.main_chain_index";
 }
 else {
