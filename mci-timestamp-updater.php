@@ -71,27 +71,28 @@ while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 /*
  * then complete by filling the holes
  */
+if (empty($ROCKSDB)){
+	$results = $stats_db->query("select main_chain_index, strftime('%s', date) as timestamp from mci_timestamps order by main_chain_index" );
 
-$results = $stats_db->query("select main_chain_index, strftime('%s', date) as timestamp from mci_timestamps order by main_chain_index" );
 
+	$from_mci = 0;
 
-$from_mci = 0;
+	while( $row = $results->fetchArray(SQLITE3_ASSOC) ){
 
-while( $row = $results->fetchArray(SQLITE3_ASSOC) ){
+		$to_mci = $row[ 'main_chain_index' ];
+		$to_timestamp = $row[ 'timestamp' ];
 
-	$to_mci = $row[ 'main_chain_index' ];
-	$to_timestamp = $row[ 'timestamp' ];
+		if( ! empty( $from_mci ) ){
 
-	if( ! empty( $from_mci ) ){
+			interpolate_timestamp( $from_mci, $from_timestamp, $to_mci, $to_timestamp );
 
-		interpolate_timestamp( $from_mci, $from_timestamp, $to_mci, $to_timestamp );
+		}
+
+		$from_mci = $to_mci;
+		$from_timestamp = $to_timestamp;
+		
 
 	}
-
-	$from_mci = $to_mci;
-	$from_timestamp = $to_timestamp;
-    
-
 }
 
 $stats_db->exec('COMMIT');
