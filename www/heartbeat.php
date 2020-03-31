@@ -84,26 +84,6 @@ echo "
 <i>Updated hourly. Last update: ".$row[ 'UTC_datetime' ]." UTC<br>
 <br><br></i>
 ";
-if(0){//deprecated
-	echo "
-			<tr>
-			<td width=\"250\"><h2>Some All times data:</h2></td><td></td><td></td><td></td>
-	</tr>
-		<tr>
-			<td width=\"250\"><b>All time Verified Users (KYC) <font size=\"-2\">(at jumio.com)</font></b></td><td>".$row[ 'registered_users' ]."</td><td></td><td></td>
-	</tr>
-			<tr>
-			<td width=\"250\"><b>All time Non US Verified Users (KYC)</b></td><td>".$row[ 'non_US' ]."</td><td></td><td></td>
-	</tr>
-		</tr>
-			<tr>
-			<td width=\"250\"><b>All time Accredited investors <font size=\"-2\">(US compliant)</font></b></td><td>".$row[ 'accredited_investors' ]."</td><td></td><td></td>
-	</tr>
-</table><br>
-<i>Updated hourly. Last update: ".$row[ 'UTC_datetime' ]." UTC<br>
-<br><br></i>
-";
-}
 
 
 

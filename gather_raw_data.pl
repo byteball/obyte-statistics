@@ -355,33 +355,36 @@ my $total_full_wallets=$query_result->{total_count};
 
 
 #registered profile (deprecated)
-$sth = $dbh->prepare("SELECT count(*) as registered_profiles 
-FROM attestations 
-left join messages on messages.unit=attestations.unit
-where 1
-and messages.app='attestation'
-and messages.payload like '%profile_hash%'");
-$sth->execute();
-$query_result = $sth->fetchrow_hashref;
-my $registered_profiles_count=$query_result->{registered_profiles};
+# $sth = $dbh->prepare("SELECT count(*) as registered_profiles 
+# FROM attestations 
+# left join messages on messages.unit=attestations.unit
+# where 1
+# and messages.app='attestation'
+# and messages.payload like '%profile_hash%'");
+# $sth->execute();
+# $query_result = $sth->fetchrow_hashref;
+# my $registered_profiles_count=$query_result->{registered_profiles};
+my $registered_profiles_count=0;
 
 #non US
-$sth = $dbh->prepare("SELECT count(*) as non_US 
-FROM attestations  
-left join messages on messages.unit=attestations.unit
-where 1
-and messages.app='attestation'
-and messages.payload like '%nonus%'");
-$sth->execute();
-$query_result = $sth->fetchrow_hashref;
-my $non_US_count=$query_result->{non_US};
+# $sth = $dbh->prepare("SELECT count(*) as non_US 
+# FROM attestations  
+# left join messages on messages.unit=attestations.unit
+# where 1
+# and messages.app='attestation'
+# and messages.payload like '%nonus%'");
+# $sth->execute();
+# $query_result = $sth->fetchrow_hashref;
+# my $non_US_count=$query_result->{non_US};
+my $non_US_count=0;
 
 #accredited investors
-$sth = $dbh->prepare("SELECT count(*) as accredited
-FROM messages where app='attestation' and payload like '%accredited\":1%'");
-$sth->execute();
-$query_result = $sth->fetchrow_hashref;
-my $accredited=$query_result->{accredited};
+# $sth = $dbh->prepare("SELECT count(*) as accredited
+# FROM messages where app='attestation' and payload like '%accredited\":1%'");
+# $sth->execute();
+# $query_result = $sth->fetchrow_hashref;
+# my $accredited=$query_result->{accredited};
+my $accredited=0;
 
 #all that into bb_stats table...
 
