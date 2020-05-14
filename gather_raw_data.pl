@@ -175,6 +175,16 @@ foreach (@array_of_witnesses)#last timestamp
 		$witnesses_stats->{$_}->{status}="Independent";
 		$others_value+=$witnesses_stats->{$_}->{validations_count};
 	}
+	elsif($_ eq 'UE25S4GRWZOLNXZKY4VWFHNJZWUSYCQC'){
+		$witnesses_stats->{$_}->{text}="IFF at University of Nicosia";
+		$witnesses_stats->{$_}->{status}="Independent";
+		$others_value+=$witnesses_stats->{$_}->{validations_count};
+	}
+	elsif($_ eq 'JMFXY26FN76GWJJG7N36UI2LNONOGZJV'){
+		$witnesses_stats->{$_}->{text}="CryptoShare Studio";
+		$witnesses_stats->{$_}->{status}="Independent";
+		$others_value+=$witnesses_stats->{$_}->{validations_count};
+	}
 	elsif ( grep( /^$buff$/, @default_witnesses ) ){
 		$witnesses_stats->{$_}->{text}="Tony Churyumoff";
 		$witnesses_stats->{$_}->{status}="Founder";
