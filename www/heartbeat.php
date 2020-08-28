@@ -16,7 +16,7 @@ include_once 'chart-functions.php';
 	
 <table>
 <tr>
-<td><a href="/"><img src="android-icon-192x192.png" height="100" width="100"></a><img src="HeartBeat.png" height="100" width="100"></td>
+<td><a href="/"><img src="/android-icon-192x192.png" height="100" width="100"></a><img src="HeartBeat.png" height="100" width="100"></td>
 
 	<td><center><h1>O<sub>byte</sub> HeartBeat</h1></center></td>
 

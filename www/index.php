@@ -17,7 +17,7 @@
 
 <table>
 	<tr>
-		<td><img src="android-icon-192x192.png" height="100" width="100"></td>
+		<td><img src="/android-icon-192x192.png" height="100" width="100"></td>
 		<td width=20></td>
 		<td>
 			Hub status: <img src="green_button.jpg" height="15" width="15" style="vertical-align: middle"><br>

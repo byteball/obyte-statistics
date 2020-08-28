@@ -50,7 +50,7 @@
 
 <table>
 	<tr>
-		<td><a href="https://obyte.org"><img src="android-icon-192x192.png" height="100" width="100"></a></td>
+		<td><a href="https://obyte.org"><img src="/android-icon-192x192.png" height="100" width="100"></a></td>
 		<td style="padding-left: 10px"><center><h1>O<sub>byte</sub> Top 100 richest list</h1></center></td>
 	</tr>
 </table>
