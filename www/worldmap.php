@@ -5,7 +5,8 @@
 <link rel="stylesheet" type="text/css" href="mystyle.css?v3">
 <meta name="Description" CONTENT="Obyte world map">
 <meta name="keywords" content="obyte, byteball, witness, hub, relay, statistics, map" />
-<link rel="icon" href="https://obyte.org/static/android-icon-192x192.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
 </head>
 <body class="worldmap">
 
@@ -18,7 +19,7 @@
 		<div id="main">
 			<table>
 				<tr>
-					<td><a href="https://obyte.org"><img src="https://obyte.org/static/android-icon-192x192.png" height="100" width="100"></a></td>
+					<td><a href="https://obyte.org"><img src="android-icon-192x192.png" height="100" width="100"></a></td>
 					<td><center><h1>O<sub>byte</sub> World map</h1></center></td>
 				</tr>
 				<tr>
@@ -87,7 +88,7 @@ echo "<div id=\"map\" style=\"height: 400px; min-width: 310px; width: 100%\">
   <div id=\"info\">
   <table>
 	<tr>
-		<td><img src=\"https://obyte.org/static/android-icon-192x192.png\" height=\"25\" width=\"25\"></td><td width=\"5\"></td><td><font size=\"+1\">Hubs, relays and full wallets</font></td>
+		<td><img src=\"android-icon-192x192.png\" height=\"25\" width=\"25\"></td><td width=\"5\"></td><td><font size=\"+1\">Hubs, relays and full wallets</font></td>
 	</tr>
 	<tr>
 		<td></td><td></td><td><font size=\"-1\"><b>".$hub_count."</b> hubs, <b>".$relay_count."</b> relays and <b>".$full_wallet_count."</b> full wallets counted today</font></td>
@@ -166,7 +167,7 @@ $(function() {
 				$('#connectable').append('<div>' +  clean_name + '</div>');
 			}
 			else if(this.properties.name.match(/Hub/g) && this.properties.name.match(/obyte\.org\/bb/)){//"#006400"
-				var buff="<table><tr><td><img src=\"https://obyte.org/static/android-icon-192x192.png\" width=\"30\" height=\"30\"></td><td width=\"5\"></td><td><b>Default</b> " +  this.properties.name + "</td></tr></table>";
+				var buff="<table><tr><td><img src=\"android-icon-192x192.png\" width=\"30\" height=\"30\"></td><td width=\"5\"></td><td><b>Default</b> " +  this.properties.name + "</td></tr></table>";
 				map.geomap("append", this, { color: "#006400", strokeWidth: "3px", fillOpacity: "0",height:10,width: 20 }, '<span class="' + this.properties.id + '">' +  buff + '</span>', false);
 				$('#connectable').append('<div>' +  clean_name + '</div>');
 			}

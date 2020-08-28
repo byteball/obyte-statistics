@@ -10,12 +10,13 @@ include_once 'chart-functions.php';
 <meta name="Description" CONTENT="obyte stats">
 <meta name="keywords" content="obyte, witness, hub, relay, statistics" />
 
-<link rel="icon" href="https://obyte.org/static/android-icon-192x192.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
 
 	
 <table>
 <tr>
-<td><a href="/"><img src="https://obyte.org/static/android-icon-192x192.png" height="100" width="100"></a><img src="HeartBeat.png" height="100" width="100"></td>
+<td><a href="/"><img src="android-icon-192x192.png" height="100" width="100"></a><img src="HeartBeat.png" height="100" width="100"></td>
 
 	<td><center><h1>O<sub>byte</sub> HeartBeat</h1></center></td>
 

@@ -6,7 +6,8 @@
 	<meta name="Description" CONTENT="Obyte stats">
 	<meta name="keywords" content="obyte, byteball, witness, hub, relay, statistics" />
 	<meta http-equiv="refresh" content="120" >
-	<link rel="icon" href="https://obyte.org/static/android-icon-192x192.png">
+	<link rel="shortcut icon" href="/favicon.ico">
+	<link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
 
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 </head>
@@ -16,7 +17,7 @@
 
 <table>
 	<tr>
-		<td><img src="https://obyte.org/static/android-icon-192x192.png" height="100" width="100"></td>
+		<td><img src="android-icon-192x192.png" height="100" width="100"></td>
 		<td width=20></td>
 		<td>
 			Hub status: <img src="green_button.jpg" height="15" width="15" style="vertical-align: middle"><br>
