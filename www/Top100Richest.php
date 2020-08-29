@@ -7,7 +7,8 @@
 
 <meta name="keywords" content="obyte, witness, hub, relay, statistics" />
 
-<link rel="icon" href="https://obyte.org/static/android-icon-192x192.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
 
 <script
   src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -49,7 +50,7 @@
 
 <table>
 	<tr>
-		<td><a href="https://obyte.org"><img src="https://obyte.org/static/android-icon-192x192.png" height="100" width="100"></a></td>
+		<td><a href="https://obyte.org"><img src="/android-icon-192x192.png" height="100" width="100"></a></td>
 		<td style="padding-left: 10px"><center><h1>O<sub>byte</sub> Top 100 richest list</h1></center></td>
 	</tr>
 </table>
