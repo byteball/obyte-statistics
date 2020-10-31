@@ -277,6 +277,12 @@ if ($total_add_with_balance) {
 	my $json_supply = "{\"circulating_supply\":".($circulation_supply/1000000000).",\"total_supply\":1000000,\"max_supply\":1000000}";
 	print $fh_supply $json_supply;
 	close $fh_supply;
+
+	my $filename_supply_txt = 'www/circulating_supply.txt';
+	open(my $fh_supply_txt, '>', $filename_supply_txt) or die "Could not open file '$filename_supply_txt' $!";
+	my $txt_supply = $circulation_supply/1000000000;
+	print $fh_supply_txt $txt_supply;
+	close $fh_supply_txt;
 }
 
 
@@ -432,7 +438,7 @@ sub dump_json{
 		
 	open(my $fh2, '>', $filename) or die "Could not open file '$filename' $!";
 	my $buff="[\n";
-	$sth=$stats_dbh->prepare ("select * from $table ORDER BY id ASC");
+	$sth=$stats_dbh->prepare ("select * from $table ORDER BY id DESC LIMIT 10000");
 	$sth->execute;
 	my $i=0;
 	while (my $query_result = $sth->fetchrow_hashref){
