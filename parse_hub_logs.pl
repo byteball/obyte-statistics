@@ -80,21 +80,21 @@ sub dump_json{
 	my $table=$fields[1];
 		
 	open(my $fh2, '>', $filename) or die "Could not open file '$filename' $!";
-	my $buff="[\n";
-	$sth=$stats_dbh->prepare ("select * from $table ORDER BY id ASC");
+	my $buff="";
+	$sth=$stats_dbh->prepare ("select * from $table ORDER BY id DESC LIMIT 20000");
 	$sth->execute;
 	my $i=0;
 	while (my $query_result = $sth->fetchrow_hashref){
 		my $timestamp=convert_to_unix_timestamp($query_result->{$fields[2]});
 		$timestamp=$timestamp*1000;
+		my $point="{\"t\":".$timestamp.",\"a\":".$query_result->{$fields[3]}."}";
 		if ($i>0){
-			$buff.=",";
+			$buff=",".$buff;
 		}
-		$buff.="{\"t\":".$timestamp.",\"a\":".$query_result->{$fields[3]}."}";	
+		$buff=$point.$buff;
 		$i++;
 	}
-	$buff.="]";
-
+	$buff="[".$buff."]";
 
 	print $fh2 $buff;
 	close $fh2;
