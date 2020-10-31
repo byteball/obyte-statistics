@@ -38,8 +38,8 @@ my $stats_dbfile="stats.sqlite";
 $stats_dbh = DBI->connect("dbi:SQLite:dbname=$stats_dbfile","","") or die $DBI::errstr;
 $stats_dbh->prepare("PRAGMA busy_timeout=30000")->execute();
 
-my $log=`grep connections ../obyte-hub/log | tail`;
-
+#my $log=`grep connections ../obyte-hub/log | tail`;
+my $log = `journalctl -t hub -n 1000 | grep connections | tail`;
 
 my @log_array=split /\n/,$log;
 my $log_array_length=scalar @log_array;
