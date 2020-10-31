@@ -81,7 +81,7 @@ sub dump_json{
 		
 	open(my $fh2, '>', $filename) or die "Could not open file '$filename' $!";
 	my $buff="";
-	$sth=$stats_dbh->prepare ("select * from $table ORDER BY id DESC LIMIT 20000");
+	$sth=$stats_dbh->prepare ("select * from $table ORDER BY id DESC LIMIT 10000");
 	$sth->execute;
 	my $i=0;
 	while (my $query_result = $sth->fetchrow_hashref){
