@@ -63,15 +63,15 @@ while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 	$known_peers[$row['url']] = $row[ 'peer_host' ];
 }
 
-foreach ($known_peers as $peer_url => $old_host) {
-	$new_host = is_peer_listening($peer_url);
-	if ( !$new_host ) {
+foreach ($known_peers as $peer_url => $peer_host) {
+	$new_ip = is_peer_listening($peer_url);
+	if ( !$new_ip ) {
 		continue;
 	}
 	$peer_type = get_peer_type($peer_url);
 	$query = sprintf('SELECT * FROM geomap WHERE `type`="%s" AND IP = "%s" AND `description` = "%s";',
 		$peer_type,
-		SQLite3::escapeString($new_host),
+		SQLite3::escapeString($new_ip),
 		SQLite3::escapeString($peer_url)
 	);
 	$results = $stats_db->query($query);
@@ -88,10 +88,10 @@ foreach ($known_peers as $peer_url => $old_host) {
 		}
 	}
 	else {
-		$data_array = json_decode(get_coord($new_host), true);
+		$data_array = json_decode(get_coord($peer_host ? $peer_host : $new_ip), true);
 		$query = sprintf('INSERT INTO geomap (`type`, `IP`, `longit`, `latt`, `description`) VALUES ("%s", "%s", "%s", "%s", "%s");',
 			$peer_type,
-			SQLite3::escapeString($new_host),
+			SQLite3::escapeString($new_ip),
 			SQLite3::escapeString($data_array[ 'longitude' ]+insert_alea($max_alea)),
 			SQLite3::escapeString($data_array[ 'latitude' ]+insert_alea($max_alea)),
 			SQLite3::escapeString($peer_url)
