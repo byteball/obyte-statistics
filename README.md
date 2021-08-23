@@ -35,7 +35,7 @@ A collection of scripts to render various stats about the Obyte network
 ### Top 100 richest:
 ![Top 100 richest](./screenshots/top100.png "Top 100 richest")
 
-### Witnesses:
+### Order Providers:
 ![Witnesses](./screenshots/wm.png "Witnesses")
 
 ### Obyte heartbeat:

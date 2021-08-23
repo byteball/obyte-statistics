@@ -8,12 +8,12 @@ include_once 'chart-functions.php';
 <title>Obyte HeartBeat</title>
 <link rel="stylesheet" type="text/css" href="mystyle.css?v3">
 <meta name="Description" CONTENT="obyte stats">
-<meta name="keywords" content="obyte, witness, hub, relay, statistics" />
+<meta name="keywords" content="obyte, order provider, hub, relay, statistics" />
 
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
 
-	
+
 <table>
 <tr>
 <td><a href="/"><img src="/android-icon-192x192.png" height="100" width="100"></a><img src="HeartBeat.png" height="100" width="100"></td>
@@ -32,9 +32,9 @@ $stats_db->busyTimeout(30*1000);
 
 $query = "SELECT * FROM bb_stats order by id DESC LIMIT 1";
 
-$results = $stats_db->query($query);    
+$results = $stats_db->query($query);
 if ( ! $results ) {
-	echo "Problem here..."; 
+	echo "Problem here...";
 	exit;
 }
 
@@ -50,11 +50,11 @@ echo "
 <td><center><h2>Current 12 hours snapshot:</h2></center></td>
 </tr>
 </table>
-		
+
 
 <table border=\"0\">
 	<tr>
-		<td width=\"300\"><b>Total active Witnesses</b></td><td><a href=\"/witnesses.php\">".$row[ 'total_active_witnesses' ]."</a></td><td width=\"10\"></td><td></td>
+		<td width=\"300\"><b>Total active Order Providers</b></td><td><a href=\"/witnesses.php\">".$row[ 'total_active_witnesses' ]."</a></td><td width=\"10\"></td><td></td>
 	</tr>
 	<tr>
 		<td width=\"250\"><b>Total units posted</b></td><td>".$row[ 'total_units' ]."</td><td width=\"10\"></td><td></td>
@@ -63,23 +63,22 @@ echo "
 		<td width=\"250\"><b>Total stable units</b></td><td>".$row[ 'total_stable_units' ]."</font></td><td></td><td></td>
 	</tr>
 	<tr>
-		<td width=\"250\"><b>Total users units </b><font size=\"-2\">(Witnesses' posts excluded)</font></td><td>".$row[ 'total_units_witnesses_excluded' ]."</td><td></td><td></td>
+		<td width=\"250\"><b>Total users units </b><font size=\"-2\">(OP and AA posts excluded)</font></td><td>".$row[ 'total_units_witnesses_excluded' ]."</td><td></td><td></td>
 	</tr>
 	<tr>
 	<td width=\"250\"><b>Multisigned addresses units</font></b></td><td>".$row[ 'multisigned_units' ]."</td><td></td><td></td>
 	</tr>
 	<tr>
-			<td width=\"250\"><b>Smart Contracts units</b></td><td>".$row[ 'smart_contract_units' ]."</td><td></td><td></td>
+			<td width=\"250\"><b>Smart Contract units</b></td><td>".$row[ 'smart_contract_units' ]."</td><td></td><td></td>
+	</tr>
+	<tr>
+			<td width=\"250\"><b>Autonomous Agent units</b></td><td>".($row[ 'total_units' ]-$row[ 'total_units_witnesses_excluded' ])."</td><td></td><td></td>
 	</tr>
 	<tr>
 			<td width=\"250\"><b>Total users payload <font size=\"-2\">(in bytes)</font></b></td><td>".number_format ( $row[ 'total_payload' ] , 0 , "." , "," )."</td><td></td><td></td>
 	</tr>
-	
-			<tr>
-			<td width=\"250\"><b></b></td><td></td><td></td><td></td>
-	</tr>
-			<tr>
-			<td width=\"250\"><b></b></td><td></td><td></td><td></td>
+	<tr>
+		<td width=\"250\"><b>Sliding stability ratio</b></td><td>".$row[ 'stable_ratio' ]."%</font></td><td></td><td></td>
 	</tr>
 </table><br>
 <i>Updated hourly. Last update: ".$row[ 'UTC_datetime' ]." UTC<br>
@@ -126,11 +125,7 @@ $params = array(
 		'json_id' => 'b',
 	),
 	array(
-		'name' => 'Sliding stability ratio',
-		'json_id' => 'c',
-	),
-	array(
-		'name' => 'Excluding Witnesses units',
+		'name' => 'Excluding OP and AA units',
 		'json_id' => 'd',
 	),
 	array(
@@ -138,12 +133,16 @@ $params = array(
 		'json_id' => 'e',
 	),
 	array(
-		'name' => 'Smart contract units',
+		'name' => 'Smart Contract units',
 		'json_id' => 'f',
 	),
 	array(
 		'name' => 'Users payload',
 		'json_id' => 'g',
+	),
+	array(
+		'name' => 'Sliding stability ratio',
+		'json_id' => 'c',
 	)
 );
 
@@ -178,14 +177,14 @@ show_chart( $args );
 /*
  * units
  */
- 
+
 $params = array(
 	array(
 		'name' => 'by others',
 		'json_id' => 'units_nw',
 	),
 	array(
-		'name' => 'by Witnesses',
+		'name' => 'by Order Providers',
 		'json_id' => 'units_w',
 	),
 );
@@ -208,14 +207,14 @@ show_chart( $args );
 /*
  * payload
  */
- 
+
 $params = array(
 	array(
 		'name' => 'by others',
 		'json_id' => 'payload_nw',
 	),
 	array(
-		'name' => 'by Witnesses',
+		'name' => 'by Order Providers',
 		'json_id' => 'payload_w',
 	),
 );
@@ -238,7 +237,7 @@ show_chart( $args );
 /*
  * sidechain
  */
- 
+
 $params = array(
 	array(
 		'name' => 'side chain units rate',
@@ -265,7 +264,7 @@ show_chart( $args );
 /*
  * addresses
  */
- 
+
 $params = array(
 	array(
 		'name' => 'Total addresses',

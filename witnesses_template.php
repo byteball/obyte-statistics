@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Obyte Witnesses monitoring service</title>
+<title>Obyte Order Provider monitoring service</title>
 <meta name="Description" CONTENT="Obyte Witnesses monitoring service">
 <meta name="keywords" content="obyte, byteball, witness, hub, relay, statistics" />
 <link rel="shortcut icon" href="/favicon.ico">
@@ -13,7 +13,7 @@
 <table>
 	<tr>
 		<td><a href="https://obyte.org"><img src="/android-icon-192x192.png" height="100" width="100"></a></td>
-		<td style="padding-left: 10px"><center><h1>O<sub>byte</sub> Witnesses monitoring service</h1></center></td>
+		<td style="padding-left: 10px"><center><h1>O<sub>byte</sub> Order Provider monitoring service</h1></center></td>
 	</tr>
 </table>
 
@@ -25,7 +25,7 @@
 	<tr>
 		<th></th>
 		<th>Rank</th>
-		<th><center>Witness Address</center></th>
+		<th><center>Order Provider address</center></th>
 		<th><center>Views</center></th>
 		<th><center>in %</center></th>
 		<th width="100"><center>MC unit<br>last seen on</center></th>
@@ -40,7 +40,7 @@
 <br>
 <font size="-1"><i>MC=Main Chain<br>
 Updated hourly. Last update: {{update}} UTC<br>
-Total active Witnesses on the network: <b>{{total_active}}</b></i></font>
+Total active OPs on the network: <b>{{total_active}}</b></i></font>
 
 <br><br><br>
 
@@ -94,7 +94,7 @@ jQuery.noConflict();
 			table_rows += '</tr>';
 		}
 		table_rows += '</tbody>';
-		$('#witnessTable').html('<h2>WW-WW-TWL*</h2>* Which witnesses (columns) have which witnesses (rows) in their witness list<br><br><table>'+ table_rows +'</table><br>Updated every 10 minutes. Last update: '+ data.last_updated);
+		$('#witnessTable').html('<h2>WOP-WOP-TOPL*</h2>* Which OPs (columns) have which OPs (rows) in their OP list<br><br><table>'+ table_rows +'</table><br>Updated every 10 minutes. Last update: '+ data.last_updated);
 
 	})
 	.fail( function(d, textStatus, error) {

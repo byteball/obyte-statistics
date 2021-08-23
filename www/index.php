@@ -51,7 +51,7 @@
 						<td><font size=-1>
 						<a href="/worldmap.php">Click here</a> to see the World Map of full nodes.<br>
 						<a href="/Top100Richest.php">Click here</a> to see the Top 100 richest list.<br>
-						<a href="/witnesses.php">Click here</a> to see Witnesses that users have picked.<br>
+						<a href="/witnesses.php">Click here</a> to see OPs that users have picked.<br>
 						<a href="/heartbeat.php">Click here</a> to see the global network statistics.
 						</font></td>
 					</tr>

@@ -16,7 +16,6 @@ my $dbh;
 my $stats_dbh;
 my $sth;
 my $sth2;
-my $sth3;
 
 my $dbfile=$ENV{"HOME"}."/.config/obyte-hub/byteball.sqlite";
 $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile","","") or die $DBI::errstr;
@@ -45,20 +44,18 @@ my @default_witnesses=("BVVJ2K7ENPZZ3VYZFWQWK7ISPCATFIW3",
 	
 my $HTML;
 my $witnesses_stats=undef;
-my $stats_range=1000;
 
 #get latest mci
-$sth = $dbh->prepare("SELECT max(main_chain_index) AS max_index FROM units");
+$sth = $dbh->prepare("SELECT min(main_chain_index) AS min_index, max(main_chain_index) AS max_index FROM units WHERE creation_date >= datetime('now', '-12 hours')");
 $sth->execute();
 my $query_result = $sth->fetchrow_hashref;
+my $start_mci=$query_result->{min_index};
 my $last_mci=$query_result->{max_index};
-
-my $start_mci=$last_mci-$stats_range;
 
 #who are all actives witnesses?
 my @array_of_serial_posting_witnesses;
 my $our_witness_count=0;
-$sth = $dbh->prepare("select address, count(*) as total_count from witnessing_outputs where main_chain_index > $start_mci and main_chain_index <=$last_mci group by address order by total_count DESC");
+$sth = $dbh->prepare("select address, count(*) as total_count from witnessing_outputs where main_chain_index >= $start_mci and main_chain_index <=$last_mci group by address order by total_count DESC");
 $sth->execute();
 while (my $query_result = $sth->fetchrow_hashref){
 	push @array_of_serial_posting_witnesses, $query_result->{address};
@@ -70,7 +67,7 @@ while (my $query_result = $sth->fetchrow_hashref){
 #witnesses "market share"
 my @array_of_witnesses;
 my $witnesses_market;
-$sth = $dbh->prepare("select count(distinct units.unit) as total_seen, unit_witnesses_1.address, max(units.main_chain_index) as max_mci, max(units.creation_date) as max_creation_date, min(units.creation_date) as min_creation_date from units left join unit_witnesses as unit_witnesses_1 on ( unit_witnesses_1.unit = units.witness_list_unit or unit_witnesses_1.unit = units.unit ) left join unit_authors on unit_authors.unit = units.unit left join unit_witnesses as unit_witnesses_2 on unit_witnesses_2.address = unit_authors.address where 1 and units.sequence='good' and (julianday('now') - julianday(units.creation_date))* 24 * 60 * 60  < 3600*12 and unit_witnesses_2.address is NULL group by unit_witnesses_1.address order by total_seen desc");
+$sth = $dbh->prepare("select count(distinct units.unit) as total_seen, unit_witnesses_1.address, max(units.main_chain_index) as max_mci, max(units.creation_date) as max_creation_date, min(units.creation_date) as min_creation_date from units left join unit_witnesses as unit_witnesses_1 on ( unit_witnesses_1.unit = units.witness_list_unit or unit_witnesses_1.unit = units.unit ) left join unit_authors on unit_authors.unit = units.unit left join unit_witnesses as unit_witnesses_2 on unit_witnesses_2.address = unit_authors.address where 1 and units.sequence='good' and units.main_chain_index >= $start_mci and unit_witnesses_2.address is NULL group by unit_witnesses_1.address order by total_seen desc");
 
 $sth->execute();
 while (my $query_result = $sth->fetchrow_hashref){
@@ -95,6 +92,7 @@ foreach (@array_of_serial_posting_witnesses){
 my $buff_html_array="";
 my $i=1;
 my $max_end_users_seen_units=0;
+my $stats_range=0;
 foreach (@array_of_witnesses)#last timestamp
 {
 	#how many time have we seen this witness except on its own posted units?
@@ -289,13 +287,13 @@ if ($total_add_with_balance) {
 
 #pass 3: trafic
 #All trafic within the last 12 hours
-$sth = $dbh->prepare("select count(*) as total from units where (julianday('now') - julianday(creation_date))* 24 * 60 * 60  < 3600*12");
+$sth = $dbh->prepare("select count(*) as total from units where units.main_chain_index >= $start_mci");
 $sth->execute();
 $query_result = $sth->fetchrow_hashref;
 my $total_units=$query_result->{total};
 
 #all stables units
-$sth = $dbh->prepare("select count(*) as total from units where (julianday('now') - julianday(creation_date))* 24 * 60 * 60  < 3600*12 AND is_stable='1'");
+$sth = $dbh->prepare("select count(*) as total from units where units.main_chain_index >= $start_mci AND is_stable='1'");
 $sth->execute();
 $query_result = $sth->fetchrow_hashref;
 my $total_stable_units=$query_result->{total};
@@ -309,13 +307,13 @@ if($total_stable_units < $total_units*(1-$percent/100)){
 }
 	
 #all units out of main chain
-$sth = $dbh->prepare("select count(*) as total from units where (julianday('now') - julianday(creation_date))* 24 * 60 * 60  < 3600*12 AND is_stable='1' AND is_on_main_chain='0'");
+$sth = $dbh->prepare("select count(*) as total from units where units.main_chain_index >= $start_mci AND is_stable='1' AND is_on_main_chain='0'");
 $sth->execute();
 $query_result = $sth->fetchrow_hashref;
 my $total_stable_units_sidechain=$query_result->{total};
 
 #all units but witnesses units
-$sth = $dbh->prepare("select units.* from units left join unit_authors on unit_authors.unit = units.unit left join unit_witnesses on unit_witnesses.address = unit_authors.address where ( julianday('now') - julianday(units.creation_date) )* 24 * 60 * 60  < 3600*12 and unit_witnesses.address is NULL group by units.unit");
+$sth = $dbh->prepare("select units.* from units left join unit_authors on unit_authors.unit = units.unit left join unit_witnesses on unit_witnesses.address = unit_authors.address where units.main_chain_index >= $start_mci and unit_witnesses.address is NULL group by units.unit");
 $sth->execute();
 $query_result = $sth->fetchrow_hashref;
 my $total_sidechain_units_witnesses_excluded=0;
@@ -332,19 +330,13 @@ while (my $query_result = $sth->fetchrow_hashref){
 	$total_units_witnesses_excluded++;
 	$total_sidechain_units_witnesses_excluded+=1 if($query_result->{is_on_main_chain}==0);
 
-	#smart addresses
 	$sth2=$dbh->prepare("SELECT * FROM unit_authors where unit='$query_result->{unit}'");
 	$sth2->execute();
 	while (my $query_result2 = $sth2->fetchrow_hashref){
-
-		$sth3=$dbh->prepare("SELECT definition_chash FROM address_definition_changes CROSS JOIN units USING(unit) WHERE address='$query_result2->{address}' AND is_stable=1 AND sequence='good' ORDER BY level DESC LIMIT 1");
-		$sth3->execute();
-		my $query_result3=$sth3->fetchrow_hashref;
-		my $rv3=$sth3->rows;
-		if ($rv3 == 0){
-			$latest_definition_cash=$query_result2->{address};# definition_cash is the address itself
-		} else{
-			$latest_definition_cash=$query_result3->{definition_chash};
+		if ($query_result2->{definition_chash}){
+			$latest_definition_cash=$query_result2->{definition_chash};
+		} else {
+			$latest_definition_cash=$query_result2->{address};
 		}
 		my $sth4=$dbh->prepare("SELECT definition FROM definitions where definition_chash='$latest_definition_cash'");
 		$sth4->execute();
@@ -360,6 +352,9 @@ while (my $query_result = $sth->fetchrow_hashref){
 				$smart_contract_count++;
 			}
 		}
+		else {
+			$total_units_witnesses_excluded--;
+		}
 	}
 
 }
@@ -369,7 +364,7 @@ my $total_payload_for_db=$total_payload;
 $total_payload=set_coma_separators($total_payload);
 
 #how many hubs and wallets
-$sth=$stats_dbh->prepare ("select count(*) as total_count from geomap where type='hub'");
+$sth=$stats_dbh->prepare ("select count(*) as total_count from geomap where type<>'full_wallet'");
 $sth->execute;
 $query_result = $sth->fetchrow_hashref();
 my $total_hubs=$query_result->{total_count};
@@ -420,12 +415,11 @@ $sth->execute;
 
 #json dump
 dump_json("www/bb_stats.json","bb_stats","UTC_datetime","total_units","total_stable_units","stable_ratio",
-"total_units_witnesses_excluded","multisigned_units","smart_contract_units","total_payload","registered_users", "non_US");
+"total_units_witnesses_excluded","multisigned_units","smart_contract_units","total_payload");
 		
 
 $sth->finish() if defined $sth;
 $sth2->finish() if defined $sth2;
-$sth3->finish() if defined $sth;
 $dbh->disconnect;
 $stats_dbh->disconnect;
 
@@ -444,7 +438,7 @@ sub dump_json{
 	while (my $query_result = $sth->fetchrow_hashref){
 		my $timestamp=convert_to_unix_timestamp($query_result->{$fields[2]});
 		$timestamp=($timestamp+7200)*1000;
-		my $point="{\"t\":".$timestamp.",\"a\":".$query_result->{$fields[3]}.",\"b\":".$query_result->{$fields[4]}.",\"c\":".$query_result->{$fields[5]}.",\"d\":".$query_result->{$fields[6]}.",\"e\":".$query_result->{$fields[7]}.",\"f\":".$query_result->{$fields[8]}.",\"g\":".$query_result->{$fields[9]}.",\"h\":".$query_result->{$fields[10]}.",\"i\":".$query_result->{$fields[11]}."}";
+		my $point="{\"t\":".$timestamp.",\"a\":".$query_result->{$fields[3]}.",\"b\":".$query_result->{$fields[4]}.",\"c\":".$query_result->{$fields[5]}.",\"d\":".$query_result->{$fields[6]}.",\"e\":".$query_result->{$fields[7]}.",\"f\":".$query_result->{$fields[8]}.",\"g\":".$query_result->{$fields[9]}."}";
 		if ($i>0){
 			$buff=",".$buff;
 		}
