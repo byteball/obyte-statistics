@@ -352,16 +352,18 @@ while (my $query_result = $sth->fetchrow_hashref){
 				$smart_contract_count++;
 			}
 		}
-		else {
-			$total_units_witnesses_excluded--;
-		}
 	}
-
 }
 	
 my $ratio=sprintf("%.2f",($total_stable_units/$total_units)*100);
 my $total_payload_for_db=$total_payload;
 $total_payload=set_coma_separators($total_payload);
+
+$sth = $dbh->prepare("select count(*) as total from aa_responses where mci >= $start_mci");
+$sth->execute();
+$query_result = $sth->fetchrow_hashref;
+$total_units_witnesses_excluded-=$query_result->{total};
+$smart_contract_count+=$query_result->{total};
 
 #how many hubs and wallets
 $sth=$stats_dbh->prepare ("select count(*) as total_count from geomap where type<>'full_wallet'");
