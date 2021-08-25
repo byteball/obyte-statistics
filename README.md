@@ -20,6 +20,7 @@ A collection of scripts to render various stats about the Obyte network
 ### Perl modules
 * `sudo apt-get install libdbi-perl`
 * `sudo apt-get install libdbd-sqlite3-perl`
+* `sudo apt-get install liblwp-protocol-https-perl`
 * `sudo cpan -fi Date::Parse`
 * `sudo cpan -fi DateTime`
 * `sudo cpan -fi JSON`

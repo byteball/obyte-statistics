@@ -26,12 +26,12 @@ $max_alea=0.025;# in degree, 1/100 deg=1km
 
 
 #flag everything down in the geomap table
-$query = 'UPDATE geomap SET is_ok=0 WHERE 1;'; 
-$results = $stats_db->query($query);    
+$query = 'UPDATE geomap SET is_ok=0 WHERE 1;';
+$results = $stats_db->query($query);
 if ( ! $results ) {
 	echo "Problem here...";
 	echo $stats_db->lastErrorMsg();
-	exit;       
+	exit;
 }
 
 $known_peers = [];
@@ -75,7 +75,7 @@ foreach ($known_peers as $peer_url => $peer_host) {
 		SQLite3::escapeString($peer_url)
 	);
 	$results = $stats_db->query($query);
-	if ( !$results ) { 
+	if ( !$results ) {
 		die($stats_db->lastErrorMsg());
 	}
 	if( $peer = $results->fetchArray(SQLITE3_ASSOC) ){
@@ -89,23 +89,24 @@ foreach ($known_peers as $peer_url => $peer_host) {
 	}
 	else {
 		$data_array = json_decode(get_coord($peer_host ? $peer_host : $new_ip), true);
-		$query = sprintf('INSERT INTO geomap (`type`, `IP`, `longit`, `latt`, `description`) VALUES ("%s", "%s", "%s", "%s", "%s");',
+		$query = sprintf('INSERT INTO geomap (`type`, `IP`, `longit`, `latt`, `country_code`, `description`) VALUES ("%s", "%s", "%s", "%s", "%s", "%s");',
 			$peer_type,
 			SQLite3::escapeString($new_ip),
 			SQLite3::escapeString($data_array[ 'longitude' ]+insert_alea($max_alea)),
 			SQLite3::escapeString($data_array[ 'latitude' ]+insert_alea($max_alea)),
+			SQLite3::escapeString($data_array[ 'country_code' ]),
 			SQLite3::escapeString($peer_url)
 		);
 		$results = $stats_db->query($query);
-		if ( !$results ) { 
+		if ( !$results ) {
 			die($stats_db->lastErrorMsg());
 		}
 	}
 }
 
 #erase all failed hubs/relays
-$query = 'DELETE FROM geomap WHERE is_ok=0 AND `type` <> "full_wallet";'; 
-$results = $stats_db->query($query);    
+$query = 'DELETE FROM geomap WHERE is_ok=0 AND `type` <> "full_wallet";';
+$results = $stats_db->query($query);
 if ( ! $results ) {
 	echo "Problem here...";
 	echo $stats_db->lastErrorMsg();
@@ -126,7 +127,6 @@ if (! $results) {
 while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 	# full wallets are with IP as peer_host
 	if(preg_match('/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\z/', $row[ 'peer_host' ])){
-		
 		$query = sprintf('SELECT * FROM geomap WHERE IP="%s" AND `type` = "%s";',
 			SQLite3::escapeString($row[ 'peer_host' ]),
 			"full_wallet"
@@ -178,7 +178,7 @@ while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 
 
 #erase all not alive previous records (aka is_ok=0) before Json dump
-$query = 'DELETE FROM geomap WHERE is_ok=0;'; 
+$query = 'DELETE FROM geomap WHERE is_ok=0;';
 $results = $stats_db->query($query);
 if ( ! $results ) {
 	echo "Problem here...";
@@ -189,7 +189,7 @@ if ( ! $results ) {
 
 #json Dump
 
-$query = 'SELECT * FROM geomap;'; 
+$query = 'SELECT * FROM geomap;';
 $results = $stats_db->query($query);
 if ( ! $results ) {
 	echo "Problem here...";
@@ -254,14 +254,14 @@ function is_peer_listening($wss_url){
 }
 
 function make_443_get($peer_url) {
-	// create curl resource 
-	$ch = curl_init(); 
+	// create curl resource
+	$ch = curl_init();
 
 	// curl_setopt
-	curl_setopt($ch, CURLOPT_URL, $peer_url); 
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+	curl_setopt($ch, CURLOPT_URL, $peer_url);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_PORT, 443);
-	curl_setopt($ch, CURLOPT_TIMEOUT, 10); 
+	curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 	curl_setopt($ch, CURLOPT_FAILONERROR, true);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
@@ -271,7 +271,7 @@ function make_443_get($peer_url) {
 	//echo 'errore here:' . curl_error($ch);
 	$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 	$ip_address = curl_getinfo($ch, CURLINFO_PRIMARY_IP);
-	// close curl resource to free up system resources 
+	// close curl resource to free up system resources
 	curl_close($ch);
 
 	return ['output'=> $output, 'http_code' => $http_code, 'ip_address' => $ip_address];
@@ -287,7 +287,7 @@ function get_coord($IP)
 	global $IPSTACK_API_KEY;
 
 	if ($IPSTACK_API_KEY) {
-		$json = file_get_contents("http://api.ipstack.com/$IP?access_key=$IPSTACK_API_KEY");  //<---- your API key here
+		$json = file_get_contents("http://api.ipstack.com/$IP?fields=main&access_key=$IPSTACK_API_KEY");  //<---- your API key here
 		if($json) {
 			return $json;
 		}

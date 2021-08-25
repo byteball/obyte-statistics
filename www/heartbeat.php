@@ -57,13 +57,16 @@ echo "
 		<td width=\"300\"><b>Total active Order Providers</b></td><td><a href=\"/witnesses.php\">".$row[ 'total_active_witnesses' ]."</a></td><td width=\"10\"></td><td></td>
 	</tr>
 	<tr>
-		<td width=\"250\"><b>Total units stable/posted</b></td><td>".$row[ 'total_stable_units' ]."/".$row[ 'total_units' ]." (".$row[ 'stable_ratio' ]."%)</td><td width=\"10\"></td><td></td>
+		<td width=\"250\"><b>Total units stable/posted</b></td><td>".$row[ 'total_stable_units' ]." / ".$row[ 'total_units' ]." (".$row[ 'stable_ratio' ]."%)</td><td width=\"10\"></td><td></td>
 	</tr>
 	<tr>
-		<td width=\"250\"><b>Total multi-sig account units</font></b></td><td>".$row[ 'multisigned_units' ]."</td><td></td><td></td>
+		<td width=\"250\"><b>Total Multi-Sig account units</font></b></td><td>".$row[ 'multisigned_units' ]."</td><td></td><td></td>
 	</tr>
 	<tr>
-		<td width=\"250\"><b>Total Smart Contract and AA units</b></td><td>".$row[ 'smart_contract_units' ]."</td><td></td><td></td>
+		<td width=\"250\"><b>Total Smart Contract units</b></td><td>".$row[ 'smart_contract_units' ]."</td><td></td><td></td>
+	</tr>
+	<tr>
+		<td width=\"250\"><b>Total Autonomous Agent units</b></td><td>".$row[ 'aa_units' ]."</td><td></td><td></td>
 	</tr>
 	<tr>
 		<td width=\"250\"><b>Total units by users </b><font size=\"-2\">(OP and AA excluded)</font></td><td>".$row[ 'total_units_witnesses_excluded' ]."</td><td></td><td></td>
@@ -72,7 +75,7 @@ echo "
 		<td width=\"250\"><b>Total payload by users </b><font size=\"-2\">(in bytes)</font></td><td>".number_format ( $row[ 'total_payload' ] , 0 , "." , "," )."</td><td></td><td></td>
 	</tr>
 </table><br>
-<i>Updated hourly. Last update: ".$row[ 'UTC_datetime' ]." UTC<br>
+<i>Last update: ".$row[ 'UTC_datetime' ]." UTC<br>
 <br><br></i>
 ";
 
@@ -116,24 +119,32 @@ $params = array(
 		'json_id' => 'b',
 	),
 	array(
+		'name' => 'Sliding stability ratio',
+		'json_id' => 'c',
+	),
+	array(
 		'name' => 'Excluding OP and AA units',
 		'json_id' => 'd',
 	),
 	array(
-		'name' => 'Multi-sig account units',
+		'name' => 'Multi-Sig account units',
 		'json_id' => 'e',
 	),
 	array(
-		'name' => 'Smart Contract and AA units',
+		'name' => 'Smart Contract units',
 		'json_id' => 'f',
+	),
+	array(
+		'name' => 'Autonomous Agent units',
+		'json_id' => 'h',
 	),
 	array(
 		'name' => 'Total payload by users',
 		'json_id' => 'g',
 	),
 	array(
-		'name' => 'Sliding stability ratio',
-		'json_id' => 'c',
+		'name' => 'GBYTE/USD price',
+		'json_id' => 'i',
 	)
 );
 
