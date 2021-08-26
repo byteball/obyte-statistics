@@ -295,7 +295,7 @@ if ($query_result->{total}==0) {
 		my $archive_limit=26;
 		my $asset_sql = $_ eq 'base' ? 'NULL' : "'$_'";
 		my $limit_sql = $_ eq 'base' ? '' : " LIMIT $archive_limit";
-		$sth = $dbh->prepare("SELECT address, COUNT(*) AS utxos, SUM(amount) AS amount FROM outputs WHERE asset IS $asset AND is_spent = 0 GROUP BY asset, address ORDER BY amount DESC$limit_sql");
+		$sth = $dbh->prepare("SELECT address, COUNT(*) AS utxos, SUM(amount) AS amount FROM outputs WHERE asset IS $asset_sql AND is_spent = 0 GROUP BY asset, address ORDER BY amount DESC$limit_sql");
 		$sth->execute();
 		while (my $query_result = $sth->fetchrow_hashref){
 			$richlist_id++;
