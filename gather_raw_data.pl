@@ -5,6 +5,7 @@ use DateTime;
 use Date::Parse;
 use JSON;
 use Data::Dumper;
+use LWP::Simple;
 
 binmode STDOUT, ":utf8";
 use utf8;
@@ -16,7 +17,6 @@ my $dbh;
 my $stats_dbh;
 my $sth;
 my $sth2;
-my $sth3;
 
 my $dbfile=$ENV{"HOME"}."/.config/obyte-hub/byteball.sqlite";
 $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile","","") or die $DBI::errstr;
@@ -45,20 +45,18 @@ my @default_witnesses=("BVVJ2K7ENPZZ3VYZFWQWK7ISPCATFIW3",
 	
 my $HTML;
 my $witnesses_stats=undef;
-my $stats_range=1000;
 
 #get latest mci
-$sth = $dbh->prepare("SELECT max(main_chain_index) AS max_index FROM units");
+$sth = $dbh->prepare("SELECT min(main_chain_index) AS min_index, max(main_chain_index) AS max_index FROM units WHERE creation_date >= datetime('now', '-12 hours')");
 $sth->execute();
 my $query_result = $sth->fetchrow_hashref;
+my $start_mci=$query_result->{min_index};
 my $last_mci=$query_result->{max_index};
-
-my $start_mci=$last_mci-$stats_range;
 
 #who are all actives witnesses?
 my @array_of_serial_posting_witnesses;
 my $our_witness_count=0;
-$sth = $dbh->prepare("select address, count(*) as total_count from witnessing_outputs where main_chain_index > $start_mci and main_chain_index <=$last_mci group by address order by total_count DESC");
+$sth = $dbh->prepare("select address, count(*) as total_count from witnessing_outputs where main_chain_index >= $start_mci and main_chain_index <=$last_mci group by address order by total_count DESC");
 $sth->execute();
 while (my $query_result = $sth->fetchrow_hashref){
 	push @array_of_serial_posting_witnesses, $query_result->{address};
@@ -70,7 +68,7 @@ while (my $query_result = $sth->fetchrow_hashref){
 #witnesses "market share"
 my @array_of_witnesses;
 my $witnesses_market;
-$sth = $dbh->prepare("select count(distinct units.unit) as total_seen, unit_witnesses_1.address, max(units.main_chain_index) as max_mci, max(units.creation_date) as max_creation_date, min(units.creation_date) as min_creation_date from units left join unit_witnesses as unit_witnesses_1 on ( unit_witnesses_1.unit = units.witness_list_unit or unit_witnesses_1.unit = units.unit ) left join unit_authors on unit_authors.unit = units.unit left join unit_witnesses as unit_witnesses_2 on unit_witnesses_2.address = unit_authors.address where 1 and units.sequence='good' and (julianday('now') - julianday(units.creation_date))* 24 * 60 * 60  < 3600*12 and unit_witnesses_2.address is NULL group by unit_witnesses_1.address order by total_seen desc");
+$sth = $dbh->prepare("select count(distinct units.unit) as total_seen, unit_witnesses_1.address, max(units.main_chain_index) as max_mci, max(units.creation_date) as max_creation_date, min(units.creation_date) as min_creation_date from units left join unit_witnesses as unit_witnesses_1 on ( unit_witnesses_1.unit = units.witness_list_unit or unit_witnesses_1.unit = units.unit ) left join unit_authors on unit_authors.unit = units.unit left join unit_witnesses as unit_witnesses_2 on unit_witnesses_2.address = unit_authors.address where 1 and units.sequence='good' and units.main_chain_index >= $start_mci and unit_witnesses_2.address is NULL group by unit_witnesses_1.address order by total_seen desc");
 
 $sth->execute();
 while (my $query_result = $sth->fetchrow_hashref){
@@ -95,6 +93,7 @@ foreach (@array_of_serial_posting_witnesses){
 my $buff_html_array="";
 my $i=1;
 my $max_end_users_seen_units=0;
+my $stats_range=0;
 foreach (@array_of_witnesses)#last timestamp
 {
 	#how many time have we seen this witness except on its own posted units?
@@ -206,7 +205,7 @@ foreach (@array_of_witnesses)#last timestamp
 	}
 	$stats_range=$max_end_users_seen_units;
 	my $percentage=calculate_percent($witnesses_stats->{$_}->{validations_count});
-	$buff_html_array.="<tr><th><font color=\"green\" valign=\"top\">".$witnesses_stats->{$_}->{arrow}."</font></th><th>#".$i."</th><td><a class=\"address\" href=\"https://explorer.obyte.org/#".$_."\" target=\"_blank\">".$_."</a></td><td><center>".$witnesses_stats->{$_}->{validations_count}."</center></td><td>".$percentage."</td><td><center>".$witnesses_stats->{$_}->{last_seen_mci}."<center></td><td>".$witnesses_stats->{$_}->{last_seen_mci_timestamp}."</td><td>".$witnesses_stats->{$_}->{status}."</td><td>".$witnesses_stats->{$_}->{text}."</td></tr>\n";
+	$buff_html_array.="<tr><th><font color=\"green\" valign=\"top\">".$witnesses_stats->{$_}->{arrow}."</font></th><th>#".$i."</th><td><a class=\"address\" href=\"".$_."\" target=\"_blank\">".$_."</a></td><td><center>".$witnesses_stats->{$_}->{validations_count}."</center></td><td>".$percentage."</td><td><center>".$witnesses_stats->{$_}->{last_seen_mci}."<center></td><td>".$witnesses_stats->{$_}->{last_seen_mci_timestamp}."</td><td>".$witnesses_stats->{$_}->{status}."</td><td>".$witnesses_stats->{$_}->{text}."</td></tr>\n";
 	
 	if(0){
 		print "$_ nbre validation : $witnesses_stats->{$_}->{validations_count}\n";
@@ -247,60 +246,116 @@ close $fh;
 
 
 #pass 2: top 100
-$stats_dbh->prepare('BEGIN')->execute();
-$stats_dbh->prepare('DELETE FROM richlist')->execute();
-
-$sth = $dbh->prepare("SELECT SUM(amount) AS amount, address FROM outputs WHERE is_spent=0 AND asset IS null GROUP BY address ORDER BY amount DESC");
-$sth->execute();
 my $total_add_with_balance=0;
-my $circulation_supply=1000000000000000;
-while (my $query_result = $sth->fetchrow_hashref){
-	#problematics addresses
-	next if $query_result->{address} eq 'mtdc7zuhmdu3ph2rrmhcmm4plc2xkhtj';#yes, lowercase
-	next if $query_result->{address} eq 'GVVHBOGQFAZJW54m37LPSHZOYWZ2Z47T';
-	next if $query_result->{address} eq 'ZQ4NJ2YZGUGIPU2F2DOAIIH67MBY4AHG';
-	#not in circulation addresses
-	$circulation_supply -= $query_result->{address} eq 'MZ4GUQC7WUKZKKLGAS3H3FSDKLHI7HFO' ? $query_result->{amount} : 0;
-	$circulation_supply -= $query_result->{address} eq 'BZUAVP5O4ND6N3PVEUZJOATXFPIKHPDC' ? $query_result->{amount} : 0;
-	$circulation_supply -= $query_result->{address} eq 'TUOMEGAZPYLZQBJKLEM2BGKYR2Q5SEYS' ? $query_result->{amount} : 0;
-	$circulation_supply -= $query_result->{address} eq 'FCXZXQR353XI4FIPQL6U4G2EQJL4CCU2' ? $query_result->{amount} : 0;
-	#new richlist
-	$total_add_with_balance++;
-	my $sth2=$stats_dbh->prepare ("INSERT INTO richlist (id, amount, address) VALUES($total_add_with_balance, '$query_result->{amount}','$query_result->{address}')");
-	$sth2->execute;
+$sth = $stats_dbh->prepare("select count(*) as total from richlists where snapshot = date('now')");
+$sth->execute();
+$query_result = $sth->fetchrow_hashref;
+if ($query_result->{total}==0) {
+	$stats_dbh->prepare('BEGIN')->execute();
+	$stats_dbh->prepare('DELETE FROM richlist')->execute();
+
+	my $circulation_supply=1000000000000000;
+	my @assets = (
+		'base', # bytes
+		# Bonded Stablecoins - USD tokens
+		'IpO7JJ0r7+Kq6nqKSr8Auwj8t+66bt/76rFiGzamrSg=',
+		'eCpmov+r6LOVNj8KD0EWTyfKPrqsG3i2GgxV4P+zE6A=',
+		'0IwAk71D5xFP0vTzwamKBwzad3I1ZUjZ1gdeB5OnfOg=',
+		'4t1FplfMcmIFg9VrTj0CiwS6/OfWHZ8wZnAr6BW2rvY=',
+		# Bonded Stablecoins - BTC tokens
+		'H3yTRHYmq7lSE+0zLMPeMUV0OocdWLgahNueoefb8oo=',
+		'viWGuQQnKBkXbuBFryfT3oJd+KHRWMtCDfy7ZEJguaA=',
+		'/hYmnT8qDvPhKVQCbMLibB47qMu1DnKf0BKzYWe836c=',
+		'/HOZkibdHHxUgk9cBgaVMMqqwqaMRNTD4etrapVngUY=',
+		# Bonded Stablecoins - ETH tokens
+		'hvoh6+rFuaiXbDijCf7z8ttJBwzuzMlqt2CkFCR1lW0=',
+		'yZXvEHHPSEGWFLNuNY8D7U6ukyytHOFpPw/ntpImK9c=',
+		'TKTmSpLhY2CF8s93OSVJvp/0e9pxrIeGrUm4c1svOLQ=',
+		'P3a+J2ALWSIAMGUvA6MN3zRsQrVS318E/i9kEPuIVDM=',
+		# Bonded Stablecoins - GBYTE tokens
+		'kJ/2JkNR0i8quYMA7tWCO/fcOVEyPJMrFg9uAmz2Kuw=',
+		'2rionwusffAB8EkuubZY4XV2F4ZRfR0wlLC080kJU1M=',
+		'yVP89X/wYcvPm5zzhffLnz7Rt+4EdrfDJFJaQc7dSc4=',
+		'xgmjTZN/nQgsilrsWV3CrFHgA33hYudNyzaer/+yaoA=',
+		# Bonded Stablecoins - XAU tokens
+		'whhEzaermRqpF4q+EmdCvazqw6WchWeHQhBRSGFgUDY=',
+		'quDyKoFEB5Ww27IC9XKd9Pixvw7quvyfiRYVyhZZsiU=',
+		'n4wyr7LfGSdwfGQpPLe0Hc7Q6VTNIMdX7XxvBT5+L9Y=',
+		'04p03vbBhbJaFynRssYgJzLQyx3gvZCHyNsnfuwTV4Q=',
+		# Counterstake Bridge imported tokens
+		'RF/ysZ/ZY4leyc3huUq1yFc0xTS0GdeFQu8RmXas4ys=',
+		'S/oCESzEO8G2hvQuI6HsyPr0foLfKwzs+GU73nO9H40=',
+		'AHVV8Um6AwHY9/nsX/YMZkWSBptWdn4g9aYVhNLcUWs=',
+		'Rqd8mi8+pOnlieU13G7RFFBJnY71D2/opd3ssaEcMZU=',
+		'vApNsebTEPb3QDNNfyLsDB/iI5st9koMpAqvADzTw5A=',
+		'zN8X/+o3iXuhmfwNMVcI+pKRJmzLvFbrJ3yvjCHbRBE='
+	);
+	foreach ( @assets ) {
+		my $richlist_id=0;
+		my $archive_limit=26;
+		my $asset_sql = $_ eq 'base' ? 'NULL' : "'$_'";
+		my $limit_sql = $_ eq 'base' ? '' : " LIMIT $archive_limit";
+		$sth = $dbh->prepare("SELECT address, COUNT(*) AS utxos, SUM(amount) AS amount FROM outputs WHERE asset IS $asset AND is_spent = 0 GROUP BY asset, address ORDER BY amount DESC$limit_sql");
+		$sth->execute();
+		while (my $query_result = $sth->fetchrow_hashref){
+			$richlist_id++;
+			if ($_ eq 'base') {
+				#problematics addresses
+				next if $query_result->{address} eq 'mtdc7zuhmdu3ph2rrmhcmm4plc2xkhtj';#yes, lowercase
+				next if $query_result->{address} eq 'GVVHBOGQFAZJW54m37LPSHZOYWZ2Z47T';
+				next if $query_result->{address} eq 'ZQ4NJ2YZGUGIPU2F2DOAIIH67MBY4AHG';
+				#not in circulation addresses
+				$circulation_supply -= $query_result->{address} eq 'MZ4GUQC7WUKZKKLGAS3H3FSDKLHI7HFO' ? $query_result->{amount} : 0;
+				$circulation_supply -= $query_result->{address} eq 'BZUAVP5O4ND6N3PVEUZJOATXFPIKHPDC' ? $query_result->{amount} : 0;
+				$circulation_supply -= $query_result->{address} eq 'TUOMEGAZPYLZQBJKLEM2BGKYR2Q5SEYS' ? $query_result->{amount} : 0;
+				$circulation_supply -= $query_result->{address} eq 'FCXZXQR353XI4FIPQL6U4G2EQJL4CCU2' ? $query_result->{amount} : 0;
+				$total_add_with_balance = $richlist_id;
+				my $sth2=$stats_dbh->prepare ("INSERT INTO richlist (id, amount, address) VALUES($richlist_id, '$query_result->{amount}','$query_result->{address}')");
+				$sth2->execute;
+			}
+			#new richlists
+			if ($richlist_id <= $archive_limit) {
+				my $sth2=$stats_dbh->prepare ("INSERT INTO richlists (id, amount, address, utxos, asset, snapshot) VALUES($richlist_id, '$query_result->{amount}','$query_result->{address}','$query_result->{utxos}',$asset_sql, date('now'))");
+				$sth2->execute;
+			}
+		}
+	}
+	$stats_dbh->prepare('COMMIT')->execute();
+
+	if ($total_add_with_balance) {
+		my $filename_supply = 'www/coin_info.json';
+		open(my $fh_supply, '>', $filename_supply) or die "Could not open file '$filename_supply' $!";
+		my $json_supply = encode_json {
+			circulating_supply => ($circulation_supply/1000000000),
+			total_supply => 1000000,
+			max_supply => 1000000
+		};
+		print $fh_supply $json_supply;
+		close $fh_supply;
+
+		my $filename_supply_txt = 'www/circulating_supply.txt';
+		open(my $fh_supply_txt, '>', $filename_supply_txt) or die "Could not open file '$filename_supply_txt' $!";
+		my $txt_supply = $circulation_supply/1000000000;
+		print $fh_supply_txt $txt_supply;
+		close $fh_supply_txt;
+	}
 }
-$stats_dbh->prepare('COMMIT')->execute();
-
-if ($total_add_with_balance) {
-	my $filename_supply = 'www/coin_info.json';
-	open(my $fh_supply, '>', $filename_supply) or die "Could not open file '$filename_supply' $!";
-	my $json_supply = "{\"circulating_supply\":".($circulation_supply/1000000000).",\"total_supply\":1000000,\"max_supply\":1000000}";
-	print $fh_supply $json_supply;
-	close $fh_supply;
-
-	my $filename_supply_txt = 'www/circulating_supply.txt';
-	open(my $fh_supply_txt, '>', $filename_supply_txt) or die "Could not open file '$filename_supply_txt' $!";
-	my $txt_supply = $circulation_supply/1000000000;
-	print $fh_supply_txt $txt_supply;
-	close $fh_supply_txt;
-}
-
 
 
 #pass 3: trafic
 #All trafic within the last 12 hours
-$sth = $dbh->prepare("select count(*) as total from units where (julianday('now') - julianday(creation_date))* 24 * 60 * 60  < 3600*12");
+$sth = $dbh->prepare("select count(*) as total from units where units.main_chain_index >= $start_mci");
 $sth->execute();
 $query_result = $sth->fetchrow_hashref;
 my $total_units=$query_result->{total};
 
 #all stables units
-$sth = $dbh->prepare("select count(*) as total from units where (julianday('now') - julianday(creation_date))* 24 * 60 * 60  < 3600*12 AND is_stable='1'");
+$sth = $dbh->prepare("select count(*) as total from units where units.main_chain_index >= $start_mci AND is_stable='1'");
 $sth->execute();
 $query_result = $sth->fetchrow_hashref;
 my $total_stable_units=$query_result->{total};
 
-my $percent=5;#little alarm system to Tonych
+my $percent=10;#little alarm system to Tonych
 if($total_stable_units < $total_units*(1-$percent/100)){
 	my $alerte_subject  = "Alert! Too many non stable units in the Obyte network!";
 	my $body="My current alert trigger is non stable vs total units less than ".$percent." %.\n\nHowever, over the last 12 hours I see:\nTotal units posted: ".$total_units."\nTotal stables units: ".$total_stable_units."\n";
@@ -309,13 +364,13 @@ if($total_stable_units < $total_units*(1-$percent/100)){
 }
 	
 #all units out of main chain
-$sth = $dbh->prepare("select count(*) as total from units where (julianday('now') - julianday(creation_date))* 24 * 60 * 60  < 3600*12 AND is_stable='1' AND is_on_main_chain='0'");
+$sth = $dbh->prepare("select count(*) as total from units where units.main_chain_index >= $start_mci AND is_stable='1' AND is_on_main_chain='0'");
 $sth->execute();
 $query_result = $sth->fetchrow_hashref;
 my $total_stable_units_sidechain=$query_result->{total};
 
 #all units but witnesses units
-$sth = $dbh->prepare("select units.* from units left join unit_authors on unit_authors.unit = units.unit left join unit_witnesses on unit_witnesses.address = unit_authors.address where ( julianday('now') - julianday(units.creation_date) )* 24 * 60 * 60  < 3600*12 and unit_witnesses.address is NULL group by units.unit");
+$sth = $dbh->prepare("select units.* from units left join unit_authors on unit_authors.unit = units.unit left join unit_witnesses on unit_witnesses.address = unit_authors.address where units.main_chain_index >= $start_mci and unit_witnesses.address is NULL group by units.unit");
 $sth->execute();
 $query_result = $sth->fetchrow_hashref;
 my $total_sidechain_units_witnesses_excluded=0;
@@ -332,19 +387,13 @@ while (my $query_result = $sth->fetchrow_hashref){
 	$total_units_witnesses_excluded++;
 	$total_sidechain_units_witnesses_excluded+=1 if($query_result->{is_on_main_chain}==0);
 
-	#smart addresses
 	$sth2=$dbh->prepare("SELECT * FROM unit_authors where unit='$query_result->{unit}'");
 	$sth2->execute();
 	while (my $query_result2 = $sth2->fetchrow_hashref){
-
-		$sth3=$dbh->prepare("SELECT definition_chash FROM address_definition_changes CROSS JOIN units USING(unit) WHERE address='$query_result2->{address}' AND is_stable=1 AND sequence='good' ORDER BY level DESC LIMIT 1");
-		$sth3->execute();
-		my $query_result3=$sth3->fetchrow_hashref;
-		my $rv3=$sth3->rows;
-		if ($rv3 == 0){
-			$latest_definition_cash=$query_result2->{address};# definition_cash is the address itself
-		} else{
-			$latest_definition_cash=$query_result3->{definition_chash};
+		if ($query_result2->{definition_chash}){
+			$latest_definition_cash=$query_result2->{definition_chash};
+		} else {
+			$latest_definition_cash=$query_result2->{address};
 		}
 		my $sth4=$dbh->prepare("SELECT definition FROM definitions where definition_chash='$latest_definition_cash'");
 		$sth4->execute();
@@ -361,15 +410,20 @@ while (my $query_result = $sth->fetchrow_hashref){
 			}
 		}
 	}
-
 }
 	
 my $ratio=sprintf("%.2f",($total_stable_units/$total_units)*100);
 my $total_payload_for_db=$total_payload;
 $total_payload=set_coma_separators($total_payload);
 
+$sth = $dbh->prepare("select count(*) as total from aa_responses where mci >= $start_mci");
+$sth->execute();
+$query_result = $sth->fetchrow_hashref;
+$total_units_witnesses_excluded-=$query_result->{total};
+my $aa_count=$query_result->{total};
+
 #how many hubs and wallets
-$sth=$stats_dbh->prepare ("select count(*) as total_count from geomap where type='hub'");
+$sth=$stats_dbh->prepare ("select count(*) as total_count from geomap where type<>'full_wallet'");
 $sth->execute;
 $query_result = $sth->fetchrow_hashref();
 my $total_hubs=$query_result->{total_count};
@@ -379,53 +433,22 @@ $sth->execute;
 $query_result = $sth->fetchrow_hashref();
 my $total_full_wallets=$query_result->{total_count};
 
-
-#registered profile (deprecated)
-# $sth = $dbh->prepare("SELECT count(*) as registered_profiles 
-# FROM attestations 
-# left join messages on messages.unit=attestations.unit
-# where 1
-# and messages.app='attestation'
-# and messages.payload like '%profile_hash%'");
-# $sth->execute();
-# $query_result = $sth->fetchrow_hashref;
-# my $registered_profiles_count=$query_result->{registered_profiles};
-my $registered_profiles_count=0;
-
-#non US
-# $sth = $dbh->prepare("SELECT count(*) as non_US 
-# FROM attestations  
-# left join messages on messages.unit=attestations.unit
-# where 1
-# and messages.app='attestation'
-# and messages.payload like '%nonus%'");
-# $sth->execute();
-# $query_result = $sth->fetchrow_hashref;
-# my $non_US_count=$query_result->{non_US};
-my $non_US_count=0;
-
-#accredited investors
-# $sth = $dbh->prepare("SELECT count(*) as accredited
-# FROM messages where app='attestation' and payload like '%accredited\":1%'");
-# $sth->execute();
-# $query_result = $sth->fetchrow_hashref;
-# my $accredited=$query_result->{accredited};
-my $accredited=0;
+my $price_content = get 'https://api.coingecko.com/api/v3/simple/price?ids=byteball&vs_currencies=usd,btc';
+my $price_json = decode_json $price_content;
+my $dollar_rate = $price_json->{byteball}->{usd};
 
 #all that into bb_stats table...
-
-$sth=$stats_dbh->prepare ("INSERT INTO bb_stats ( total_active_witnesses, multisigned_units, smart_contract_units, total_units, total_stable_units, total_units_witnesses_excluded, stable_ratio, total_payload, total_add_with_balance, total_stable_units_sidechain, total_sidechain_units_WE, total_full_wallets, total_hubs, registered_users, non_US, accredited_investors) values 
-('$total_active_witnesses','$multisig_count','$smart_contract_count','$total_units','$total_stable_units','$total_units_witnesses_excluded','$ratio','$total_payload_for_db','$total_add_with_balance','$total_stable_units_sidechain','$total_sidechain_units_witnesses_excluded','$total_full_wallets','$total_hubs','$registered_profiles_count','$non_US_count','$accredited')");
+$sth=$stats_dbh->prepare ("INSERT INTO bb_stats ( total_active_witnesses, multisigned_units, smart_contract_units, total_units, total_stable_units, total_units_witnesses_excluded, stable_ratio, total_payload, total_add_with_balance, total_stable_units_sidechain, total_sidechain_units_WE, total_full_wallets, total_hubs, aa_units, dollar_rate) values 
+('$total_active_witnesses','$multisig_count','$smart_contract_count','$total_units','$total_stable_units','$total_units_witnesses_excluded','$ratio','$total_payload_for_db','$total_add_with_balance','$total_stable_units_sidechain','$total_sidechain_units_witnesses_excluded','$total_full_wallets','$total_hubs','$aa_count', '$dollar_rate')");
 $sth->execute;
 
 #json dump
 dump_json("www/bb_stats.json","bb_stats","UTC_datetime","total_units","total_stable_units","stable_ratio",
-"total_units_witnesses_excluded","multisigned_units","smart_contract_units","total_payload","registered_users", "non_US");
+"total_units_witnesses_excluded","multisigned_units","smart_contract_units","total_payload","aa_units","dollar_rate");
 		
 
 $sth->finish() if defined $sth;
 $sth2->finish() if defined $sth2;
-$sth3->finish() if defined $sth;
 $dbh->disconnect;
 $stats_dbh->disconnect;
 
@@ -444,7 +467,18 @@ sub dump_json{
 	while (my $query_result = $sth->fetchrow_hashref){
 		my $timestamp=convert_to_unix_timestamp($query_result->{$fields[2]});
 		$timestamp=($timestamp+7200)*1000;
-		my $point="{\"t\":".$timestamp.",\"a\":".$query_result->{$fields[3]}.",\"b\":".$query_result->{$fields[4]}.",\"c\":".$query_result->{$fields[5]}.",\"d\":".$query_result->{$fields[6]}.",\"e\":".$query_result->{$fields[7]}.",\"f\":".$query_result->{$fields[8]}.",\"g\":".$query_result->{$fields[9]}.",\"h\":".$query_result->{$fields[10]}.",\"i\":".$query_result->{$fields[11]}."}";
+		my $point = encode_json {
+			t => $timestamp,
+			a => $query_result->{$fields[3]},
+			b => $query_result->{$fields[4]},
+			c => $query_result->{$fields[5]},
+			d => $query_result->{$fields[6]},
+			e => $query_result->{$fields[7]},
+			f => $query_result->{$fields[8]},
+			g => $query_result->{$fields[9]},
+			h => $query_result->{$fields[10]},
+			i => $query_result->{$fields[11]}
+		};
 		if ($i>0){
 			$buff=",".$buff;
 		}

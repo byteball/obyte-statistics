@@ -71,3 +71,18 @@ CREATE TABLE `geomap` (
   `is_ok` tinyint(1) NOT NULL DEFAULT '1',
   `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+
+ALTER TABLE `bb_stats` ADD COLUMN `aa_units` int(11) DEFAULT 0;
+ALTER TABLE `geomap` ADD COLUMN `country_code` varchar(2) DEFAULT NULL;
+
+CREATE TABLE `richlists` (
+  `id` INTEGER NOT NULL,
+  `address` varchar(32) NOT NULL,
+  `asset` varchar(44) DEFAULT NULL,
+  `amount` bigint(20) NOT NULL,
+  `utxos` int(11) DEFAULT NULL,
+  `snapshot` varchar(10) DEFAULT NULL,
+  UNIQUE  (address, asset, snapshot)
+);
+CREATE INDEX richlistsIndexBySnapshot ON richlists(snapshot);

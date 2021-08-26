@@ -6,7 +6,7 @@
 					<a href="/">Home</a> | 
 					<a href="./worldmap.php">World map</a> | 
 					<a href="./Top100Richest.php">Top 100 richest</a> | 
-					<a href="./witnesses.php">Witnesses</a> | 
+					<a href="./witnesses.php">Order Providers</a> | 
 					<a href="./heartbeat.php">HeartBeat</a>
 				</center>
 				<br><br>

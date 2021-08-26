@@ -70,7 +70,6 @@
 <br>
 <?php
 $rate_url="https://api.coinpaprika.com/v1/tickers/gbyte-obyte?quotes=USD,BTC";
-
 $json_array = json_decode(make_443_get ($rate_url), true);
 $dollar_value = 0;
 $btc_value = 0;
@@ -80,6 +79,17 @@ if(!empty($json_array['quotes']['USD']['price'])){
 if(!empty($json_array['quotes']['BTC']['price'])){
 	$btc_value=round($json_array['quotes']['BTC']['price'],8);
 }
+
+// $rate_url="https://api.coingecko.com/api/v3/simple/price?ids=byteball&vs_currencies=usd,btc";
+// $json_array = json_decode(make_443_get ($rate_url), true);
+// $dollar_value = 0;
+// $btc_value = 0;
+// if(!empty($json_array['byteball']['usd'])){
+// 	$dollar_value=round($json_array['byteball']['usd'],2);
+// }
+// if(!empty($json_array['byteball']['btc'])){
+// 	$btc_value=round($json_array['byteball']['btc'],8);
+// }
 ?>
 <table id="richList" border="0">
 	<thead>
@@ -124,13 +134,16 @@ while( $row = $results->fetchArray(SQLITE3_ASSOC) ){
 	echo "</tr>";
 	$i++;
 }
+
+$disclaimers .= 'Rates powered by <a href="https://coinpaprika.com/coin/gbyte-obyte/#!exchanges" target="_blank">CoinPaprika</a>';
+//$disclaimers .= 'Rates powered by <a href="https://www.coingecko.com/en/coins/obyte#markets" target="_blank">CoinGecko</a>';
 ?>
 	</tbody>
 </table>
 <br>
 
 <?php echo $disclaimers; ?>
-Rate powered by <a href="https://coinpaprika.com/coin/gbyte-obyte/#!exchanges" target="_blank">CoinPaprika</a><br><br></i>
+<br><br>
 
 
 <?php
