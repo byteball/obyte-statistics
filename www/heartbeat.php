@@ -150,7 +150,7 @@ $params = array(
 
 $args = array(
 	'title' => 'Recent Obyte trend',
-	'subtitle' => '12 hours sliding window snapshots - updated hourly',
+	'subtitle' => '12 hours sliding window snapshots',
 	'container_id' => 'container_units_2',
 	'params' => $params,
 	'json' => 'bb_stats.json',
