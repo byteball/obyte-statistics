@@ -47,7 +47,7 @@ my $HTML;
 my $witnesses_stats=undef;
 
 #get latest mci
-$sth = $dbh->prepare("SELECT min(main_chain_index) AS min_index, max(main_chain_index) AS max_index FROM units WHERE creation_date >= datetime('now', '-12 hours')");
+$sth = $dbh->prepare("SELECT min(main_chain_index) AS min_index, max(main_chain_index) AS max_index FROM (SELECT main_chain_index, creation_date FROM units ORDER BY rowid DESC LIMIT 43200) WHERE creation_date >= datetime('now', '-12 hours')");
 $sth->execute();
 my $query_result = $sth->fetchrow_hashref;
 my $start_mci=$query_result->{min_index};
