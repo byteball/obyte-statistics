@@ -170,7 +170,7 @@ foreach (@array_of_witnesses)#last timestamp
 		$others_value+=$witnesses_stats->{$_}->{validations_count};
 	}
 	elsif($_ eq 'DXYWHSZ72ZDNDZ7WYZXKWBBH425C6WZN'){
-		$witnesses_stats->{$_}->{text}="Bind Creative";
+		$witnesses_stats->{$_}->{text}="Altos Engineering (formerly Bind Creative)";
 		$witnesses_stats->{$_}->{status}="Independent";
 		$others_value+=$witnesses_stats->{$_}->{validations_count};
 	}
