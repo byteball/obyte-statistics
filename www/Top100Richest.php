@@ -130,7 +130,7 @@ while( $row = $results->fetchArray(SQLITE3_ASSOC) ){
 	echo "<td>".number_format ($row[ 'amount' ]/1000000000, 9)."</td>";
 	echo "<td>&#x24;".number_format (($row[ 'amount' ]/1000000000)*$dollar_value, 0)."</td>";
 	echo "<td>&#x20BF; ".number_format (($row[ 'amount' ]/1000000000)*$btc_value, 8)."</td>";
-	echo "<td><a class=\"address\" href=\"https://explorer.obyte.org/#".$row[ 'address' ]."\">".$row[ 'address' ]."</a></td>";
+	echo "<td><a class=\"address\" href=\"https://explorer.obyte.org/address/".$row[ 'address' ]."\">".$row[ 'address' ]."</a></td>";
 	echo "</tr>";
 	$i++;
 }
