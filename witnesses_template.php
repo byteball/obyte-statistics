@@ -28,7 +28,7 @@
 		<th><center>Order Provider address</center></th>
 		<th><center>Transactions</center></th>
 		<th width="130"><center>last seen<br>UTC Timestamp</center></th>
-		<th width="80">Income, bytes</th>
+		<th width="80"><center>Income, bytes</center></th>
 		<th width="80">Origin</th>
 		<th>Operated by</th>
 	
