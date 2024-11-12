@@ -53,61 +53,35 @@ my $query_result = $sth->fetchrow_hashref;
 my $start_mci=$query_result->{min_index};
 my $last_mci=$query_result->{max_index};
 
-#who are all actives witnesses?
-my @array_of_serial_posting_witnesses;
-my $our_witness_count=0;
-$sth = $dbh->prepare("select address, count(*) as total_count from witnessing_outputs where main_chain_index >= $start_mci and main_chain_index <=$last_mci group by address order by total_count DESC");
+my @ops;
+$sth = $dbh->prepare("SELECT DISTINCT op_address, (SELECT MAX(creation_date) FROM unit_authors LEFT JOIN units USING(unit) WHERE unit_authors.address=op_address AND _mci>=$start_mci) AS last_seen FROM op_votes ORDER BY last_seen DESC");
 $sth->execute();
-while (my $query_result = $sth->fetchrow_hashref){
-	push @array_of_serial_posting_witnesses, $query_result->{address};
-	$witnesses_stats->{$query_result->{address}}->{text}="Unknown: contact us to be listed here";
-	$witnesses_stats->{$query_result->{address}}->{status}="Unknown";
-	$witnesses_stats->{$query_result->{address}}->{arrow}="";
+while (my $row = $sth->fetchrow_hashref()){
+	push @ops, $row->{op_address};
 }
 
-#witnesses "market share"
-my @array_of_witnesses;
-my $witnesses_market;
-$sth = $dbh->prepare("select count(distinct units.unit) as total_seen, unit_witnesses_1.address, max(units.main_chain_index) as max_mci, max(units.creation_date) as max_creation_date, min(units.creation_date) as min_creation_date from units left join unit_witnesses as unit_witnesses_1 on ( unit_witnesses_1.unit = units.witness_list_unit or unit_witnesses_1.unit = units.unit ) left join unit_authors on unit_authors.unit = units.unit left join unit_witnesses as unit_witnesses_2 on unit_witnesses_2.address = unit_authors.address where 1 and units.sequence='good' and units.main_chain_index >= $start_mci and unit_witnesses_2.address is NULL group by unit_witnesses_1.address order by total_seen desc");
 
-$sth->execute();
-while (my $query_result = $sth->fetchrow_hashref){
-	push @array_of_witnesses, $query_result->{address};
-
-	$witnesses_market->{$query_result->{address}}->{total_seen}=$query_result->{total_seen};
-	$witnesses_market->{$query_result->{address}}->{last_mci}=$query_result->{max_mci};
-	$witnesses_market->{$query_result->{address}}->{last_seen}=$query_result->{max_creation_date};
-
-}
-
-#fill also @array_of_witnesses with posting (but non used by any en user) witness
-foreach (@array_of_serial_posting_witnesses){
-	my $buff=$_;
-	my $is_found=0;
-	foreach (@array_of_witnesses){
-		$is_found=1 if($buff eq $_);
-	}
-	push @array_of_witnesses,$_ if (!$is_found);
-}
 
 my $buff_html_array="";
 my $i=1;
-my $max_end_users_seen_units=0;
 my $stats_range=0;
-foreach (@array_of_witnesses)#last timestamp
+foreach (@ops)#last timestamp
 {
+	my $sth = $dbh->prepare("SELECT MAX(creation_date) AS last_seen_mci_timestamp, COUNT(*) AS total_seen FROM unit_authors LEFT JOIN units USING(unit) WHERE address='$_' AND _mci>=$start_mci");
+	$sth->execute();
+	my $row = $sth->fetchrow_hashref;
 	#how many time have we seen this witness except on its own posted units?
-	$witnesses_stats->{$_}->{validations_count}=0;
-	$witnesses_stats->{$_}->{validations_count}=$witnesses_market->{$_}->{total_seen} if (defined $witnesses_market->{$_}->{total_seen});  
-	$max_end_users_seen_units=$witnesses_market->{$_}->{total_seen} if (defined $witnesses_market->{$_}->{total_seen} && $witnesses_market->{$_}->{total_seen}>$max_end_users_seen_units);
-	$witnesses_stats->{$_}->{last_seen_mci_timestamp}="<center>> 12h</center>";
-	$witnesses_stats->{$_}->{last_seen_mci_timestamp}=$witnesses_market->{$_}->{last_seen} if ($witnesses_market->{$_}->{last_seen});
-	$witnesses_stats->{$_}->{last_seen_mci}="<center>> 12h</center>";
-	$witnesses_stats->{$_}->{last_seen_mci}=$witnesses_market->{$_}->{last_mci} if(defined $witnesses_market->{$_}->{last_mci});
+	$witnesses_stats->{$_}->{validations_count} = $row->{total_seen} || 0;
+	$witnesses_stats->{$_}->{last_seen_mci_timestamp} = $row->{last_seen_mci_timestamp} || "<center>> 12h</center>";
 	$witnesses_stats->{$_}->{arrow}="";
 	  
 	$total_value+=$witnesses_stats->{$_}->{validations_count};
 	  
+	$sth = $dbh->prepare("SELECT SUM(amount) AS total_witnessing_fees FROM witnessing_outputs WHERE address='$_' AND main_chain_index>=$start_mci");
+	$sth->execute();
+	$row = $sth->fetchrow_hashref;
+	$witnesses_stats->{$_}->{total_witnessing_fees} = $row->{total_witnessing_fees} || 0;
+
 	my $buff=$_;
 	if($_ eq 'MEJGDND55XNON7UU3ZKERJIZMMXJTVCV'){
 		$witnesses_stats->{$_}->{text}="byteball.fr";
@@ -203,9 +177,7 @@ foreach (@array_of_witnesses)#last timestamp
 		$witnesses_stats->{$_}->{status}="Independent";
 		$others_value+=$witnesses_stats->{$_}->{validations_count};
 	}
-	$stats_range=$max_end_users_seen_units;
-	my $percentage=calculate_percent($witnesses_stats->{$_}->{validations_count});
-	$buff_html_array.="<tr><th><font color=\"green\" valign=\"top\">".$witnesses_stats->{$_}->{arrow}."</font></th><th>#".$i."</th><td><a class=\"address\" href=\"https://explorer.obyte.org/address/".$_."\" target=\"_blank\">".$_."</a></td><td><center>".$witnesses_stats->{$_}->{validations_count}."</center></td><td>".$percentage."</td><td><center>".$witnesses_stats->{$_}->{last_seen_mci}."<center></td><td>".$witnesses_stats->{$_}->{last_seen_mci_timestamp}."</td><td>".$witnesses_stats->{$_}->{status}."</td><td>".$witnesses_stats->{$_}->{text}."</td></tr>\n";
+	$buff_html_array.="<tr><th><font color=\"green\" valign=\"top\">".$witnesses_stats->{$_}->{arrow}."</font></th><th>#".$i."</th><td><a class=\"address\" href=\"https://explorer.obyte.org/address/".$_."\" target=\"_blank\">".$_."</a></td><td><center>".$witnesses_stats->{$_}->{validations_count}."</center></td><td>".$witnesses_stats->{$_}->{last_seen_mci_timestamp}."</td><td>".$witnesses_stats->{$_}->{total_witnessing_fees}."</td><td>".$witnesses_stats->{$_}->{status}."</td><td>".$witnesses_stats->{$_}->{text}."</td></tr>\n";
 	
 	if(0){
 		print "$_ nbre validation : $witnesses_stats->{$_}->{validations_count}\n";
