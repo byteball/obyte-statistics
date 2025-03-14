@@ -200,9 +200,6 @@ foreach (@ops)#last timestamp
 	}
 	 
 }#end of foreach arrayofwitnesses
-	
-
-	
 
 $buff_html_array.="";
 
@@ -221,6 +218,22 @@ open(my $fh, '>', $filename) or die "Could not open file '$filename' $!";
 print $fh $new_stats;
 close $fh;
 
+my %json_stats_data;
+$json_stats_data{last_update}          = "".$update;
+$json_stats_data{total_active}         = $total_active_witnesses;
+$json_stats_data{witnesses_stats}      = $witnesses_stats;
+
+my $json_out = encode_json(\%json_stats_data);
+my $json_file = 'www/op_stats.json';
+eval {
+    open(my $fh_json, '>', $json_file) or die "Could not open file '$json_file' $!";
+    print $fh_json $json_out;
+    close $fh_json;
+    print "Successfully wrote witness statistics to $json_file\n";
+};
+if ($@) {
+    warn "Error writing JSON data: $@";
+}
 
 #pass 2: top 100
 my $total_add_with_balance=0;
